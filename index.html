@@ -1026,6 +1026,185 @@
 
         let routeLines = null, destPoints = null, originPoints = null;
 
+        function isWeekendGetaway(d) {
+            if (!d.date || !d.returnDate) return false;
+            const outDate = new Date(d.date);
+            const retDate = new Date(d.returnDate);
+            const outDay = outDate.getUTCDay(); // 4 = Thu, 5 = Fri
+            const retDay = retDate.getUTCDay(); // 0 = Sun, 1 = Mon, 2 = Tue
+            return (outDay === 4 || outDay === 5) && (retDay === 0 || retDay === 1 || retDay === 2) && d.tripDays >= 2 && d.tripDays <= 4;
+        }
+
+        function openDrawer(deal) {
+            const rEl = document.getElementById('d-route');
+            if (rEl) rEl.textContent = `${deal.origin} → ${deal.destName}`;
+            const dtEl = document.getElementById('d-dates');
+            if (dtEl) dtEl.textContent = `${deal.tripDays} days · ${deal.date} to ${deal.returnDate}`;
+            const pEl = document.getElementById('d-price');
+            if (pEl) pEl.textContent = `€${deal.price}`;
+            const bEl = document.getElementById('d-baseline');
+            if (bEl) bEl.textContent = `Market Baseline: €${deal.score?.baseline || '—'}`;
+
+            const baseline = deal.score?.baseline || deal.price;
+            const diff = baseline - deal.price;
+            const discount = deal.score?.discount || 0;
+
+            const discEl = document.getElementById('d-discount');
+            const savEl = document.getElementById('d-savings');
+            const fillEl = document.getElementById('d-bar-fill');
+
+            if (discount > 0) {
+                if (discEl) discEl.textContent = `${discount}% Below Market Baseline`;
+                if (savEl) savEl.textContent = `Estimated Savings: €${diff}`;
+                if (fillEl) {
+                    fillEl.style.width = `${Math.min(100, Math.max(10, discount))}%`;
+                    fillEl.style.background = 'linear-gradient(90deg, #ff4444, #4ecdc4)';
+                }
+            } else if (discount < 0) {
+                const markup = Math.abs(discount);
+                if (discEl) discEl.textContent = `${markup}% Above Market Baseline`;
+                if (savEl) savEl.textContent = `Peak Season Premium: +€${Math.abs(diff)}`;
+                if (fillEl) {
+                    fillEl.style.width = '100%';
+                    fillEl.style.background = '#555566';
+                }
+            } else {
+                if (discEl) discEl.textContent = `At Market Baseline`;
+                if (savEl) savEl.textContent = `Standard Fare`;
+                if (fillEl) {
+                    fillEl.style.width = '50%';
+                    fillEl.style.background = '#8a8a9e';
+                }
+            }
+
+            const outEl = document.getElementById('d-leg-outbound');
+            if (outEl) outEl.innerHTML = `<strong>Outbound:</strong> ${deal.origin} → ${deal.dest} (${deal.airline})<br>Date: ${deal.date} · Stops: ${deal.stops > 0 ? deal.stops : 'Non-stop'}`;
+            const retEl = document.getElementById('d-leg-return');
+            if (retEl) retEl.innerHTML = `<strong>Return:</strong> ${deal.dest} → ${deal.origin} (${deal.airline})<br>Date: ${deal.returnDate}`;
+
+            const dufEl = document.getElementById('d-duffel-verify');
+            if (dufEl) {
+                if (deal.crossCheck) {
+                    dufEl.textContent = `🔍 Live Verification (Duffel): €${deal.crossCheck.duffelPrice || '—'} · Status: ${deal.crossCheck.status}`;
+                } else { dufEl.textContent = ''; }
+            }
+
+            const airlineUrl = deal.bookingLinks?.airline?.url || '#';
+            const skyUrl = deal.bookingLinks?.skyscanner || '#';
+            const isDupSky = airlineUrl === skyUrl || (deal.bookingLinks?.airline?.name || '').includes('Skyscanner');
+
+            const linksEl = document.getElementById('d-links');
+            if (linksEl) {
+                linksEl.innerHTML = `
+                    <a class="btn-link" href="${airlineUrl}" target="_blank">🔗 ${deal.bookingLinks?.airline?.name || 'Airline Direct'}</a>
+                    ${!isDupSky ? `<a class="btn-link" href="${skyUrl}" target="_blank">✈️ Skyscanner</a>` : ''}
+                    <a class="btn-link" href="${deal.bookingLinks?.googleFlights || '#'}" target="_blank">🌍 Google Flights</a>
+                    ${deal.deepLink ? `<a class="btn-link" href="${deal.deepLink}" target="_blank">🥝 Kiwi.com</a>` : ''}
+                `;
+            }
+
+            const drawer = document.getElementById('drawer');
+            const drawerOverlay = document.getElementById('drawer-overlay');
+            if (drawer) drawer.classList.add('open');
+            if (drawerOverlay) drawerOverlay.classList.add('open');
+        }
+
+        function renderCards(filtered) {
+            const sidebar = document.getElementById('sidebar');
+            if (!sidebar) return;
+            sidebar.innerHTML = '';
+            const sorted = [...filtered].sort((a, b) => {
+                if (state.sort === 'price-asc') return a.price - b.price;
+                if (state.sort === 'price-desc') return b.price - a.price;
+                if (state.sort === 'discount') return (b.score?.discount || 0) - (a.score?.discount || 0);
+                const tagOrder = { 'ERROR FARE': 0, 'GREAT DEAL': 1, 'GOOD DEAL': 2, 'NORMAL': 3 };
+                return (tagOrder[a.score?.tag] ?? 3) - (tagOrder[b.score?.tag] ?? 3);
+            });
+
+            for (const deal of sorted) {
+                const tagCss = (deal.score?.tag || 'normal').toLowerCase().replace(' ', '-');
+                const discVal = deal.score?.discount || 0;
+                const discTagStr = discVal > 0 ? `-${discVal}%` : discVal < 0 ? `+${Math.abs(discVal)}%` : '±0%';
+                const isWknd = isWeekendGetaway(deal);
+                const card = document.createElement('div');
+                card.className = `deal-card glass-panel ${tagCss}`;
+                card.innerHTML = `
+                    <div class="card-header">
+                        <span class="card-route">${deal.origin} → ${deal.destName}</span>
+                        <span class="card-price ${tagCss}">€${deal.price}</span>
+                    </div>
+                    <div class="card-tags">
+                        <span class="tag-pill ${tagCss}">${deal.score?.emoji || ''} ${deal.score?.tag || 'NORMAL'} ${discTagStr}</span>
+                        ${isWknd ? `<span class="badge-stops" style="background:rgba(78,205,196,0.15); color:#4ecdc4; border:1px solid rgba(78,205,196,0.3);">✈️ Weekend</span>` : ''}
+                        ${deal.priceCrash ? `<span class="badge-stops" style="background:rgba(255,68,68,0.2); color:#ff4444; border-color:rgba(255,68,68,0.4);">📉 -€${deal.priceCrash.dropEur} Drop</span>` : ''}
+                        ${deal.stops > 0 ? `<span class="badge-stops">${deal.stops} stop</span>` : '<span class="badge-direct">Direct</span>'}
+                    </div>
+                    <div class="card-details">
+                        ${deal.tripDays}d trip · ${deal.date} → ${deal.returnDate} · ${deal.airline}
+                    </div>
+                `;
+                card.addEventListener('click', () => {
+                    const coords = getCoords(deal.dest);
+                    if (coords) {
+                        map.flyTo({
+                            center: coords,
+                            zoom: 5.2,
+                            speed: 0.7,
+                            curve: 1.2,
+                            pitch: 35,
+                            easing: (t) => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t,
+                            essential: true
+                        });
+                    }
+                    openDrawer(deal);
+                });
+                sidebar.appendChild(card);
+            }
+        }
+
+        function applyFilters() {
+            if (!deals) return;
+            const searchLower = state.search.toLowerCase();
+            const filtered = deals.filter(d => {
+                if (!state.origins.has(d.origin)) return false;
+                if (!state.tags.has(d.score?.tag || 'NORMAL')) return false;
+                if (d.price > state.maxPrice) return false;
+                if (state.stops === '0' && d.stops !== 0) return false;
+                if (state.stops === '1' && d.stops > 1) return false;
+                if (state.weekendOnly && !isWeekendGetaway(d)) return false;
+                if (state.days && d.date) {
+                    const flightDate = new Date(d.date);
+                    const maxDate = new Date();
+                    maxDate.setDate(maxDate.getDate() + state.days);
+                    if (flightDate > maxDate) return false;
+                }
+                if (searchLower) {
+                    const matchDest = (d.destName || '').toLowerCase().includes(searchLower);
+                    const matchCountry = (d.country || '').toLowerCase().includes(searchLower);
+                    const matchCode = (d.dest || '').toLowerCase().includes(searchLower);
+                    if (!matchDest && !matchCountry && !matchCode) return false;
+                }
+                return true;
+            });
+
+            const errEl = document.getElementById('stat-error');
+            const grtEl = document.getElementById('stat-great');
+            const gudEl = document.getElementById('stat-good');
+            const totEl = document.getElementById('stat-total');
+            if (errEl) errEl.textContent = filtered.filter(d => d.score?.tag === 'ERROR FARE').length;
+            if (grtEl) grtEl.textContent = filtered.filter(d => d.score?.tag === 'GREAT DEAL').length;
+            if (gudEl) gudEl.textContent = filtered.filter(d => d.score?.tag === 'GOOD DEAL').length;
+            if (totEl) totEl.textContent = filtered.length;
+
+            renderCards(filtered);
+
+            if (map.isStyleLoaded() && map.getLayer('route-lines') && map.getLayer('dest-circles')) {
+                const visIdx = new Set(filtered.map(d => deals.indexOf(d)));
+                map.setFilter('route-lines', ['in', ['get', 'idx'], ['literal', [...visIdx]]]);
+                map.setFilter('dest-circles', ['in', ['get', 'idx'], ['literal', [...visIdx]]]);
+            }
+        }
+
         async function updateMapSourcesAndFilters(newDeals) {
             deals = newDeals || [];
             if (!deals.length) return;
@@ -1083,19 +1262,20 @@
             if (isStaticHost) {
                 try {
                     const res = await fetch('error_fares_report.json');
-                    report = await res.json();
+                    if (res.ok) report = await res.json();
+                } catch { }
+            }
+            if (!report && API_BASE && window.location.port === '3000') {
+                try {
+                    const res = await fetch(`${API_BASE}/api/report`);
+                    if (res.ok) report = await res.json();
                 } catch { }
             }
             if (!report) {
                 try {
-                    const res = await fetch(`${API_BASE}/api/report`);
-                    report = await res.json();
-                } catch {
-                    try {
-                        const res = await fetch('error_fares_report.json');
-                        report = await res.json();
-                    } catch { return; }
-                }
+                    const res = await fetch('error_fares_report.json');
+                    if (res.ok) report = await res.json();
+                } catch { return; }
             }
 
             if (report?.allResults) {
@@ -1240,110 +1420,14 @@
                 drawerOverlay.classList.remove('open');
             });
 
-            function isWeekendGetaway(d) {
-                if (!d.date || !d.returnDate) return false;
-                const outDate = new Date(d.date);
-                const retDate = new Date(d.returnDate);
-                const outDay = outDate.getUTCDay(); // 4 = Thu, 5 = Fri
-                const retDay = retDate.getUTCDay(); // 0 = Sun, 1 = Mon, 2 = Tue
-                return (outDay === 4 || outDay === 5) && (retDay === 0 || retDay === 1 || retDay === 2) && d.tripDays >= 2 && d.tripDays <= 4;
-            }
-
-            // Card Rendering
-            function renderCards(filtered) {
-                const sidebar = document.getElementById('sidebar');
-                sidebar.innerHTML = '';
-                const sorted = [...filtered].sort((a, b) => {
-                    if (state.sort === 'price-asc') return a.price - b.price;
-                    if (state.sort === 'price-desc') return b.price - a.price;
-                    if (state.sort === 'discount') return (b.score?.discount || 0) - (a.score?.discount || 0);
-                    const tagOrder = { 'ERROR FARE': 0, 'GREAT DEAL': 1, 'GOOD DEAL': 2, 'NORMAL': 3 };
-                    return (tagOrder[a.score?.tag] ?? 3) - (tagOrder[b.score?.tag] ?? 3);
-                });
-
-                for (const deal of sorted) {
-                    const tagCss = (deal.score?.tag || 'normal').toLowerCase().replace(' ', '-');
-                    const discVal = deal.score?.discount || 0;
-                    const discTagStr = discVal > 0 ? `-${discVal}%` : discVal < 0 ? `+${Math.abs(discVal)}%` : '±0%';
-                    const isWknd = isWeekendGetaway(deal);
-                    const card = document.createElement('div');
-                    card.className = `deal-card glass-panel ${tagCss}`;
-                    card.innerHTML = `
-                        <div class="card-header">
-                            <span class="card-route">${deal.origin} → ${deal.destName}</span>
-                            <span class="card-price ${tagCss}">€${deal.price}</span>
-                        </div>
-                        <div class="card-tags">
-                            <span class="tag-pill ${tagCss}">${deal.score?.emoji || ''} ${deal.score?.tag || 'NORMAL'} ${discTagStr}</span>
-                            ${isWknd ? `<span class="badge-stops" style="background:rgba(78,205,196,0.15); color:#4ecdc4; border:1px solid rgba(78,205,196,0.3);">✈️ Weekend</span>` : ''}
-                            ${deal.priceCrash ? `<span class="badge-stops" style="background:rgba(255,68,68,0.2); color:#ff4444; border-color:rgba(255,68,68,0.4);">📉 -€${deal.priceCrash.dropEur} Drop</span>` : ''}
-                            ${deal.stops > 0 ? `<span class="badge-stops">${deal.stops} stop</span>` : '<span class="badge-direct">Direct</span>'}
-                        </div>
-                        <div class="card-details">
-                            ${deal.tripDays}d trip · ${deal.date} → ${deal.returnDate} · ${deal.airline}
-                        </div>
-                    `;
-                    card.addEventListener('click', () => {
-                        const coords = getCoords(deal.dest);
-                        if (coords) {
-                            map.flyTo({
-                                center: coords,
-                                zoom: 5.2,
-                                speed: 0.7,
-                                curve: 1.2,
-                                pitch: 35,
-                                easing: (t) => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t,
-                                essential: true
-                            });
-                        }
-                        openDrawer(deal);
-                    });
-                    sidebar.appendChild(card);
-                }
-            }
-
-            function applyFilters() {
-                const searchLower = state.search.toLowerCase();
-                const filtered = deals.filter(d => {
-                    if (!state.origins.has(d.origin)) return false;
-                    if (!state.tags.has(d.score?.tag || 'NORMAL')) return false;
-                    if (d.price > state.maxPrice) return false;
-                    if (state.stops === '0' && d.stops !== 0) return false;
-                    if (state.stops === '1' && d.stops > 1) return false;
-                    if (state.weekendOnly && !isWeekendGetaway(d)) return false;
-                    if (state.days && d.date) {
-                        const flightDate = new Date(d.date);
-                        const maxDate = new Date();
-                        maxDate.setDate(maxDate.getDate() + state.days);
-                        if (flightDate > maxDate) return false;
-                    }
-                    if (searchLower) {
-                        const matchDest = (d.destName || '').toLowerCase().includes(searchLower);
-                        const matchCountry = (d.country || '').toLowerCase().includes(searchLower);
-                        const matchCode = (d.dest || '').toLowerCase().includes(searchLower);
-                        if (!matchDest && !matchCountry && !matchCode) return false;
-                    }
-                    return true;
-                });
-
-                // Stats
-                document.getElementById('stat-error').textContent = filtered.filter(d => d.score?.tag === 'ERROR FARE').length;
-                document.getElementById('stat-great').textContent = filtered.filter(d => d.score?.tag === 'GREAT DEAL').length;
-                document.getElementById('stat-good').textContent = filtered.filter(d => d.score?.tag === 'GOOD DEAL').length;
-                document.getElementById('stat-total').textContent = filtered.length;
-
-                renderCards(filtered);
-
-                const visIdx = new Set(filtered.map(d => deals.indexOf(d)));
-                map.setFilter('route-lines', ['in', ['get', 'idx'], ['literal', [...visIdx]]]);
-                map.setFilter('dest-circles', ['in', ['get', 'idx'], ['literal', [...visIdx]]]);
-            }
-
             // Events
-            document.getElementById('search-input').addEventListener('input', (e) => {
-                state.search = e.target.value;
-                applyFilters();
-            });
+            const searchEl = document.getElementById('search-input');
+            if (searchEl) {
+                searchEl.addEventListener('input', (e) => {
+                    state.search = e.target.value;
+                    applyFilters();
+                });
+            }
 
             document.querySelectorAll('.chip[data-filter="origin"]').forEach(btn => {
                 btn.addEventListener('click', () => {
@@ -1380,94 +1464,49 @@
                 });
             });
 
-            document.getElementById('sort-select').addEventListener('change', (e) => {
-                state.sort = e.target.value;
-                applyFilters();
-            });
+            const sortEl = document.getElementById('sort-select');
+            if (sortEl) {
+                sortEl.addEventListener('change', (e) => {
+                    state.sort = e.target.value;
+                    applyFilters();
+                });
+            }
 
             const priceSlider = document.getElementById('price-slider');
-            priceSlider.addEventListener('input', (e) => {
-                state.maxPrice = Number(e.target.value);
-                document.getElementById('price-val').textContent = `€${state.maxPrice}`;
-                applyFilters();
-            });
+            if (priceSlider) {
+                priceSlider.addEventListener('input', (e) => {
+                    state.maxPrice = Number(e.target.value);
+                    const valBadge = document.getElementById('price-val');
+                    if (valBadge) valBadge.textContent = `€${state.maxPrice}`;
+                    applyFilters();
+                });
+            }
 
             // Mobile Nav
             const btnMap = document.getElementById('btn-view-map');
             const btnList = document.getElementById('btn-view-list');
             const sidebar = document.getElementById('sidebar');
 
-            btnMap.addEventListener('click', () => {
-                btnMap.classList.add('active');
-                btnList.classList.remove('active');
-                sidebar.classList.remove('mobile-show');
-            });
-            btnList.addEventListener('click', () => {
-                btnList.classList.add('active');
-                btnMap.classList.remove('active');
-                sidebar.classList.add('mobile-show');
-            });
+            if (btnMap && sidebar) {
+                btnMap.addEventListener('click', () => {
+                    btnMap.classList.add('active');
+                    if (btnList) btnList.classList.remove('active');
+                    sidebar.classList.remove('mobile-show');
+                });
+            }
+            if (btnList && sidebar) {
+                btnList.addEventListener('click', () => {
+                    btnList.classList.add('active');
+                    if (btnMap) btnMap.classList.remove('active');
+                    sidebar.classList.add('mobile-show');
+                });
+            }
 
             map.on('click', 'dest-circles', (e) => {
                 const props = e.features[0].properties;
                 const deal = deals[props.idx];
                 if (deal) openDrawer(deal);
             });
-
-            async function triggerBackendHunt(days) {
-                const btnHunt = document.getElementById('btn-trigger-hunt');
-                const isStaticHost = window.location.hostname.endsWith('github.io') || (window.location.protocol === 'https:' && !window.location.host.includes('localhost'));
-
-                if (!isStaticHost) {
-                    if (btnHunt) btnHunt.textContent = `⏳ ${days}d Scan...`;
-                    try {
-                        const res = await fetch(`${API_BASE}/api/trigger-hunt?days=${days}`, { method: 'POST' });
-                        if (res.ok || res.status === 409) {
-                            if (btnHunt) btnHunt.textContent = `⚡ ${days}d Active`;
-                            pollHuntStatus();
-                            return;
-                        }
-                    } catch { }
-                }
-
-                if (btnHunt) btnHunt.textContent = `⏳ Syncing...`;
-                try {
-                    const res = await fetch(`error_fares_report.json?t=${Date.now()}`);
-                    if (res.ok) {
-                        const report = await res.json();
-                        if (report.allResults) {
-                            await updateMapSourcesAndFilters(report.allResults);
-                            if (btnHunt) btnHunt.textContent = `✓ Refreshed`;
-                            setTimeout(() => { if (btnHunt) btnHunt.textContent = '🔄 Refresh Deals'; }, 3000);
-                            return;
-                        }
-                    }
-                } catch { }
-
-                if (btnHunt) btnHunt.textContent = `🔄 Refresh Deals`;
-            }
-
-            function pollHuntStatus() {
-                const interval = setInterval(async () => {
-                    try {
-                        const res = await fetch(`${API_BASE}/api/status`);
-                        const data = await res.json();
-                        if (!data.isHunting) {
-                            clearInterval(interval);
-                            const btn = document.getElementById('btn-trigger-hunt');
-                            if (btn) btn.textContent = '🔄 Live Scan';
-                            const repRes = await fetch(`${API_BASE}/api/report`);
-                            if (repRes.ok) {
-                                const report = await repRes.json();
-                                if (report.allResults) {
-                                    deals = report.allResults;
-                                    applyFilters();
-                                }
-                            }
-                        }
-                    } catch { }
-                }, 3000);
-            }
 
             document.querySelectorAll('.chip[data-filter="days"]').forEach(btn => {
                 btn.addEventListener('click', () => {
