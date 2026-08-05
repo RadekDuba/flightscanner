@@ -1091,6 +1091,28 @@
             return (outDay === 4 || outDay === 5) && (retDay === 0 || retDay === 1 || retDay === 2) && d.tripDays >= 2 && d.tripDays <= 4;
         }
 
+        function fitMapToRoute(originCode, destCode) {
+            const from = getCoords(originCode);
+            const to = getCoords(destCode);
+            if (!from || !to || !map) return;
+
+            const bounds = new maptilersdk.LngLatBounds();
+            bounds.extend(from);
+            bounds.extend(to);
+
+            const isMobile = window.innerWidth <= 900;
+            const padding = isMobile 
+                ? { top: 60, bottom: 280, left: 30, right: 30 }
+                : { top: 100, bottom: 100, left: 100, right: 460 };
+
+            map.fitBounds(bounds, {
+                padding,
+                maxZoom: 6,
+                duration: 1200,
+                essential: true
+            });
+        }
+
         function openDrawer(deal) {
             const rEl = document.getElementById('d-route');
             if (rEl) rEl.textContent = `${deal.origin} → ${deal.destName}`;
@@ -1177,6 +1199,8 @@
                 if (map.getLayer('dest-circles')) map.setFilter('dest-circles', ['==', ['get', 'idx'], idx]);
             }
 
+            fitMapToRoute(deal.origin, deal.dest);
+
             const drawer = document.getElementById('drawer');
             const drawerOverlay = document.getElementById('drawer-overlay');
             if (drawer) drawer.classList.add('open');
@@ -1218,18 +1242,6 @@
                     </div>
                 `;
                 card.addEventListener('click', () => {
-                    const coords = getCoords(deal.dest);
-                    if (coords) {
-                        map.flyTo({
-                            center: coords,
-                            zoom: 5.2,
-                            speed: 0.7,
-                            curve: 1.2,
-                            pitch: 35,
-                            easing: (t) => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t,
-                            essential: true
-                        });
-                    }
                     openDrawer(deal);
                 });
                 sidebar.appendChild(card);
