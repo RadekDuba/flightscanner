@@ -53,7 +53,7 @@ jobs:
 
       - name: Hunt Flight Deals
         run: |
-          node error_fare_hunter.js --days 30
+          node error_fare_hunter.js
 
       - name: Commit updated report to repository
         run: |
