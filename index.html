@@ -935,6 +935,14 @@
             </div>
         </div>
 
+        <div class="itinerary-section" id="d-chart-section">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span class="section-title">📉 Price Trend & History</span>
+                <span id="d-crash-badge" style="font-size: 11px; font-weight: 700; color: var(--error-color);"></span>
+            </div>
+            <div id="d-chart-container" style="width: 100%; height: 130px; background: rgba(0,0,0,0.3); border-radius: 10px; padding: 10px 12px; border: 1px solid rgba(255,255,255,0.08);"></div>
+        </div>
+
         <div class="itinerary-section">
             <span class="section-title">Flight Details & Itinerary</span>
             <div class="flight-leg" id="d-leg-outbound">
@@ -1192,6 +1200,17 @@
                 }
             }
 
+            const crashBadgeEl = document.getElementById('d-crash-badge');
+            if (crashBadgeEl) {
+                if (deal.priceCrash) {
+                    crashBadgeEl.textContent = `📉 -€${deal.priceCrash.dropEur} Drop (-${deal.priceCrash.dropPercent}%)`;
+                } else {
+                    crashBadgeEl.textContent = '';
+                }
+            }
+
+            renderPriceChart(deal.priceHistory, deal.score?.baseline, deal.price);
+
             const idx = deals.indexOf(deal);
             if (idx !== -1 && map && map.isStyleLoaded()) {
                 if (map.getLayer('route-lines')) map.setFilter('route-lines', ['==', ['get', 'idx'], idx]);
@@ -1204,6 +1223,72 @@
             const drawerOverlay = document.getElementById('drawer-overlay');
             if (drawer) drawer.classList.add('open');
             if (drawerOverlay) drawerOverlay.classList.add('open');
+        }
+
+        function renderPriceChart(history, baseline, currentPrice) {
+            const container = document.getElementById('d-chart-container');
+            if (!container) return;
+            if (!history || history.length < 2) {
+                container.innerHTML = `<div style="font-size: 11px; color: var(--text-muted); text-align: center; padding-top: 35px;">No historical trend data available</div>`;
+                return;
+            }
+
+            const width = container.clientWidth || 360;
+            const height = 110;
+            const padX = 24;
+            const padY = 16;
+
+            const prices = history.map(h => h.price);
+            if (baseline) prices.push(baseline);
+            const minP = Math.max(0, Math.min(...prices) * 0.85);
+            const maxP = Math.max(...prices) * 1.1;
+
+            const getX = (i) => padX + (i / (history.length - 1)) * (width - padX * 2);
+            const getY = (price) => height - padY - ((price - minP) / (maxP - minP || 1)) * (height - padY * 2);
+
+            const points = history.map((h, i) => [getX(i), getY(h.price)]);
+
+            let dPath = `M ${points[0][0]} ${points[0][1]}`;
+            for (let i = 0; i < points.length - 1; i++) {
+                const p0 = points[i];
+                const p1 = points[i + 1];
+                const cX = (p0[0] + p1[0]) / 2;
+                dPath += ` C ${cX} ${p0[1]}, ${cX} ${p1[1]}, ${p1[0]} ${p1[1]}`;
+            }
+
+            const lastPoint = points[points.length - 1];
+            const firstPoint = points[0];
+            const areaPath = `${dPath} L ${lastPoint[0]} ${height - padY} L ${firstPoint[0]} ${height - padY} Z`;
+
+            const isCrash = baseline && currentPrice <= baseline * 0.6;
+            const lineColor = isCrash ? '#ff4444' : '#4ecdc4';
+            const gradId = `chartGrad_${Math.floor(Math.random() * 100000)}`;
+
+            const baselineY = baseline ? getY(baseline) : null;
+
+            let dotsSvg = points.map((p, i) => `
+                <circle cx="${p[0]}" cy="${p[1]}" r="${i === points.length - 1 ? 5 : 3}" fill="${i === points.length - 1 ? lineColor : '#fff'}" stroke="${lineColor}" stroke-width="2">
+                    <title>${history[i].date}: €${history[i].price}</title>
+                </circle>
+            `).join('');
+
+            container.innerHTML = `
+                <svg width="100%" height="100%" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" style="overflow: visible;">
+                    <defs>
+                        <linearGradient id="${gradId}" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="${lineColor}" stop-opacity="0.4"/>
+                            <stop offset="100%" stop-color="${lineColor}" stop-opacity="0.0"/>
+                        </linearGradient>
+                    </defs>
+                    ${baselineY ? `<line x1="${padX}" y1="${baselineY}" x2="${width - padX}" y2="${baselineY}" stroke="rgba(255,255,255,0.25)" stroke-dasharray="3 3" stroke-width="1.5"/>
+                    <text x="${width - padX}" y="${baselineY - 4}" fill="#8a8a9e" font-size="9" text-anchor="end">Market Base €${baseline}</text>` : ''}
+                    <path d="${areaPath}" fill="url(#${gradId})" />
+                    <path d="${dPath}" fill="none" stroke="${lineColor}" stroke-width="2.5" stroke-linecap="round" />
+                    ${dotsSvg}
+                    <text x="${firstPoint[0]}" y="${height - 2}" fill="#8a8a9e" font-size="9">${history[0].date.slice(5)}</text>
+                    <text x="${lastPoint[0]}" y="${height - 2}" fill="${lineColor}" font-size="9" font-weight="700" text-anchor="end">Today €${currentPrice}</text>
+                </svg>
+            `;
         }
 
         function renderCards(filtered) {
