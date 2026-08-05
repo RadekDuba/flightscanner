@@ -59,96 +59,139 @@
             border-radius: 18px;
         }
 
-        /* ─── Main Header Bar ────────────────────────── */
-        .header {
+        /* ─── Unified Top Control Bar ────────────────── */
+        .top-bar {
             position: absolute;
             top: 16px;
             left: 16px;
-            z-index: 10;
-            padding: 18px 22px;
-            width: 360px;
-            max-height: calc(100vh - 32px);
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            overflow-y: auto;
-        }
-
-        .brand-row {
+            right: 430px;
+            z-index: 20;
+            padding: 10px 18px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 14px;
+        }
+
+        .brand-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            white-space: nowrap;
         }
 
         .brand-title {
-            font-size: 19px;
+            font-size: 18px;
             font-weight: 800;
             letter-spacing: -0.4px;
-            background: linear-gradient(135deg, #ff5252, #ffab40, #ffd740);
+            background: linear-gradient(135deg, #ff3b5c, #ffab40, #00f2fe);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .brand-actions {
+        .search-group {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            flex: 1;
+            max-width: 600px;
         }
 
-        .btn-toggle-filters {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+        .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 160px;
+        }
+
+        .search-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 7px 12px 7px 32px;
+            font-size: 12px;
             color: var(--text-main);
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #00f2fe;
+            box-shadow: 0 0 14px rgba(0, 242, 254, 0.25);
+        }
+
+        .preset-chips {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            white-space: nowrap;
+        }
+
+        .stats-pills {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .stat-pill {
+            font-size: 11px;
+            font-weight: 700;
             padding: 4px 10px;
             border-radius: 12px;
-            font-size: 11px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .stat-pill.error { color: #ff3b5c; border-color: rgba(255, 59, 92, 0.3); background: rgba(255, 59, 92, 0.1); }
+        .stat-pill.great { color: #00f2fe; border-color: rgba(0, 242, 254, 0.3); background: rgba(0, 242, 254, 0.1); }
+
+        .btn-filters-toggle {
+            background: rgba(0, 242, 254, 0.12);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            color: #00f2fe;
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-size: 12px;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.2s ease;
         }
 
-        .btn-toggle-filters:hover {
-            background: rgba(78, 205, 196, 0.2);
-            border-color: #4ecdc4;
-            color: #4ecdc4;
+        .btn-filters-toggle:hover, .btn-filters-toggle.active {
+            background: #00f2fe;
+            color: #06070b;
+            box-shadow: 0 0 16px rgba(0, 242, 254, 0.4);
         }
 
-        .header.collapsed .search-box,
-        .header.collapsed .filter-group,
-        .header.collapsed .controls-row {
-            display: none !important;
-        }
-
-        .brand-status {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 11px;
-            color: #4ecdc4;
-            background: rgba(78, 205, 196, 0.1);
-            padding: 3px 8px;
-            border-radius: 12px;
-            border: 1px solid rgba(78, 205, 196, 0.2);
-        }
-
-        /* Preset Bar */
-        .preset-bar {
+        /* ─── Floating Filter Popover Drawer ───────────── */
+        .filter-popover {
             position: absolute;
-            top: 16px;
-            right: 430px;
-            z-index: 10;
-            padding: 8px 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            overflow-x: auto;
-            max-width: calc(100vw - 830px);
-            scrollbar-width: none;
+            top: 72px;
+            left: 16px;
+            z-index: 25;
+            padding: 18px 22px;
+            width: 520px;
+            display: none;
+            flex-direction: column;
+            gap: 14px;
+            animation: fadeInDown 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .preset-bar::-webkit-scrollbar {
-            display: none;
+        .filter-popover.open {
+            display: flex;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .preset-chip {
@@ -914,41 +957,41 @@
 <body>
     <div id="map"></div>
 
-    <!-- Header Panel -->
-    <div class="header glass-panel" id="hud-panel">
-        <div class="brand-row">
-            <h1 class="brand-title">🔥 FlightScanner v3.5</h1>
-            <div class="brand-actions">
-                <span class="brand-status"><span class="status-dot"></span> Sync</span>
-                <button class="btn-toggle-filters" id="btn-toggle-hud" title="Toggle HUD Filters">⚙️ Filters</button>
+    <!-- Unified Top Floating Control Bar -->
+    <div class="top-bar glass-panel" id="top-bar">
+        <div class="brand-group">
+            <h1 class="brand-title">🔥 FlightScanner</h1>
+            <span class="brand-status"><span class="status-dot"></span> Sync</span>
+        </div>
+
+        <div class="search-group">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="search-input" class="search-input"
+                    placeholder="Search city, country, airport (e.g. BCN, Spain)...">
+            </div>
+            <div class="preset-chips">
+                <button class="preset-chip" id="preset-under50">🔥 <€50</button>
+                <button class="preset-chip" id="preset-topdeals">⭐ Top Deals</button>
+                <button class="preset-chip" id="preset-direct">✈️ Direct</button>
+                <button class="preset-chip" id="preset-weekend">🏖️ Weekend</button>
+                <button class="preset-chip reset" id="preset-reset">↺ Reset</button>
             </div>
         </div>
 
-        <div class="stats-grid">
-            <div class="stat-box error">
-                <div class="val" id="stat-error">0</div>
-                <div class="lbl">Error</div>
+        <div class="header-actions">
+            <div class="stats-pills">
+                <span class="stat-pill error" id="stat-error-pill">🔥 0</span>
+                <span class="stat-pill great" id="stat-great-pill">⭐ 0</span>
+                <span class="stat-pill total" id="stat-total-pill">252 Total</span>
             </div>
-            <div class="stat-box great">
-                <div class="val" id="stat-great">0</div>
-                <div class="lbl">Great</div>
-            </div>
-            <div class="stat-box good">
-                <div class="val" id="stat-good">0</div>
-                <div class="lbl">Good</div>
-            </div>
-            <div class="stat-box total">
-                <div class="val" id="stat-total">0</div>
-                <div class="lbl">Total</div>
-            </div>
+            <button class="btn-filters-toggle" id="btn-toggle-filters">⚙️ Filters</button>
         </div>
+    </div>
 
-        <div class="search-box">
-            <span class="search-icon">🔍</span>
-            <input type="text" id="search-input" class="search-input"
-                placeholder="Search city, country, or airport (e.g. BCN, Spain)...">
-        </div>
-        <div class="search-chips" id="search-chips" style="display: flex; gap: 6px; overflow-x: auto; padding-top: 2px;">
+    <!-- Floating Filter Popover Drawer -->
+    <div class="filter-popover glass-panel" id="filter-popover">
+        <div class="search-chips" id="search-chips" style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px;">
             <button class="sug-chip" data-search="Italy">🇮🇹 Italy</button>
             <button class="sug-chip" data-search="Spain">🇪🇸 Spain</button>
             <button class="sug-chip" data-search="New York">🇺🇸 New York</button>
@@ -956,79 +999,75 @@
             <button class="sug-chip" data-search="London">🇬🇧 London</button>
         </div>
 
-        <div class="filter-group">
-            <span class="filter-label">Airline Carrier</span>
-            <select id="airline-select" class="custom-select" style="width: 100%;">
-                <option value="all">All Airlines</option>
-            </select>
-        </div>
+        <div style="display: flex; gap: 14px;">
+            <div class="filter-group" style="flex:1;">
+                <span class="filter-label">Origin Airport</span>
+                <div class="filter-chips">
+                    <button class="chip active origin-prg" data-filter="origin" data-value="PRG">PRG</button>
+                    <button class="chip active" data-filter="origin" data-value="VIE">VIE</button>
+                    <button class="chip active" data-filter="origin" data-value="BTS">BTS</button>
+                    <button class="chip active" data-filter="origin" data-value="KTW">KTW</button>
+                    <button class="chip active" data-filter="origin" data-value="OSR">OSR</button>
+                </div>
+            </div>
 
-        <div class="filter-group">
-            <span class="filter-label">Origin Airport</span>
-            <div class="filter-chips">
-                <button class="chip active origin-prg" data-filter="origin" data-value="PRG">PRG</button>
-                <button class="chip active" data-filter="origin" data-value="VIE">VIE</button>
-                <button class="chip active" data-filter="origin" data-value="BTS">BTS</button>
-                <button class="chip active" data-filter="origin" data-value="KTW">KTW</button>
-                <button class="chip active" data-filter="origin" data-value="OSR">OSR</button>
+            <div class="filter-group" style="flex:1;">
+                <span class="filter-label">Deal Rating</span>
+                <div class="filter-chips">
+                    <button class="chip active tag-error" data-filter="tag" data-value="ERROR FARE">🔥 Error</button>
+                    <button class="chip active tag-great" data-filter="tag" data-value="GREAT DEAL">⭐ Great</button>
+                    <button class="chip active tag-good" data-filter="tag" data-value="GOOD DEAL">✅ Good</button>
+                    <button class="chip" data-filter="tag" data-value="NORMAL">Normal</button>
+                </div>
             </div>
         </div>
 
-        <div class="filter-group">
-            <span class="filter-label">Deal Rating</span>
-            <div class="filter-chips">
-                <button class="chip active tag-error" data-filter="tag" data-value="ERROR FARE">🔥 Error</button>
-                <button class="chip active tag-great" data-filter="tag" data-value="GREAT DEAL">⭐ Great</button>
-                <button class="chip active tag-good" data-filter="tag" data-value="GOOD DEAL">✅ Good</button>
-                <button class="chip active" data-filter="tag" data-value="NORMAL">Normal</button>
+        <div style="display: flex; gap: 14px;">
+            <div class="filter-group" style="flex:1;">
+                <span class="filter-label">Flight Type</span>
+                <div class="filter-chips">
+                    <button class="chip active" data-filter="stops" data-value="all">All</button>
+                    <button class="chip" data-filter="stops" data-value="0">Direct</button>
+                    <button class="chip" data-filter="stops" data-value="1">Max 1 Stop</button>
+                    <button class="chip" data-filter="weekend" data-value="true">✈️ Weekend</button>
+                </div>
+            </div>
+
+            <div class="filter-group" style="flex:1;">
+                <span class="filter-label">Search Range Window</span>
+                <div class="filter-chips">
+                    <button class="chip" data-filter="days" data-value="7">7d</button>
+                    <button class="chip" data-filter="days" data-value="30">30d</button>
+                    <button class="chip" data-filter="days" data-value="90">90d</button>
+                    <button class="chip active" data-filter="days" data-value="365">Full Year</button>
+                </div>
             </div>
         </div>
 
-        <div class="filter-group">
-            <span class="filter-label">Flight Type</span>
-            <div class="filter-chips">
-                <button class="chip active" data-filter="stops" data-value="all">All Flights</button>
-                <button class="chip" data-filter="stops" data-value="0">Direct Only</button>
-                <button class="chip" data-filter="stops" data-value="1">Max 1 Stop</button>
-                <button class="chip" data-filter="weekend" data-value="true">✈️ Weekend Getaways Only</button>
+        <div style="display: flex; gap: 14px; align-items: center;">
+            <div class="filter-group" style="flex:1;">
+                <span class="filter-label">Airline Carrier</span>
+                <select id="airline-select" class="custom-select" style="width: 100%;">
+                    <option value="all">All Airlines</option>
+                </select>
+            </div>
+            <div class="filter-group" style="flex:1;">
+                <span class="filter-label">Sort & Max Price</span>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <select id="sort-select" class="custom-select" style="flex:1;">
+                        <option value="score">Sort: Best Deals</option>
+                        <option value="price-asc">Sort: Price ↑</option>
+                        <option value="price-desc">Sort: Price ↓</option>
+                        <option value="discount">Sort: Discount %</option>
+                        <option value="date">Sort: Date</option>
+                    </select>
+                    <div class="slider-container" style="flex:1;">
+                        <input type="range" id="price-slider" min="0" max="2000" value="2000">
+                        <span class="price-badge" id="price-val">€2000</span>
+                    </div>
+                </div>
             </div>
         </div>
-
-        <div class="filter-group">
-            <span class="filter-label">Search Range Window</span>
-            <div class="filter-chips">
-                <button class="chip" data-filter="days" data-value="1">🔥 Today</button>
-                <button class="chip" data-filter="days" data-value="7">📆 7 Days</button>
-                <button class="chip" data-filter="days" data-value="30">⚡ 30 Days</button>
-                <button class="chip" data-filter="days" data-value="60">📅 60 Days</button>
-                <button class="chip" data-filter="days" data-value="90">🗓️ 90 Days</button>
-                <button class="chip" data-filter="days" data-value="180">🌍 6 Months</button>
-                <button class="chip active" data-filter="days" data-value="365">🎆 Full Year</button>
-            </div>
-        </div>
-
-        <div class="controls-row">
-            <select id="sort-select" class="custom-select">
-                <option value="score">Sort: Best Deals</option>
-                <option value="price-asc">Sort: Price ↑</option>
-                <option value="price-desc">Sort: Price ↓</option>
-                <option value="discount">Sort: Discount %</option>
-                <option value="date">Sort: Date</option>
-            </select>
-            <div class="slider-container">
-                <input type="range" id="price-slider" min="0" max="2000" value="2000">
-                <span class="price-badge" id="price-val">€2000</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- Quick Preset Filters Bar -->
-    <div class="preset-bar glass-panel" id="preset-bar">
-        <button class="preset-chip" id="preset-under50">🔥 Under €50</button>
-        <button class="preset-chip" id="preset-topdeals">⭐ Top Deals</button>
-        <button class="preset-chip" id="preset-direct">✈️ Direct Only</button>
-        <button class="preset-chip" id="preset-weekend">🏖️ Weekend</button>
-        <button class="preset-chip reset" id="preset-reset">↺ Reset</button>
     </div>
 
     <!-- Map Legend -->
@@ -1616,14 +1655,14 @@
                 return true;
             });
 
-            const errEl = document.getElementById('stat-error');
-            const grtEl = document.getElementById('stat-great');
-            const gudEl = document.getElementById('stat-good');
-            const totEl = document.getElementById('stat-total');
-            if (errEl) errEl.textContent = filtered.filter(d => d.score?.tag === 'ERROR FARE').length;
-            if (grtEl) grtEl.textContent = filtered.filter(d => d.score?.tag === 'GREAT DEAL').length;
-            if (gudEl) gudEl.textContent = filtered.filter(d => d.score?.tag === 'GOOD DEAL').length;
-            if (totEl) totEl.textContent = filtered.length;
+            const errPill = document.getElementById('stat-error-pill');
+            const grtPill = document.getElementById('stat-great-pill');
+            const totPill = document.getElementById('stat-total-pill');
+            const numErr = filtered.filter(d => d.score?.tag === 'ERROR FARE').length;
+            const numGrt = filtered.filter(d => d.score?.tag === 'GREAT DEAL').length;
+            if (errPill) errPill.textContent = `🔥 ${numErr}`;
+            if (grtPill) grtPill.textContent = `⭐ ${numGrt}`;
+            if (totPill) totPill.textContent = `${filtered.length} Total`;
 
             updateSmartInsights(filtered);
             renderCards(filtered);
@@ -1967,13 +2006,20 @@
                 });
             }
 
-            // Toggle HUD Panel Collapse
-            const btnToggleHud = document.getElementById('btn-toggle-hud');
-            const hudPanel = document.getElementById('hud-panel');
-            if (btnToggleHud && hudPanel) {
-                btnToggleHud.addEventListener('click', () => {
-                    hudPanel.classList.toggle('collapsed');
-                    btnToggleHud.textContent = hudPanel.classList.contains('collapsed') ? '⚙️ Filters' : '✖ Collapse';
+            // Toggle Filter Popover Drawer
+            const btnToggleFilters = document.getElementById('btn-toggle-filters');
+            const filterPopover = document.getElementById('filter-popover');
+            if (btnToggleFilters && filterPopover) {
+                btnToggleFilters.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    filterPopover.classList.toggle('open');
+                    btnToggleFilters.classList.toggle('active', filterPopover.classList.contains('open'));
+                });
+                document.addEventListener('click', (e) => {
+                    if (filterPopover.classList.contains('open') && !filterPopover.contains(e.target) && e.target !== btnToggleFilters) {
+                        filterPopover.classList.remove('open');
+                        btnToggleFilters.classList.remove('active');
+                    }
                 });
             }
 
