@@ -916,6 +916,35 @@
         <button id="btn-view-list">📋 Deals List</button>
     </div>
 
+    <!-- Trigger Scan Modal -->
+    <div class="scan-modal-overlay" id="scan-modal-overlay" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.75); z-index:1000; backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); align-items:center; justify-content:center;">
+        <div class="glass-panel" style="width:420px; max-width:90vw; padding:24px; position:relative; background:var(--panel-bg); border:1px solid var(--panel-border); border-radius:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                <h3 style="font-size:18px; font-weight:800; color:var(--text-main);">⚡ Trigger Live Scan</h3>
+                <button id="scan-modal-close" style="background:none; border:none; color:var(--text-muted); font-size:24px; cursor:pointer;">×</button>
+            </div>
+            
+            <p style="font-size:13px; color:var(--text-muted); line-height:1.5; margin-bottom:18px;">
+                Launch a fresh cloud scan on GitHub Actions to search for live flight error fares.
+            </p>
+
+            <a href="https://github.com/RadekDuba/flightscanner/actions/workflows/deploy.yml" target="_blank" class="btn-link" style="display:block; text-align:center; padding:12px; background:linear-gradient(135deg, #ff5252, #ffab40); color:#000; font-weight:700; border-radius:10px; text-decoration:none; margin-bottom:16px; font-size:14px;">
+                🚀 1-Click Launch on GitHub Actions
+            </a>
+
+            <div style="border-top:1px solid var(--panel-border); padding-top:14px; margin-top:14px;">
+                <label style="font-size:12px; font-weight:600; color:var(--text-muted); display:block; margin-bottom:6px;">
+                    🔑 Optional: Save GitHub PAT Token for Direct 1-Click Scan from Map
+                </label>
+                <div style="display:flex; gap:8px;">
+                    <input type="password" id="gh-token-input" placeholder="ghp_xxxxxxxxxxxx" style="flex:1; background:rgba(0,0,0,0.5); border:1px solid var(--panel-border); color:#fff; padding:8px 12px; border-radius:8px; font-size:12px;">
+                    <button id="btn-save-gh-token" style="background:var(--accent-cyan); color:#000; font-weight:700; border:none; padding:8px 14px; border-radius:8px; cursor:pointer; font-size:12px;">Save</button>
+                </div>
+                <span id="gh-token-status" style="font-size:11px; color:var(--accent-cyan); display:block; margin-top:6px;"></span>
+            </div>
+        </div>
+    </div>
+
     <script>
         const MAPTILER_KEY = 'IMi1p2HJvGGHIDVoJaYX';
         const GEO_CACHE_KEY = 'efh_geocache_v6';
@@ -1404,29 +1433,73 @@
             async function triggerBackendHunt(days) {
                 const btnHunt = document.getElementById('btn-trigger-hunt');
                 const isStaticHost = window.location.hostname.endsWith('github.io') || (window.location.protocol === 'https:' && !window.location.host.includes('localhost'));
-                
-                if (isStaticHost) {
-                    if (btnHunt) {
-                        btnHunt.textContent = `⚡ Auto 6h Sync`;
-                        setTimeout(() => { btnHunt.textContent = '🔄 Live Scan'; }, 3000);
-                    }
-                    return;
+
+                // 1. Try local server first if on localhost or non-static
+                if (!isStaticHost) {
+                    if (btnHunt) btnHunt.textContent = `⏳ ${days}d Scan...`;
+                    try {
+                        const res = await fetch(`${API_BASE}/api/trigger-hunt?days=${days}`, { method: 'POST' });
+                        if (res.ok || res.status === 409) {
+                            if (btnHunt) btnHunt.textContent = `⚡ ${days}d Active`;
+                            pollHuntStatus();
+                            return;
+                        }
+                    } catch { }
                 }
 
-                if (btnHunt) btnHunt.textContent = `⏳ ${days}d Scan...`;
-                try {
-                    const res = await fetch(`${API_BASE}/api/trigger-hunt?days=${days}`, { method: 'POST' });
-                    if (res.ok || res.status === 409) {
-                        if (btnHunt) btnHunt.textContent = `⚡ ${days}d Active`;
-                        pollHuntStatus();
-                    } else {
-                        if (btnHunt) btnHunt.textContent = '❌ Offline';
-                        setTimeout(() => { if (btnHunt) btnHunt.textContent = '🔄 Live Scan'; }, 4000);
-                    }
-                } catch {
-                    if (btnHunt) btnHunt.textContent = '❌ Offline';
-                    setTimeout(() => { if (btnHunt) btnHunt.textContent = '🔄 Live Scan'; }, 4000);
+                // 2. Check for stored GitHub PAT token for direct API trigger
+                const storedToken = localStorage.getItem('efh_gh_token');
+                if (storedToken) {
+                    if (btnHunt) btnHunt.textContent = `⏳ Cloud Scan...`;
+                    try {
+                        const res = await fetch('https://api.github.com/repos/RadekDuba/flightscanner/actions/workflows/deploy.yml/dispatches', {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Bearer ${storedToken}`,
+                                'Accept': 'application/vnd.github+json'
+                            },
+                            body: JSON.stringify({ ref: 'main' })
+                        });
+                        if (res.ok || res.status === 204) {
+                            if (btnHunt) btnHunt.textContent = `⚡ Scan Launched!`;
+                            setTimeout(() => { if (btnHunt) btnHunt.textContent = '🔄 Live Scan'; }, 4000);
+                            return;
+                        }
+                    } catch { }
                 }
+
+                // 3. Open Modal for 1-Click Action or Token Entry
+                const modal = document.getElementById('scan-modal-overlay');
+                if (modal) modal.style.display = 'flex';
+            }
+
+            // Modal Logic
+            const modalClose = document.getElementById('scan-modal-close');
+            const modalOverlay = document.getElementById('scan-modal-overlay');
+            if (modalClose) modalClose.addEventListener('click', () => { modalOverlay.style.display = 'none'; });
+            if (modalOverlay) modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) modalOverlay.style.display = 'none'; });
+
+            const savedToken = localStorage.getItem('efh_gh_token');
+            if (savedToken) {
+                const input = document.getElementById('gh-token-input');
+                const status = document.getElementById('gh-token-status');
+                if (input) input.value = savedToken;
+                if (status) status.textContent = '✓ Token saved — 1-click map scan active!';
+            }
+
+            const btnSaveTok = document.getElementById('btn-save-gh-token');
+            if (btnSaveTok) {
+                btnSaveTok.addEventListener('click', () => {
+                    const tok = document.getElementById('gh-token-input').value.trim();
+                    const status = document.getElementById('gh-token-status');
+                    if (tok) {
+                        localStorage.setItem('efh_gh_token', tok);
+                        if (status) status.textContent = '✓ Saved! Live Scan button now triggers GitHub Actions directly.';
+                    } else {
+                        localStorage.removeItem('efh_gh_token');
+                        if (status) status.textContent = 'Token cleared.';
+                    }
+                });
             }
 
             function pollHuntStatus() {
