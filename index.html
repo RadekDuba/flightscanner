@@ -1298,6 +1298,12 @@
                     if (state.stops === '0' && d.stops !== 0) return false;
                     if (state.stops === '1' && d.stops > 1) return false;
                     if (state.weekendOnly && !isWeekendGetaway(d)) return false;
+                    if (state.days && d.date) {
+                        const flightDate = new Date(d.date);
+                        const maxDate = new Date();
+                        maxDate.setDate(maxDate.getDate() + state.days);
+                        if (flightDate > maxDate) return false;
+                    }
                     if (searchLower) {
                         const matchDest = (d.destName || '').toLowerCase().includes(searchLower);
                         const matchCountry = (d.country || '').toLowerCase().includes(searchLower);
@@ -1397,19 +1403,29 @@
 
             async function triggerBackendHunt(days) {
                 const btnHunt = document.getElementById('btn-trigger-hunt');
-                btnHunt.textContent = `⏳ ${days}d Scan...`;
+                const isStaticHost = window.location.hostname.endsWith('github.io') || (window.location.protocol === 'https:' && !window.location.host.includes('localhost'));
+                
+                if (isStaticHost) {
+                    if (btnHunt) {
+                        btnHunt.textContent = `⚡ Auto 6h Sync`;
+                        setTimeout(() => { btnHunt.textContent = '🔄 Live Scan'; }, 3000);
+                    }
+                    return;
+                }
+
+                if (btnHunt) btnHunt.textContent = `⏳ ${days}d Scan...`;
                 try {
                     const res = await fetch(`${API_BASE}/api/trigger-hunt?days=${days}`, { method: 'POST' });
                     if (res.ok || res.status === 409) {
-                        btnHunt.textContent = `⚡ ${days}d Active`;
+                        if (btnHunt) btnHunt.textContent = `⚡ ${days}d Active`;
                         pollHuntStatus();
                     } else {
-                        btnHunt.textContent = '❌ Failed';
-                        setTimeout(() => { btnHunt.textContent = '🔄 Live Scan'; }, 4000);
+                        if (btnHunt) btnHunt.textContent = '❌ Offline';
+                        setTimeout(() => { if (btnHunt) btnHunt.textContent = '🔄 Live Scan'; }, 4000);
                     }
                 } catch {
-                    btnHunt.textContent = '❌ Error';
-                    setTimeout(() => { btnHunt.textContent = '🔄 Live Scan'; }, 4000);
+                    if (btnHunt) btnHunt.textContent = '❌ Offline';
+                    setTimeout(() => { if (btnHunt) btnHunt.textContent = '🔄 Live Scan'; }, 4000);
                 }
             }
 
@@ -1420,7 +1436,8 @@
                         const data = await res.json();
                         if (!data.isHunting) {
                             clearInterval(interval);
-                            document.getElementById('btn-trigger-hunt').textContent = '🔄 Live Scan';
+                            const btn = document.getElementById('btn-trigger-hunt');
+                            if (btn) btn.textContent = '🔄 Live Scan';
                             const repRes = await fetch(`${API_BASE}/api/report`);
                             if (repRes.ok) {
                                 const report = await repRes.json();
@@ -1439,6 +1456,7 @@
                     document.querySelectorAll('.chip[data-filter="days"]').forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
                     state.days = Number(btn.dataset.value);
+                    applyFilters();
                     triggerBackendHunt(state.days);
                 });
             });
