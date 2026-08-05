@@ -59,18 +59,27 @@
             border-radius: 18px;
         }
 
-        /* ─── Unified Top Control Bar ────────────────── */
-        .top-bar {
-            position: absolute;
-            top: 16px;
-            left: 16px;
-            right: 430px;
-            z-index: 20;
-            padding: 10px 18px;
+        /* ─── Unified Full-Bleed Grid Dashboard Layout ──── */
+        .app-layout {
+            display: flex;
+            flex-direction: column;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .app-header {
+            height: 56px;
+            background: rgba(11, 14, 23, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 14px;
+            padding: 0 16px;
+            gap: 16px;
+            z-index: 50;
+            flex-shrink: 0;
         }
 
         .brand-group {
@@ -90,12 +99,18 @@
             -webkit-text-fill-color: transparent;
         }
 
+        .brand-version {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
         .search-group {
             display: flex;
             align-items: center;
             gap: 10px;
             flex: 1;
-            max-width: 600px;
+            max-width: 680px;
         }
 
         .search-box {
@@ -108,7 +123,7 @@
             width: 100%;
             background: rgba(255, 255, 255, 0.06);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
+            border-radius: 10px;
             padding: 7px 12px 7px 32px;
             font-size: 12px;
             color: var(--text-main);
@@ -119,7 +134,7 @@
         .search-input:focus {
             background: rgba(255, 255, 255, 0.1);
             border-color: #00f2fe;
-            box-shadow: 0 0 14px rgba(0, 242, 254, 0.25);
+            box-shadow: 0 0 12px rgba(0, 242, 254, 0.25);
         }
 
         .preset-chips {
@@ -128,24 +143,18 @@
             gap: 6px;
         }
 
-        .header-actions {
+        .header-stats {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             white-space: nowrap;
-        }
-
-        .stats-pills {
-            display: flex;
-            align-items: center;
-            gap: 6px;
         }
 
         .stat-pill {
             font-size: 11px;
             font-weight: 700;
             padding: 4px 10px;
-            border-radius: 12px;
+            border-radius: 10px;
             background: rgba(255, 255, 255, 0.06);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
@@ -153,36 +162,37 @@
         .stat-pill.error { color: #ff3b5c; border-color: rgba(255, 59, 92, 0.3); background: rgba(255, 59, 92, 0.1); }
         .stat-pill.great { color: #00f2fe; border-color: rgba(0, 242, 254, 0.3); background: rgba(0, 242, 254, 0.1); }
 
-        .btn-filters-toggle {
-            background: rgba(0, 242, 254, 0.12);
-            border: 1px solid rgba(0, 242, 254, 0.3);
-            color: #00f2fe;
-            padding: 6px 14px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s ease;
+        .app-body {
+            display: flex;
+            flex: 1;
+            height: calc(100vh - 56px);
+            position: relative;
+            overflow: hidden;
         }
 
-        .btn-filters-toggle:hover, .btn-filters-toggle.active {
-            background: #00f2fe;
-            color: #06070b;
-            box-shadow: 0 0 16px rgba(0, 242, 254, 0.4);
-        }
-
-        /* ─── Floating Filter Popover Drawer ───────────── */
-        .filter-popover {
-            position: absolute;
-            top: 72px;
-            left: 16px;
-            z-index: 25;
-            padding: 18px 22px;
-            width: 520px;
-            display: none;
+        .left-sidebar {
+            width: 320px;
+            background: rgba(11, 14, 23, 0.95);
+            backdrop-filter: blur(24px);
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
             flex-direction: column;
             gap: 14px;
-            animation: fadeInDown 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 16px;
+            overflow-y: auto;
+            z-index: 30;
+            flex-shrink: 0;
+        }
+
+        .map-viewport {
+            flex: 1;
+            height: 100%;
+            position: relative;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
         }
 
         .filter-popover.open {
@@ -491,17 +501,17 @@
 
         /* ─── Sidebar (Deal Cards) ────────────────────── */
         .sidebar {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            bottom: 16px;
-            z-index: 10;
-            width: 370px;
+            width: 380px;
+            background: rgba(11, 14, 23, 0.95);
+            backdrop-filter: blur(24px);
+            border-left: 1px solid rgba(255, 255, 255, 0.08);
             overflow-y: auto;
             display: flex;
             flex-direction: column;
             gap: 10px;
-            padding-right: 2px;
+            padding: 16px;
+            z-index: 30;
+            flex-shrink: 0;
             scrollbar-width: thin;
             scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
         }
@@ -955,143 +965,131 @@
 </head>
 
 <body>
-    <div id="map"></div>
-
-    <!-- Unified Top Floating Control Bar -->
-    <div class="top-bar glass-panel" id="top-bar">
-        <div class="brand-group">
-            <h1 class="brand-title">🔥 FlightScanner</h1>
-            <span class="brand-status"><span class="status-dot"></span> Sync</span>
-        </div>
-
-        <div class="search-group">
-            <div class="search-box">
-                <span class="search-icon">🔍</span>
-                <input type="text" id="search-input" class="search-input"
-                    placeholder="Search city, country, airport (e.g. BCN, Spain)...">
+    <div class="app-layout">
+        <!-- 100% Full-Width Top Header Bar -->
+        <header class="app-header" id="app-header">
+            <div class="brand-group">
+                <h1 class="brand-title">🔥 FlightScanner <span class="brand-version">v3.5</span></h1>
+                <span class="brand-status"><span class="status-dot"></span> Sync</span>
             </div>
-            <div class="preset-chips">
-                <button class="preset-chip" id="preset-under50">🔥 <€50</button>
-                <button class="preset-chip" id="preset-topdeals">⭐ Top Deals</button>
-                <button class="preset-chip" id="preset-direct">✈️ Direct</button>
-                <button class="preset-chip" id="preset-weekend">🏖️ Weekend</button>
-                <button class="preset-chip reset" id="preset-reset">↺ Reset</button>
-            </div>
-        </div>
 
-        <div class="header-actions">
-            <div class="stats-pills">
+            <div class="search-group">
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="search-input" class="search-input"
+                        placeholder="Search city, country, airport (e.g. BCN, Spain)...">
+                </div>
+                <div class="preset-chips">
+                    <button class="preset-chip" id="preset-under50">🔥 <€50</button>
+                    <button class="preset-chip" id="preset-topdeals">⭐ Top Deals</button>
+                    <button class="preset-chip" id="preset-direct">✈️ Direct</button>
+                    <button class="preset-chip" id="preset-weekend">🏖️ Weekend</button>
+                    <button class="preset-chip reset" id="preset-reset">↺ Reset</button>
+                </div>
+            </div>
+
+            <div class="header-stats">
                 <span class="stat-pill error" id="stat-error-pill">🔥 0</span>
                 <span class="stat-pill great" id="stat-great-pill">⭐ 0</span>
                 <span class="stat-pill total" id="stat-total-pill">252 Total</span>
             </div>
-            <button class="btn-filters-toggle" id="btn-toggle-filters">⚙️ Filters</button>
-        </div>
-    </div>
+        </header>
 
-    <!-- Floating Filter Popover Drawer -->
-    <div class="filter-popover glass-panel" id="filter-popover">
-        <div class="search-chips" id="search-chips" style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px;">
-            <button class="sug-chip" data-search="Italy">🇮🇹 Italy</button>
-            <button class="sug-chip" data-search="Spain">🇪🇸 Spain</button>
-            <button class="sug-chip" data-search="New York">🇺🇸 New York</button>
-            <button class="sug-chip" data-search="Morocco">🇲🇦 Morocco</button>
-            <button class="sug-chip" data-search="London">🇬🇧 London</button>
-        </div>
-
-        <div style="display: flex; gap: 14px;">
-            <div class="filter-group" style="flex:1;">
-                <span class="filter-label">Origin Airport</span>
-                <div class="filter-chips">
-                    <button class="chip active origin-prg" data-filter="origin" data-value="PRG">PRG</button>
-                    <button class="chip active" data-filter="origin" data-value="VIE">VIE</button>
-                    <button class="chip active" data-filter="origin" data-value="BTS">BTS</button>
-                    <button class="chip active" data-filter="origin" data-value="KTW">KTW</button>
-                    <button class="chip active" data-filter="origin" data-value="OSR">OSR</button>
+        <div class="app-body">
+            <!-- Anchored Left Filter Panel -->
+            <aside class="left-sidebar" id="left-sidebar">
+                <div class="search-chips" id="search-chips" style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px;">
+                    <button class="sug-chip" data-search="Italy">🇮🇹 Italy</button>
+                    <button class="sug-chip" data-search="Spain">🇪🇸 Spain</button>
+                    <button class="sug-chip" data-search="New York">🇺🇸 New York</button>
+                    <button class="sug-chip" data-search="Morocco">🇲🇦 Morocco</button>
+                    <button class="sug-chip" data-search="London">🇬🇧 London</button>
                 </div>
-            </div>
 
-            <div class="filter-group" style="flex:1;">
-                <span class="filter-label">Deal Rating</span>
-                <div class="filter-chips">
-                    <button class="chip active tag-error" data-filter="tag" data-value="ERROR FARE">🔥 Error</button>
-                    <button class="chip active tag-great" data-filter="tag" data-value="GREAT DEAL">⭐ Great</button>
-                    <button class="chip active tag-good" data-filter="tag" data-value="GOOD DEAL">✅ Good</button>
-                    <button class="chip active" data-filter="tag" data-value="NORMAL">Normal</button>
+                <div class="filter-group">
+                    <span class="filter-label">Origin Airport</span>
+                    <div class="filter-chips">
+                        <button class="chip active origin-prg" data-filter="origin" data-value="PRG">PRG</button>
+                        <button class="chip active" data-filter="origin" data-value="VIE">VIE</button>
+                        <button class="chip active" data-filter="origin" data-value="BTS">BTS</button>
+                        <button class="chip active" data-filter="origin" data-value="KTW">KTW</button>
+                        <button class="chip active" data-filter="origin" data-value="OSR">OSR</button>
+                    </div>
                 </div>
-            </div>
-        </div>
 
-        <div style="display: flex; gap: 14px;">
-            <div class="filter-group" style="flex:1;">
-                <span class="filter-label">Flight Type</span>
-                <div class="filter-chips">
-                    <button class="chip active" data-filter="stops" data-value="all">All</button>
-                    <button class="chip" data-filter="stops" data-value="0">Direct</button>
-                    <button class="chip" data-filter="stops" data-value="1">Max 1 Stop</button>
-                    <button class="chip" data-filter="weekend" data-value="true">✈️ Weekend</button>
+                <div class="filter-group">
+                    <span class="filter-label">Deal Rating</span>
+                    <div class="filter-chips">
+                        <button class="chip active tag-error" data-filter="tag" data-value="ERROR FARE">🔥 Error</button>
+                        <button class="chip active tag-great" data-filter="tag" data-value="GREAT DEAL">⭐ Great</button>
+                        <button class="chip active tag-good" data-filter="tag" data-value="GOOD DEAL">✅ Good</button>
+                        <button class="chip active" data-filter="tag" data-value="NORMAL">Normal</button>
+                    </div>
                 </div>
-            </div>
 
-            <div class="filter-group" style="flex:1;">
-                <span class="filter-label">Search Range Window</span>
-                <div class="filter-chips">
-                    <button class="chip" data-filter="days" data-value="7">7d</button>
-                    <button class="chip" data-filter="days" data-value="30">30d</button>
-                    <button class="chip" data-filter="days" data-value="90">90d</button>
-                    <button class="chip active" data-filter="days" data-value="365">Full Year</button>
+                <div class="filter-group">
+                    <span class="filter-label">Flight Type</span>
+                    <div class="filter-chips">
+                        <button class="chip active" data-filter="stops" data-value="all">All</button>
+                        <button class="chip" data-filter="stops" data-value="0">Direct</button>
+                        <button class="chip" data-filter="stops" data-value="1">Max 1 Stop</button>
+                        <button class="chip" data-filter="weekend" data-value="true">✈️ Weekend</button>
+                    </div>
                 </div>
-            </div>
-        </div>
 
-        <div style="display: flex; gap: 14px; align-items: center;">
-            <div class="filter-group" style="flex:1;">
-                <span class="filter-label">Airline Carrier</span>
-                <select id="airline-select" class="custom-select" style="width: 100%;">
-                    <option value="all">All Airlines</option>
-                </select>
-            </div>
-            <div class="filter-group" style="flex:1;">
-                <span class="filter-label">Sort & Max Price</span>
-                <div style="display: flex; gap: 8px; align-items: center;">
-                    <select id="sort-select" class="custom-select" style="flex:1;">
+                <div class="filter-group">
+                    <span class="filter-label">Search Range Window</span>
+                    <div class="filter-chips">
+                        <button class="chip" data-filter="days" data-value="7">7d</button>
+                        <button class="chip" data-filter="days" data-value="30">30d</button>
+                        <button class="chip" data-filter="days" data-value="90">90d</button>
+                        <button class="chip active" data-filter="days" data-value="365">Full Year</button>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <span class="filter-label">Airline Carrier</span>
+                    <select id="airline-select" class="custom-select" style="width: 100%;">
+                        <option value="all">All Airlines</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <span class="filter-label">Sort & Max Price</span>
+                    <select id="sort-select" class="custom-select" style="width: 100%; margin-bottom: 6px;">
                         <option value="score">Sort: Best Deals</option>
                         <option value="price-asc">Sort: Price ↑</option>
                         <option value="price-desc">Sort: Price ↓</option>
                         <option value="discount">Sort: Discount %</option>
                         <option value="date">Sort: Date</option>
                     </select>
-                    <div class="slider-container" style="flex:1;">
+                    <div class="slider-container">
                         <input type="range" id="price-slider" min="0" max="2000" value="2000">
                         <span class="price-badge" id="price-val">€2000</span>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
+            </aside>
 
-    <!-- Map Legend -->
-    <div class="legend glass-panel">
-        <span class="legend-title">Deal Class</span>
-        <div class="legend-items">
-            <div class="legend-item">
-                <div class="legend-dot" style="background: var(--error-color);"></div> Error Fare (70%+)
-            </div>
-            <div class="legend-item">
-                <div class="legend-dot" style="background: var(--great-color);"></div> Great (50-70%)
-            </div>
-            <div class="legend-item">
-                <div class="legend-dot" style="background: var(--good-color);"></div> Good (30-50%)
-            </div>
-            <div class="legend-item">
-                <div class="legend-dot" style="background: #ff6b6b; box-shadow: 0 0 8px #ff6b6b;"></div> Origin
-            </div>
-        </div>
-    </div>
+            <!-- Center 3D Globe Map Viewport -->
+            <main class="map-viewport">
+                <div id="map"></div>
+                <!-- Map Legend inside map canvas -->
+                <div class="legend glass-panel" style="position: absolute; bottom: 16px; left: 16px; z-index: 10;">
+                    <span class="legend-title">Deal Class</span>
+                    <div class="legend-items">
+                        <div class="legend-item"><div class="legend-dot" style="background: var(--error-color);"></div> Error (70%+)</div>
+                        <div class="legend-item"><div class="legend-dot" style="background: var(--great-color);"></div> Great (50-70%)</div>
+                        <div class="legend-item"><div class="legend-dot" style="background: var(--good-color);"></div> Good (30-50%)</div>
+                        <div class="legend-item"><div class="legend-dot" style="background: #ff6b6b; box-shadow: 0 0 8px #ff6b6b;"></div> Origin</div>
+                    </div>
+                </div>
+            </main>
 
-    <!-- Right Sidebar (Cards) -->
-    <div class="sidebar glass-panel" id="sidebar">
-        <div class="smart-banner" id="smart-banner"></div>
+            <!-- Anchored Right Deals Sidebar -->
+            <aside class="sidebar" id="sidebar">
+                <div class="smart-banner" id="smart-banner"></div>
+            </aside>
+        </div>
     </div>
 
     <!-- Detail Drawer Modal -->
@@ -1273,6 +1271,8 @@
             navigationControl: false,
             geolocateControl: false,
         });
+
+        map.on('load', () => { setTimeout(() => map.resize(), 100); });
 
         let routeLines = null, destPoints = null, originPoints = null;
 
