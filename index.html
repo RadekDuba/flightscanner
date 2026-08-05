@@ -89,6 +89,36 @@
             -webkit-text-fill-color: transparent;
         }
 
+        .brand-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-toggle-filters {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: var(--text-main);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-toggle-filters:hover {
+            background: rgba(78, 205, 196, 0.2);
+            border-color: #4ecdc4;
+            color: #4ecdc4;
+        }
+
+        .header.collapsed .search-box,
+        .header.collapsed .filter-group,
+        .header.collapsed .controls-row {
+            display: none !important;
+        }
+
         .brand-status {
             display: inline-flex;
             align-items: center;
@@ -99,6 +129,56 @@
             padding: 3px 8px;
             border-radius: 12px;
             border: 1px solid rgba(78, 205, 196, 0.2);
+        }
+
+        /* Preset Bar */
+        .preset-bar {
+            position: absolute;
+            top: 16px;
+            right: 430px;
+            z-index: 10;
+            padding: 8px 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            overflow-x: auto;
+            max-width: calc(100vw - 830px);
+            scrollbar-width: none;
+        }
+
+        .preset-bar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .preset-chip {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+
+        .preset-chip:hover, .preset-chip.active {
+            background: rgba(78, 205, 196, 0.2);
+            border-color: #4ecdc4;
+            color: #4ecdc4;
+            transform: translateY(-1px);
+        }
+
+        .preset-chip.reset {
+            color: var(--text-muted);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .preset-chip.reset:hover {
+            color: #ff5252;
+            border-color: #ff5252;
+            background: rgba(255, 82, 82, 0.15);
         }
 
         .status-dot {
@@ -796,10 +876,13 @@
     <div id="map"></div>
 
     <!-- Header Panel -->
-    <div class="header glass-panel">
+    <div class="header glass-panel" id="hud-panel">
         <div class="brand-row">
             <h1 class="brand-title">🔥 FlightScanner v3.5</h1>
-            <span class="brand-status"><span class="status-dot"></span> Hourly Auto Sync</span>
+            <div class="brand-actions">
+                <span class="brand-status"><span class="status-dot"></span> Sync</span>
+                <button class="btn-toggle-filters" id="btn-toggle-hud" title="Toggle HUD Filters">⚙️ Filters</button>
+            </div>
         </div>
 
         <div class="stats-grid">
@@ -884,6 +967,15 @@
                 <span class="price-badge" id="price-val">€2000</span>
             </div>
         </div>
+    </div>
+
+    <!-- Quick Preset Filters Bar -->
+    <div class="preset-bar glass-panel" id="preset-bar">
+        <button class="preset-chip" id="preset-under50">🔥 Under €50</button>
+        <button class="preset-chip" id="preset-topdeals">⭐ Top Deals</button>
+        <button class="preset-chip" id="preset-direct">✈️ Direct Only</button>
+        <button class="preset-chip" id="preset-weekend">🏖️ Weekend</button>
+        <button class="preset-chip reset" id="preset-reset">↺ Reset</button>
     </div>
 
     <!-- Map Legend -->
@@ -1737,10 +1829,129 @@
                 });
             }
 
+            // Toggle HUD Panel Collapse
+            const btnToggleHud = document.getElementById('btn-toggle-hud');
+            const hudPanel = document.getElementById('hud-panel');
+            if (btnToggleHud && hudPanel) {
+                btnToggleHud.addEventListener('click', () => {
+                    hudPanel.classList.toggle('collapsed');
+                    btnToggleHud.textContent = hudPanel.classList.contains('collapsed') ? '⚙️ Filters' : '✖ Collapse';
+                });
+            }
+
+            // Quick Preset Bar Handlers
+            const pUnder50 = document.getElementById('preset-under50');
+            const pTopDeals = document.getElementById('preset-topdeals');
+            const pDirect = document.getElementById('preset-direct');
+            const pWeekend = document.getElementById('preset-weekend');
+            const pReset = document.getElementById('preset-reset');
+
+            function syncPresetUI() {
+                if (pUnder50) pUnder50.classList.toggle('active', state.maxPrice === 50);
+                if (pTopDeals) pTopDeals.classList.toggle('active', state.tags.size === 2 && state.tags.has('ERROR FARE') && state.tags.has('GREAT DEAL'));
+                if (pDirect) pDirect.classList.toggle('active', state.stops === '0');
+                if (pWeekend) pWeekend.classList.toggle('active', state.weekendOnly);
+            }
+
+            if (pUnder50) {
+                pUnder50.addEventListener('click', () => {
+                    state.maxPrice = state.maxPrice === 50 ? 2000 : 50;
+                    const priceSlider = document.getElementById('price-slider');
+                    const valBadge = document.getElementById('price-val');
+                    if (priceSlider) priceSlider.value = state.maxPrice;
+                    if (valBadge) valBadge.textContent = `€${state.maxPrice}`;
+                    syncPresetUI();
+                    applyFilters();
+                });
+            }
+
+            if (pTopDeals) {
+                pTopDeals.addEventListener('click', () => {
+                    if (state.tags.size === 2 && state.tags.has('ERROR FARE') && state.tags.has('GREAT DEAL')) {
+                        state.tags = new Set(['ERROR FARE', 'GREAT DEAL', 'GOOD DEAL', 'NORMAL']);
+                    } else {
+                        state.tags = new Set(['ERROR FARE', 'GREAT DEAL']);
+                    }
+                    document.querySelectorAll('.chip[data-filter="tag"]').forEach(b => {
+                        b.classList.toggle('active', state.tags.has(b.dataset.value));
+                    });
+                    syncPresetUI();
+                    applyFilters();
+                });
+            }
+
+            if (pDirect) {
+                pDirect.addEventListener('click', () => {
+                    state.stops = state.stops === '0' ? 'all' : '0';
+                    document.querySelectorAll('.chip[data-filter="stops"]').forEach(b => {
+                        b.classList.toggle('active', b.dataset.value === state.stops);
+                    });
+                    syncPresetUI();
+                    applyFilters();
+                });
+            }
+
+            if (pWeekend) {
+                pWeekend.addEventListener('click', () => {
+                    state.weekendOnly = !state.weekendOnly;
+                    document.querySelectorAll('.chip[data-filter="weekend"]').forEach(b => {
+                        b.classList.toggle('active', state.weekendOnly);
+                    });
+                    syncPresetUI();
+                    applyFilters();
+                });
+            }
+
+            if (pReset) {
+                pReset.addEventListener('click', () => {
+                    state.origins = new Set(['PRG', 'VIE', 'BTS', 'KTW', 'OSR']);
+                    state.tags = new Set(['ERROR FARE', 'GREAT DEAL', 'GOOD DEAL', 'NORMAL']);
+                    state.stops = 'all';
+                    state.search = '';
+                    state.maxPrice = 2000;
+                    state.sort = 'score';
+                    state.days = 365;
+                    state.weekendOnly = false;
+
+                    const searchEl = document.getElementById('search-input');
+                    const priceSlider = document.getElementById('price-slider');
+                    const valBadge = document.getElementById('price-val');
+                    if (searchEl) searchEl.value = '';
+                    if (priceSlider) priceSlider.value = 2000;
+                    if (valBadge) valBadge.textContent = '€2000';
+
+                    document.querySelectorAll('.chip[data-filter="origin"]').forEach(b => b.classList.add('active'));
+                    document.querySelectorAll('.chip[data-filter="tag"]').forEach(b => b.classList.add('active'));
+                    document.querySelectorAll('.chip[data-filter="stops"]').forEach(b => b.classList.toggle('active', b.dataset.value === 'all'));
+                    document.querySelectorAll('.chip[data-filter="weekend"]').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.chip[data-filter="days"]').forEach(b => b.classList.toggle('active', b.dataset.value === '365'));
+
+                    syncPresetUI();
+                    showToast('↺ Filters Reset');
+                    applyFilters();
+                });
+            }
+
             map.on('click', 'dest-circles', (e) => {
                 const props = e.features[0].properties;
                 const deal = deals[props.idx];
                 if (deal) openDrawer(deal);
+            });
+
+            map.on('click', 'origin-dots', (e) => {
+                const props = e.features[0]?.properties;
+                if (!props?.code) return;
+                const code = props.code;
+                if (state.origins.has(code) && state.origins.size > 1) {
+                    state.origins.delete(code);
+                } else {
+                    state.origins.add(code);
+                }
+                document.querySelectorAll('.chip[data-filter="origin"]').forEach(btn => {
+                    btn.classList.toggle('active', state.origins.has(btn.dataset.value));
+                });
+                showToast(`Filter Origin: ${code}`);
+                applyFilters();
             });
 
             document.querySelectorAll('.chip[data-filter="days"]').forEach(btn => {
