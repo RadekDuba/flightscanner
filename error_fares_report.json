@@ -1,5 +1,5 @@
 {
-  "scanDate": "2026-08-05T22:15:41.013Z",
+  "scanDate": "2026-08-05T22:18:40.398Z",
   "origins": [
     "PRG",
     "VIE",
@@ -10473,10 +10473,8 @@
         "dropPct": 43
       },
       "crossCheck": {
-        "duffelPrice": 273.45,
-        "kiwiPrice": 113,
-        "priceDiff": 142,
-        "status": "KIWI MUCH CHEAPER"
+        "status": "VERIFY FAILED",
+        "error": "The operation was aborted due to timeout"
       }
     },
     {
