@@ -754,7 +754,7 @@
             <h1 class="brand-title">🔥 FlightScanner v3.5</h1>
             <div style="display: flex; gap: 6px; align-items: center;">
                 <button id="btn-trigger-hunt" class="chip active"
-                    style="font-size: 10px; padding: 4px 8px; cursor: pointer;">🔄 Live Scan</button>
+                    style="font-size: 10px; padding: 4px 8px; cursor: pointer;">🔄 Refresh Deals</button>
                 <span class="brand-status"><span class="status-dot"></span> Scanned</span>
             </div>
         </div>
@@ -1442,13 +1442,13 @@
                         if (report.allResults) {
                             await updateMapSourcesAndFilters(report.allResults);
                             if (btnHunt) btnHunt.textContent = `✓ Refreshed`;
-                            setTimeout(() => { if (btnHunt) btnHunt.textContent = '🔄 Live Scan'; }, 3000);
+                            setTimeout(() => { if (btnHunt) btnHunt.textContent = '🔄 Refresh Deals'; }, 3000);
                             return;
                         }
                     }
                 } catch { }
 
-                if (btnHunt) btnHunt.textContent = `🔄 Live Scan`;
+                if (btnHunt) btnHunt.textContent = `🔄 Refresh Deals`;
             }
 
             function pollHuntStatus() {
