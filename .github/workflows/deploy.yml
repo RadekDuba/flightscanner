@@ -44,12 +44,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          if [ ! -f active_keys.json ]; then
-            echo "No cached keys found, running quick scan..."
-            node scan_keys.js
-          else
-            echo "Using cached active_keys.json."
-          fi
+          node scan_keys.js
 
       - name: Hunt Flight Deals
         run: |

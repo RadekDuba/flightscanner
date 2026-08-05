@@ -593,6 +593,10 @@ function addDays(dateStr, days) {
     return d.toISOString().split('T')[0];
 }
 
+export async function searchTravelpayouts(params, key) {
+    return { provider: 'Travelpayouts', error: 'Travelpayouts provider not configured', offers: [] };
+}
+
 // ─── Provider Map ───────────────────────────────────────────
 const PROVIDERS = {
     duffel:        { fn: searchDuffel,        name: 'Duffel'          },
