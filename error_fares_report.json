@@ -1,5 +1,5 @@
 {
-  "scanDate": "2026-08-05T20:19:25.648Z",
+  "scanDate": "2026-08-05T20:30:42.108Z",
   "origins": [
     "PRG",
     "VIE",
@@ -794,7 +794,12 @@
         "dynamic": true
       },
       "isGenuineRoundTrip": true,
-      "source": "kiwi"
+      "source": "kiwi",
+      "crossCheck": {
+        "status": "NO OFFERS",
+        "duffelPrice": null,
+        "kiwiPrice": 38
+      }
     },
     {
       "origin": "BTS",
@@ -2122,7 +2127,12 @@
         "dynamic": true
       },
       "isGenuineRoundTrip": true,
-      "source": "kiwi"
+      "source": "kiwi",
+      "crossCheck": {
+        "status": "NO OFFERS",
+        "duffelPrice": null,
+        "kiwiPrice": 38
+      }
     },
     {
       "origin": "BTS",
@@ -2703,7 +2713,13 @@
         "dynamic": true
       },
       "isGenuineRoundTrip": true,
-      "source": "kiwi"
+      "source": "kiwi",
+      "crossCheck": {
+        "duffelPrice": 428.7,
+        "kiwiPrice": 43,
+        "priceDiff": 897,
+        "status": "KIWI MUCH CHEAPER"
+      }
     },
     {
       "origin": "KTW",
@@ -2996,7 +3012,12 @@
         "dynamic": true
       },
       "isGenuineRoundTrip": true,
-      "source": "kiwi"
+      "source": "kiwi",
+      "crossCheck": {
+        "status": "NO OFFERS",
+        "duffelPrice": null,
+        "kiwiPrice": 48
+      }
     },
     {
       "origin": "KTW",
@@ -4134,7 +4155,13 @@
         "dynamic": true
       },
       "isGenuineRoundTrip": true,
-      "source": "kiwi"
+      "source": "kiwi",
+      "crossCheck": {
+        "duffelPrice": 359.9,
+        "kiwiPrice": 61,
+        "priceDiff": 490,
+        "status": "KIWI MUCH CHEAPER"
+      }
     },
     {
       "origin": "KTW",
@@ -5110,6 +5137,12 @@
       },
       "isGenuineRoundTrip": true,
       "source": "kiwi",
+      "crossCheck": {
+        "duffelPrice": 101.46,
+        "kiwiPrice": 91,
+        "priceDiff": 11,
+        "status": "KIWI CHEAPER"
+      },
       "priceCrash": {
         "previousPrice": 140,
         "previousTs": "2026-07-29T21:43:44.741Z",
@@ -5692,6 +5725,12 @@
       },
       "isGenuineRoundTrip": true,
       "source": "kiwi",
+      "crossCheck": {
+        "duffelPrice": 116.34,
+        "kiwiPrice": 104,
+        "priceDiff": 12,
+        "status": "KIWI CHEAPER"
+      },
       "priceCrash": {
         "previousPrice": 225,
         "previousTs": "2026-07-29T21:43:44.741Z",
@@ -5956,6 +5995,12 @@
       },
       "isGenuineRoundTrip": true,
       "source": "kiwi",
+      "crossCheck": {
+        "duffelPrice": 270,
+        "kiwiPrice": 108,
+        "priceDiff": 150,
+        "status": "KIWI MUCH CHEAPER"
+      },
       "priceCrash": {
         "previousPrice": 189,
         "previousTs": "2026-07-29T21:43:44.741Z",
@@ -6220,6 +6265,12 @@
       },
       "isGenuineRoundTrip": true,
       "source": "kiwi",
+      "crossCheck": {
+        "duffelPrice": 273.45,
+        "kiwiPrice": 113,
+        "priceDiff": 142,
+        "status": "KIWI MUCH CHEAPER"
+      },
       "priceCrash": {
         "previousPrice": 197,
         "previousTs": "2026-07-29T21:43:44.741Z",
@@ -6625,6 +6676,12 @@
       },
       "isGenuineRoundTrip": true,
       "source": "kiwi",
+      "crossCheck": {
+        "duffelPrice": 145.55,
+        "kiwiPrice": 121,
+        "priceDiff": 20,
+        "status": "KIWI CHEAPER"
+      },
       "priceCrash": {
         "previousPrice": 170,
         "previousTs": "2026-07-29T21:43:44.741Z",
@@ -6719,7 +6776,13 @@
         "dynamic": true
       },
       "isGenuineRoundTrip": true,
-      "source": "kiwi"
+      "source": "kiwi",
+      "crossCheck": {
+        "duffelPrice": 147.54,
+        "kiwiPrice": 123,
+        "priceDiff": 20,
+        "status": "KIWI CHEAPER"
+      }
     },
     {
       "origin": "VIE",
