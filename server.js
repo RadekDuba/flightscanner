@@ -113,7 +113,7 @@ createServer((req, res) => {
         return;
     }
 
-    let file = req.url === '/' ? '/map.html' : req.url.split('?')[0];
+    let file = (req.url === '/' || req.url === '/map.html') ? '/index.html' : req.url.split('?')[0];
     const path = resolve('.' + file);
     if (!existsSync(path)) { res.writeHead(404); res.end('Not found'); return; }
     const ext = extname(path);
