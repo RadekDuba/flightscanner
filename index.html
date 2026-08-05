@@ -1089,6 +1089,40 @@
 
         let routeLines = null, destPoints = null, originPoints = null;
 
+        function showToast(message) {
+            let toast = document.getElementById('app-toast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'app-toast';
+                toast.style.cssText = `
+                    position: fixed;
+                    bottom: 32px;
+                    left: 50%;
+                    transform: translateX(-50%) translateY(20px);
+                    background: rgba(12, 24, 20, 0.95);
+                    color: #4ecdc4;
+                    border: 1px solid rgba(78, 205, 196, 0.4);
+                    padding: 10px 22px;
+                    border-radius: 30px;
+                    font-size: 13px;
+                    font-weight: 700;
+                    z-index: 9999;
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+                    opacity: 0;
+                    transition: all 0.3s ease;
+                    pointer-events: none;
+                `;
+                document.body.appendChild(toast);
+            }
+            toast.textContent = message;
+            toast.style.opacity = '1';
+            toast.style.transform = 'translateX(-50%) translateY(0)';
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(-50%) translateY(20px)';
+            }, 2500);
+        }
+
         function isWeekendGetaway(d) {
             if (!d.date || !d.returnDate) return false;
             const outDate = new Date(d.date);
@@ -1185,17 +1219,45 @@
                     ${!isDupSky ? `<a class="btn-link" href="${skyUrl}" target="_blank">✈️ Skyscanner</a>` : ''}
                     <a class="btn-link" href="${deal.bookingLinks?.googleFlights || '#'}" target="_blank">🌍 Google Flights</a>
                     ${deal.deepLink ? `<a class="btn-link" href="${deal.deepLink}" target="_blank">🥝 Kiwi.com</a>` : ''}
-                    ${navigator.share ? `<a class="btn-link" id="btn-share-deal" href="#" style="background:rgba(78,205,196,0.15); color:#4ecdc4; border-color:rgba(78,205,196,0.3);">📲 Share Deal</a>` : ''}
+                    <a class="btn-link" id="btn-share-deal" href="#" style="background:rgba(78,205,196,0.15); color:#4ecdc4; border-color:rgba(78,205,196,0.3); cursor:pointer;">📲 Share Deal</a>
                 `;
                 const btnShare = document.getElementById('btn-share-deal');
                 if (btnShare) {
-                    btnShare.addEventListener('click', (e) => {
+                    btnShare.addEventListener('click', async (e) => {
                         e.preventDefault();
-                        navigator.share({
-                            title: `Flight Deal: ${deal.origin} → ${deal.destName} €${deal.price}`,
-                            text: `🔥 Found flight deal: ${deal.origin} → ${deal.destName} for only €${deal.price} (${deal.tripDays} days trip)!`,
-                            url: window.location.href
-                        }).catch(() => {});
+                        const shareUrl = airlineUrl !== '#' ? airlineUrl : window.location.href;
+                        const shareText = `🔥 Flight Deal: ${deal.origin} → ${deal.destName} for €${deal.price} (${deal.tripDays}d trip, ${deal.date} → ${deal.returnDate})! Check deal: ${shareUrl}`;
+
+                        if (navigator.share) {
+                            try {
+                                await navigator.share({
+                                    title: `Flight Deal: ${deal.origin} → ${deal.destName}`,
+                                    text: shareText,
+                                    url: shareUrl
+                                });
+                                showToast('✓ Shared Deal!');
+                                return;
+                            } catch (err) {
+                                if (err.name === 'AbortError') return;
+                            }
+                        }
+
+                        try {
+                            await navigator.clipboard.writeText(shareText);
+                            showToast('📋 Copied deal link to clipboard!');
+                            btnShare.textContent = '✓ Copied!';
+                            setTimeout(() => { btnShare.textContent = '📲 Share Deal'; }, 2500);
+                        } catch {
+                            const input = document.createElement('textarea');
+                            input.value = shareText;
+                            document.body.appendChild(input);
+                            input.select();
+                            document.execCommand('copy');
+                            document.body.removeChild(input);
+                            showToast('📋 Copied deal link to clipboard!');
+                            btnShare.textContent = '✓ Copied!';
+                            setTimeout(() => { btnShare.textContent = '📲 Share Deal'; }, 2500);
+                        }
                     });
                 }
             }
