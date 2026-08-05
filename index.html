@@ -3,7 +3,11 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#0d0f17">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="manifest.json">
     <title>Error Fare Hunter — Global Flight Intelligence</title>
     <script src="https://cdn.maptiler.com/maptiler-sdk-js/v4.0.2/maptiler-sdk.umd.min.js"></script>
     <link href="https://cdn.maptiler.com/maptiler-sdk-js/v4.0.2/maptiler-sdk.css" rel="stylesheet" />
@@ -709,19 +713,42 @@
             color: #000;
         }
 
+        .mobile-handle-bar {
+            display: none;
+            width: 36px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+            margin: 0 auto 12px auto;
+        }
+
         @media (max-width: 900px) {
             .header {
-                width: calc(100vw - 32px);
-                max-height: 240px;
+                width: calc(100vw - 24px);
+                left: 12px;
+                top: 12px;
+                padding: 12px;
+                max-height: 280px;
+                overflow-y: auto;
+            }
+
+            .filter-row {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                padding-bottom: 4px;
+                scrollbar-width: none;
+            }
+            .filter-row::-webkit-scrollbar {
+                display: none;
             }
 
             .sidebar {
                 top: auto;
-                bottom: 70px;
-                left: 16px;
-                right: 16px;
+                bottom: 72px;
+                left: 12px;
+                right: 12px;
                 width: auto;
-                height: 50vh;
+                height: 55vh;
                 display: none;
             }
 
@@ -733,9 +760,30 @@
                 display: flex;
             }
 
+            /* Bottom Sheet Drawer on Mobile */
             .drawer {
+                top: auto;
+                bottom: -100vh;
+                right: 0;
+                left: 0;
                 width: 100vw;
-                right: -100vw;
+                height: auto;
+                max-height: 85vh;
+                border-radius: 24px 24px 0 0;
+                border-bottom: none;
+                transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), bottom 0.35s ease;
+                transform: translateY(100%);
+                overflow-y: auto;
+                padding: 16px 20px 32px 20px;
+            }
+
+            .drawer.open {
+                bottom: 0;
+                transform: translateY(0);
+            }
+
+            .mobile-handle-bar {
+                display: block;
             }
 
             .legend {
@@ -864,6 +912,7 @@
     <!-- Detail Drawer Modal -->
     <div class="drawer-overlay" id="drawer-overlay"></div>
     <div class="drawer glass-panel" id="drawer">
+        <div class="mobile-handle-bar"></div>
         <div class="drawer-header">
             <div>
                 <div class="drawer-title" id="d-route">PRG → BCN</div>
@@ -915,6 +964,13 @@
 
 
     <script>
+        // PWA Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(() => {});
+            });
+        }
+
         const MAPTILER_KEY = 'LxXxUn18K1zwkMYaixQN';
         const GEO_CACHE_KEY = 'efh_geocache_v6';
 
@@ -1100,7 +1156,19 @@
                     ${!isDupSky ? `<a class="btn-link" href="${skyUrl}" target="_blank">✈️ Skyscanner</a>` : ''}
                     <a class="btn-link" href="${deal.bookingLinks?.googleFlights || '#'}" target="_blank">🌍 Google Flights</a>
                     ${deal.deepLink ? `<a class="btn-link" href="${deal.deepLink}" target="_blank">🥝 Kiwi.com</a>` : ''}
+                    ${navigator.share ? `<a class="btn-link" id="btn-share-deal" href="#" style="background:rgba(78,205,196,0.15); color:#4ecdc4; border-color:rgba(78,205,196,0.3);">📲 Share Deal</a>` : ''}
                 `;
+                const btnShare = document.getElementById('btn-share-deal');
+                if (btnShare) {
+                    btnShare.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        navigator.share({
+                            title: `Flight Deal: ${deal.origin} → ${deal.destName} €${deal.price}`,
+                            text: `🔥 Found flight deal: ${deal.origin} → ${deal.destName} for only €${deal.price} (${deal.tripDays} days trip)!`,
+                            url: window.location.href
+                        }).catch(() => {});
+                    });
+                }
             }
 
             const drawer = document.getElementById('drawer');
