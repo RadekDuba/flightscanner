@@ -752,11 +752,7 @@
     <div class="header glass-panel">
         <div class="brand-row">
             <h1 class="brand-title">🔥 FlightScanner v3.5</h1>
-            <div style="display: flex; gap: 6px; align-items: center;">
-                <button id="btn-trigger-hunt" class="chip active"
-                    style="font-size: 10px; padding: 4px 8px; cursor: pointer;">🔄 Refresh Deals</button>
-                <span class="brand-status"><span class="status-dot"></span> Scanned</span>
-            </div>
+            <span class="brand-status"><span class="status-dot"></span> Hourly Auto Sync</span>
         </div>
 
         <div class="stats-grid">
@@ -1479,14 +1475,7 @@
                     btn.classList.add('active');
                     state.days = Number(btn.dataset.value);
                     applyFilters();
-                    triggerBackendHunt(state.days);
                 });
-            });
-
-            // Live Trigger Hunt button
-            const btnHunt = document.getElementById('btn-trigger-hunt');
-            btnHunt.addEventListener('click', () => {
-                triggerBackendHunt(state.days || 30);
             });
 
             applyFilters();
