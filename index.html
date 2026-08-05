@@ -1171,6 +1171,12 @@
                 }
             }
 
+            const idx = deals.indexOf(deal);
+            if (idx !== -1 && map && map.isStyleLoaded()) {
+                if (map.getLayer('route-lines')) map.setFilter('route-lines', ['==', ['get', 'idx'], idx]);
+                if (map.getLayer('dest-circles')) map.setFilter('dest-circles', ['==', ['get', 'idx'], idx]);
+            }
+
             const drawer = document.getElementById('drawer');
             const drawerOverlay = document.getElementById('drawer-overlay');
             if (drawer) drawer.classList.add('open');
@@ -1479,13 +1485,16 @@
                 drawerOverlay.classList.add('open');
             }
 
-            dClose.addEventListener('click', () => {
-                drawer.classList.remove('open');
-                drawerOverlay.classList.remove('open');
-            });
-            drawerOverlay.addEventListener('click', () => {
-                drawer.classList.remove('open');
-                drawerOverlay.classList.remove('open');
+            function closeDrawer() {
+                if (drawer) drawer.classList.remove('open');
+                if (drawerOverlay) drawerOverlay.classList.remove('open');
+                applyFilters();
+            }
+
+            dClose.addEventListener('click', closeDrawer);
+            drawerOverlay.addEventListener('click', closeDrawer);
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeDrawer();
             });
 
             // Events
