@@ -1,0 +1,36 @@
+name: Daily API Key Scanner
+
+on:
+  schedule:
+    # Run daily at 02:00 UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  scan-keys:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Scan Active API Keys
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          node scan_keys.js --force
+
+      - name: Save Active Keys Cache
+        uses: actions/cache/save@v4
+        with:
+          path: active_keys.json
+          key: active-keys-cache-${{ github.run_id }}
+          restore-keys: |
+            active-keys-cache-

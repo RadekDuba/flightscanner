@@ -32,11 +32,27 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Scan Keys & Hunt Deals
+      - name: Restore Active Keys Cache
+        uses: actions/cache/restore@v4
+        with:
+          path: active_keys.json
+          key: active-keys-cache-
+          restore-keys: |
+            active-keys-cache-
+
+      - name: Ensure Active Keys Exist
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          node scan_keys.js --force
+          if [ ! -f active_keys.json ]; then
+            echo "No cached keys found, running quick scan..."
+            node scan_keys.js
+          else
+            echo "Using cached active_keys.json."
+          fi
+
+      - name: Hunt Flight Deals
+        run: |
           node error_fare_hunter.js --days 30
 
       - name: Commit updated report to repository

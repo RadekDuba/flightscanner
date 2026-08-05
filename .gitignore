@@ -1,4 +1,4 @@
-# Secrets & keys
+# Secrets & local env
 .env
 active_keys.json
 
