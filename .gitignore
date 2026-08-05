@@ -1,0 +1,16 @@
+# Secrets & keys
+.env
+active_keys.json
+
+# Dependencies
+node_modules/
+
+# IDE & Tooling
+.agent/
+.gemini/
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db

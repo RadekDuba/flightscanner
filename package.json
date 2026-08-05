@@ -1,0 +1,14 @@
+{
+  "name": "flightscanner",
+  "version": "3.0.0",
+  "type": "module",
+  "description": "Error fare hunter — Kiwi scout + smart scoring + Duffel cross-verification",
+  "scripts": {
+    "scan": "node scan_keys.js",
+    "scan:fresh": "node scan_keys.js --force",
+    "hunt": "node error_fare_hunter.js",
+    "map": "node server.js",
+    "full": "node scan_keys.js --force && node error_fare_hunter.js"
+  },
+  "dependencies": {}
+}

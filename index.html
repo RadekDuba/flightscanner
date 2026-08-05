@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error Fare Hunter — Global Flight Intelligence</title>
+    <script src="https://cdn.maptiler.com/maptiler-sdk-js/v4.0.2/maptiler-sdk.umd.min.js"></script>
+    <link href="https://cdn.maptiler.com/maptiler-sdk-js/v4.0.2/maptiler-sdk.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #07070c;
+            --panel-bg: rgba(12, 12, 24, 0.88);
+            --panel-border: rgba(255, 255, 255, 0.08);
+            --panel-blur: blur(24px);
+            --error-color: #ff4444;
+            --great-color: #4ecdc4;
+            --good-color: #ffe66d;
+            --normal-color: #777788;
+            --accent-cyan: #4ecdc4;
+            --text-main: #f0f0f5;
+            --text-muted: #8a8a9e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-main);
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        #map {
+            width: 100vw;
+            height: 100vh;
+        }
+
+        /* Glass Panel Common */
+        .glass-panel {
+            background: var(--panel-bg);
+            backdrop-filter: var(--panel-blur);
+            -webkit-backdrop-filter: var(--panel-blur);
+            border: 1px solid var(--panel-border);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55);
+            border-radius: 16px;
+        }
+
+        /* ─── Main Header Bar ────────────────────────── */
+        .header {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            z-index: 10;
+            padding: 18px 22px;
+            width: 360px;
+            max-height: calc(100vh - 32px);
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            overflow-y: auto;
+        }
+
+        .brand-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand-title {
+            font-size: 19px;
+            font-weight: 800;
+            letter-spacing: -0.4px;
+            background: linear-gradient(135deg, #ff5252, #ffab40, #ffd740);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: #4ecdc4;
+            background: rgba(78, 205, 196, 0.1);
+            padding: 3px 8px;
+            border-radius: 12px;
+            border: 1px solid rgba(78, 205, 196, 0.2);
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #4ecdc4;
+            box-shadow: 0 0 8px #4ecdc4;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.4;
+            }
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            padding: 10px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .stat-box {
+            text-align: center;
+        }
+
+        .stat-box .val {
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .stat-box .lbl {
+            font-size: 9px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+        }
+
+        .stat-box.error .val {
+            color: var(--error-color);
+        }
+
+        .stat-box.great .val {
+            color: var(--great-color);
+        }
+
+        .stat-box.good .val {
+            color: var(--good-color);
+        }
+
+        .stat-box.total .val {
+            color: var(--text-main);
+        }
+
+        /* Search Input */
+        .search-box {
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 9px 12px 9px 34px;
+            font-size: 12px;
+            color: var(--text-main);
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            border-color: var(--accent-cyan);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 12px rgba(78, 205, 196, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 11px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        /* Filter Section */
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .filter-label {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
+
+        .filter-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .chip {
+            font-family: inherit;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 5px 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .chip:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        .chip.active {
+            background: rgba(78, 205, 196, 0.15);
+            border-color: rgba(78, 205, 196, 0.4);
+            color: var(--accent-cyan);
+        }
+
+        .chip.active.origin-prg {
+            background: rgba(255, 107, 107, 0.15);
+            border-color: rgba(255, 107, 107, 0.4);
+            color: #ff6b6b;
+        }
+
+        .chip.active.tag-error {
+            background: rgba(255, 68, 68, 0.15);
+            border-color: rgba(255, 68, 68, 0.4);
+            color: var(--error-color);
+        }
+
+        .chip.active.tag-great {
+            background: rgba(78, 205, 196, 0.15);
+            border-color: rgba(78, 205, 196, 0.4);
+            color: var(--great-color);
+        }
+
+        .chip.active.tag-good {
+            background: rgba(255, 230, 109, 0.15);
+            border-color: rgba(255, 230, 109, 0.4);
+            color: var(--good-color);
+        }
+
+        /* Price & Sort Controls */
+        .controls-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .custom-select {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            font-size: 11px;
+            font-weight: 500;
+            padding: 6px 10px;
+            border-radius: 8px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .slider-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .slider-container input[type=range] {
+            flex: 1;
+            accent-color: var(--accent-cyan);
+            cursor: pointer;
+        }
+
+        .price-badge {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            min-width: 44px;
+            text-align: right;
+        }
+
+        /* MapTiler Popup Glassmorphism Overrides */
+        .maplibregl-popup-content,
+        .maptilersdk-popup-content {
+            background: rgba(12, 12, 24, 0.94) !important;
+            backdrop-filter: blur(20px) !important;
+            -webkit-backdrop-filter: blur(20px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+            border-radius: 12px !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7) !important;
+            padding: 10px 14px !important;
+            color: #f0f0f5 !important;
+        }
+
+        .maplibregl-popup-tip,
+        .maptilersdk-popup-tip {
+            border-top-color: rgba(12, 12, 24, 0.94) !important;
+            border-bottom-color: rgba(12, 12, 24, 0.94) !important;
+        }
+
+        /* ─── Sidebar (Deal Cards) ────────────────────── */
+        .sidebar {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            bottom: 16px;
+            z-index: 10;
+            width: 370px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding-right: 2px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 4px;
+        }
+
+        .deal-card {
+            padding: 14px 16px;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+
+        .deal-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.22);
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.6);
+        }
+
+        .deal-card.error-fare {
+            border-left: 4px solid var(--error-color);
+        }
+
+        .deal-card.great-deal {
+            border-left: 4px solid var(--great-color);
+        }
+
+        .deal-card.good-deal {
+            border-left: 4px solid var(--good-color);
+        }
+
+        .deal-card.normal {
+            border-left: 4px solid var(--normal-color);
+        }
+
+        .deal-card.active {
+            border-color: var(--accent-cyan) !important;
+            box-shadow: 0 0 24px rgba(78, 205, 196, 0.35), 0 8px 32px rgba(0, 0, 0, 0.6);
+            background: rgba(18, 22, 40, 0.95);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 6px;
+        }
+
+        .card-route {
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        .card-price {
+            font-size: 19px;
+            font-weight: 800;
+        }
+
+        .card-price.error-fare {
+            color: var(--error-color);
+        }
+
+        .card-price.great-deal {
+            color: var(--great-color);
+        }
+
+        .card-price.good-deal {
+            color: var(--good-color);
+        }
+
+        .card-tags {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tag-pill {
+            font-size: 9px;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .tag-pill.error-fare {
+            background: rgba(255, 68, 68, 0.2);
+            color: #ff6666;
+        }
+
+        .tag-pill.great-deal {
+            background: rgba(78, 205, 196, 0.2);
+            color: #4ecdc4;
+        }
+
+        .tag-pill.good-deal {
+            background: rgba(255, 230, 109, 0.2);
+            color: #ffe66d;
+        }
+
+        .tag-pill.normal {
+            background: rgba(120, 120, 140, 0.2);
+            color: #8a8a9e;
+        }
+
+        .badge-stops {
+            font-size: 9px;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: rgba(255, 165, 0, 0.15);
+            color: #ffa500;
+        }
+
+        .badge-direct {
+            font-size: 9px;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: rgba(78, 205, 196, 0.15);
+            color: #4ecdc4;
+        }
+
+        .card-details {
+            font-size: 11px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .layover-info {
+            font-size: 10px;
+            color: #ffab40;
+            background: rgba(255, 171, 64, 0.08);
+            padding: 3px 8px;
+            border-radius: 6px;
+            margin-top: 6px;
+            display: inline-block;
+        }
+
+        .card-links {
+            display: flex;
+            gap: 6px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-link {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            text-decoration: none;
+            padding: 4px 9px;
+            border-radius: 6px;
+            background: rgba(78, 205, 196, 0.1);
+            border: 1px solid rgba(78, 205, 196, 0.2);
+            transition: all 0.15s ease;
+        }
+
+        .btn-link:hover {
+            background: rgba(78, 205, 196, 0.25);
+            border-color: var(--accent-cyan);
+        }
+
+        /* ─── Detail Drawer (Sliding Panel) ───────────── */
+        .drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 99;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .drawer-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .drawer {
+            position: fixed;
+            top: 0;
+            right: -480px;
+            width: 460px;
+            height: 100vh;
+            z-index: 100;
+            padding: 28px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            overflow-y: auto;
+            transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            border-left: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .drawer.open {
+            right: 0;
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .drawer-title {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .drawer-close {
+            background: rgba(255, 255, 255, 0.08);
+            border: none;
+            color: var(--text-muted);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s ease;
+        }
+
+        .drawer-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        /* Savings Gauge */
+        .savings-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .savings-bar-container {
+            height: 8px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .savings-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff4444, #4ecdc4);
+            border-radius: 4px;
+            transition: width 0.6s ease;
+        }
+
+        .savings-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* Itinerary Timeline */
+        .itinerary-section {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .section-title {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: var(--accent-cyan);
+        }
+
+        .flight-leg {
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 3px solid var(--accent-cyan);
+            border-radius: 8px;
+            padding: 12px 14px;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        /* ─── Legend ────────────────────────────────── */
+        .legend {
+            position: absolute;
+            bottom: 24px;
+            left: 16px;
+            z-index: 10;
+            padding: 12px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .legend-title {
+            font-size: 9px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .legend-items {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        /* ─── Mobile View Switcher ──────────────────── */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            bottom: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 90;
+            padding: 6px 12px;
+            border-radius: 30px;
+            gap: 8px;
+        }
+
+        .mobile-nav button {
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .mobile-nav button.active {
+            background: var(--accent-cyan);
+            color: #000;
+        }
+
+        @media (max-width: 900px) {
+            .header {
+                width: calc(100vw - 32px);
+                max-height: 240px;
+            }
+
+            .sidebar {
+                top: auto;
+                bottom: 70px;
+                left: 16px;
+                right: 16px;
+                width: auto;
+                height: 50vh;
+                display: none;
+            }
+
+            .sidebar.mobile-show {
+                display: flex;
+            }
+
+            .mobile-nav {
+                display: flex;
+            }
+
+            .drawer {
+                width: 100vw;
+                right: -100vw;
+            }
+
+            .legend {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+
+    <!-- Header Panel -->
+    <div class="header glass-panel">
+        <div class="brand-row">
+            <h1 class="brand-title">🔥 FlightScanner v3.5</h1>
+            <div style="display: flex; gap: 6px; align-items: center;">
+                <button id="btn-trigger-hunt" class="chip active"
+                    style="font-size: 10px; padding: 4px 8px; cursor: pointer;">🔄 Live Scan</button>
+                <span class="brand-status"><span class="status-dot"></span> Scanned</span>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-box error">
+                <div class="val" id="stat-error">0</div>
+                <div class="lbl">Error</div>
+            </div>
+            <div class="stat-box great">
+                <div class="val" id="stat-great">0</div>
+                <div class="lbl">Great</div>
+            </div>
+            <div class="stat-box good">
+                <div class="val" id="stat-good">0</div>
+                <div class="lbl">Good</div>
+            </div>
+            <div class="stat-box total">
+                <div class="val" id="stat-total">0</div>
+                <div class="lbl">Total</div>
+            </div>
+        </div>
+
+        <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="search-input" class="search-input"
+                placeholder="Search city, country, or airport (e.g. BCN, Spain)...">
+        </div>
+
+        <div class="filter-group">
+            <span class="filter-label">Origin Airport</span>
+            <div class="filter-chips">
+                <button class="chip active origin-prg" data-filter="origin" data-value="PRG">PRG</button>
+                <button class="chip active" data-filter="origin" data-value="VIE">VIE</button>
+                <button class="chip active" data-filter="origin" data-value="BTS">BTS</button>
+                <button class="chip active" data-filter="origin" data-value="KTW">KTW</button>
+                <button class="chip active" data-filter="origin" data-value="OSR">OSR</button>
+            </div>
+        </div>
+
+        <div class="filter-group">
+            <span class="filter-label">Deal Rating</span>
+            <div class="filter-chips">
+                <button class="chip active tag-error" data-filter="tag" data-value="ERROR FARE">🔥 Error</button>
+                <button class="chip active tag-great" data-filter="tag" data-value="GREAT DEAL">⭐ Great</button>
+                <button class="chip active tag-good" data-filter="tag" data-value="GOOD DEAL">✅ Good</button>
+                <button class="chip active" data-filter="tag" data-value="NORMAL">Normal</button>
+            </div>
+        </div>
+
+        <div class="filter-group">
+            <span class="filter-label">Flight Type</span>
+            <div class="filter-chips">
+                <button class="chip active" data-filter="stops" data-value="all">All Flights</button>
+                <button class="chip" data-filter="stops" data-value="0">Direct Only</button>
+                <button class="chip" data-filter="stops" data-value="1">Max 1 Stop</button>
+                <button class="chip" data-filter="weekend" data-value="true">✈️ Weekend Getaways Only</button>
+            </div>
+        </div>
+
+        <div class="filter-group">
+            <span class="filter-label">Search Range Window</span>
+            <div class="filter-chips">
+                <button class="chip" data-filter="days" data-value="1">🔥 Today</button>
+                <button class="chip" data-filter="days" data-value="7">📆 7 Days</button>
+                <button class="chip active" data-filter="days" data-value="30">⚡ 30 Days</button>
+                <button class="chip" data-filter="days" data-value="60">📅 60 Days</button>
+                <button class="chip" data-filter="days" data-value="90">🗓️ 90 Days</button>
+                <button class="chip" data-filter="days" data-value="180">🌍 6 Months</button>
+                <button class="chip" data-filter="days" data-value="365">🎆 Full Year</button>
+            </div>
+        </div>
+
+        <div class="controls-row">
+            <select id="sort-select" class="custom-select">
+                <option value="score">Sort: Best Deals</option>
+                <option value="price-asc">Sort: Price ↑</option>
+                <option value="price-desc">Sort: Price ↓</option>
+                <option value="discount">Sort: Discount %</option>
+                <option value="date">Sort: Date</option>
+            </select>
+            <div class="slider-container">
+                <input type="range" id="price-slider" min="0" max="2000" value="2000">
+                <span class="price-badge" id="price-val">€2000</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Map Legend -->
+    <div class="legend glass-panel">
+        <span class="legend-title">Deal Class</span>
+        <div class="legend-items">
+            <div class="legend-item">
+                <div class="legend-dot" style="background: var(--error-color);"></div> Error Fare (70%+)
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot" style="background: var(--great-color);"></div> Great (50-70%)
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot" style="background: var(--good-color);"></div> Good (30-50%)
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot" style="background: #ff6b6b; box-shadow: 0 0 8px #ff6b6b;"></div> Origin
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Sidebar (Cards) -->
+    <div class="sidebar glass-panel" id="sidebar"></div>
+
+    <!-- Detail Drawer Modal -->
+    <div class="drawer-overlay" id="drawer-overlay"></div>
+    <div class="drawer glass-panel" id="drawer">
+        <div class="drawer-header">
+            <div>
+                <div class="drawer-title" id="d-route">PRG → BCN</div>
+                <div style="font-size: 13px; color: var(--text-muted);" id="d-dates">2026-09-01 → 2026-09-08 (7 days)
+                </div>
+            </div>
+            <button class="drawer-close" id="d-close">×</button>
+        </div>
+
+        <div class="savings-box">
+            <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                <span style="font-size: 24px; font-weight: 800; color: var(--accent-cyan);" id="d-price">€48</span>
+                <span style="font-size: 12px; color: var(--text-muted);" id="d-baseline">Baseline: €175</span>
+            </div>
+            <div class="savings-bar-container">
+                <div class="savings-bar-fill" id="d-bar-fill" style="width: 72%;"></div>
+            </div>
+            <div class="savings-stats">
+                <span id="d-discount">72% Off Market Value</span>
+                <span id="d-savings">You Save €127</span>
+            </div>
+        </div>
+
+        <div class="itinerary-section">
+            <span class="section-title">Flight Details & Itinerary</span>
+            <div class="flight-leg" id="d-leg-outbound">
+                <strong>Outbound Flight:</strong> Direct flight via Ryanair<br>
+                Departs PRG → Arrives BCN
+            </div>
+            <div class="flight-leg" id="d-leg-return">
+                <strong>Return Flight:</strong> Direct flight via Ryanair<br>
+                Departs BCN → Arrives PRG
+            </div>
+            <div id="d-duffel-verify" style="font-size: 11px; color: var(--accent-cyan);"></div>
+        </div>
+
+        <div class="itinerary-section">
+            <span class="section-title">Book Direct</span>
+            <div class="card-links" id="d-links" style="gap: 8px;"></div>
+        </div>
+    </div>
+
+    <!-- Mobile View Navigation -->
+    <div class="mobile-nav glass-panel" id="mobile-nav">
+        <button class="active" id="btn-view-map">🗺️ Map View</button>
+        <button id="btn-view-list">📋 Deals List</button>
+    </div>
+
+    <script>
+        const MAPTILER_KEY = 'IMi1p2HJvGGHIDVoJaYX';
+        const GEO_CACHE_KEY = 'efh_geocache_v6';
+
+        // Auto-detect API server base (supports Live Server on port 5500, static file hosts, etc.)
+        const API_BASE = window.location.port === '3000' ? '' : 'http://localhost:3000';
+
+        // Filter & Drawer Global State (defined at top of script to prevent TDZ ReferenceError)
+        const state = {
+            origins: new Set(['PRG', 'VIE', 'BTS', 'KTW', 'OSR']),
+            tags: new Set(['ERROR FARE', 'GREAT DEAL', 'GOOD DEAL', 'NORMAL']),
+            stops: 'all',
+            search: '',
+            maxPrice: 2000,
+            sort: 'score',
+            days: 30,
+            weekendOnly: false
+        };
+        let deals = [];
+
+        const ORIGIN_COORDS = {
+            PRG: [14.267, 50.101], VIE: [16.570, 48.110], BTS: [17.213, 48.170],
+            KTW: [19.080, 50.474], OSR: [18.111, 49.696],
+        };
+
+        let geoCache = {};
+        try { geoCache = JSON.parse(localStorage.getItem(GEO_CACHE_KEY) || '{}'); } catch { }
+
+        async function geocodeCity(cityName, country, iataCode) {
+            if (geoCache[iataCode]) return geoCache[iataCode];
+            if (ORIGIN_COORDS[iataCode]) { geoCache[iataCode] = ORIGIN_COORDS[iataCode]; return ORIGIN_COORDS[iataCode]; }
+            if (country) {
+                try {
+                    const res = await maptilersdk.geocoding.forward(`${iataCode}, ${country}`, {
+                        types: ['poi'],
+                        limit: 5,
+                        language: ['en']
+                    });
+                    if (res?.features?.length > 0) {
+                        const coords = res.features[0].geometry.coordinates;
+                        geoCache[iataCode] = coords;
+                        localStorage.setItem(GEO_CACHE_KEY, JSON.stringify(geoCache));
+                        return coords;
+                    }
+                } catch { }
+            }
+            try {
+                const res = await maptilersdk.geocoding.forward(`${cityName}${country ? ', ' + country : ''}`, {
+                    types: ['place', 'municipality'],
+                    limit: 1,
+                    language: ['en']
+                });
+                if (res?.features?.length > 0) {
+                    const coords = res.features[0].geometry.coordinates;
+                    geoCache[iataCode] = coords;
+                    localStorage.setItem(GEO_CACHE_KEY, JSON.stringify(geoCache));
+                    return coords;
+                }
+            } catch { }
+            return null;
+        }
+
+        async function geocodeAllDeals(deals) {
+            const unique = new Map();
+            for (const d of deals) {
+                if (!unique.has(d.dest)) unique.set(d.dest, { city: d.destName, country: d.country });
+            }
+            const entries = [...unique.entries()];
+            for (let i = 0; i < entries.length; i += 5) {
+                const batch = entries.slice(i, i + 5);
+                await Promise.all(batch.map(([code, info]) => geocodeCity(info.city, info.country, code)));
+            }
+            return geoCache;
+        }
+
+        function getCoords(code) { return geoCache[code] || ORIGIN_COORDS[code] || null; }
+
+        const TAG_COLORS = { 'ERROR FARE': '#ff4444', 'GREAT DEAL': '#4ecdc4', 'GOOD DEAL': '#ffe66d', 'NORMAL': '#777788' };
+
+        function makeArc(start, end, numPoints = 50) {
+            const coords = [];
+            for (let i = 0; i <= numPoints; i++) {
+                const t = i / numPoints;
+                const lng = start[0] + (end[0] - start[0]) * t;
+                const lat = start[1] + (end[1] - start[1]) * t;
+                const dist = Math.sqrt((end[0] - start[0]) ** 2 + (end[1] - start[1]) ** 2);
+                const arcHeight = Math.min(dist * 0.15, 8);
+                coords.push([lng, lat + Math.sin(t * Math.PI) * arcHeight]);
+            }
+            return coords;
+        }
+
+        maptilersdk.config.apiKey = MAPTILER_KEY;
+        maptilersdk.config.maxTileCacheSize = 500; // MapTiler SDK guide: High tile cache size for smooth panning
+        maptilersdk.prewarm(); // MapTiler SDK guide: Resource prewarming
+
+        const map = new maptilersdk.Map({
+            container: 'map',
+            style: maptilersdk.MapStyle.DATAVIZ.DARK,
+            center: [15, 48],
+            zoom: 3.6,
+            projection: 'globe',
+            halo: true,
+            space: true,
+            navigationControl: 'top-right',
+            scaleControl: false,
+            navigationControl: false,
+            geolocateControl: false,
+        });
+
+        map.on('style.load', () => {
+            map.setFog({ color: 'rgba(10, 10, 30, 1)', 'high-color': 'rgba(20, 20, 60, 1)', 'space-color': 'rgba(5, 5, 15, 1)', 'star-intensity': 0.6 });
+            if (window.reAttachLayers) window.reAttachLayers();
+        });
+
+        map.on('load', async () => {
+            let report;
+            const isStaticHost = window.location.hostname.endsWith('github.io') || window.location.protocol === 'https:';
+            if (isStaticHost) {
+                try {
+                    const res = await fetch('error_fares_report.json');
+                    report = await res.json();
+                } catch { }
+            }
+            if (!report) {
+                try {
+                    const res = await fetch(`${API_BASE}/api/report`);
+                    report = await res.json();
+                } catch {
+                    try {
+                        const res = await fetch('error_fares_report.json');
+                        report = await res.json();
+                    } catch { return; }
+                }
+            }
+
+            const deals = report.allResults || [];
+            if (!deals.length) return;
+
+            await geocodeAllDeals(deals);
+
+            const originCodes = [...new Set(deals.map(d => d.origin))];
+            const originPoints = {
+                type: 'FeatureCollection',
+                features: originCodes.filter(c => getCoords(c)).map(code => ({
+                    type: 'Feature', geometry: { type: 'Point', coordinates: getCoords(code) }, properties: { code }
+                }))
+            };
+
+            const destPoints = {
+                type: 'FeatureCollection',
+                features: deals.map((d, i) => {
+                    const coords = getCoords(d.dest);
+                    if (!coords) return null;
+                    return {
+                        type: 'Feature', geometry: { type: 'Point', coordinates: coords },
+                        properties: { idx: i, dest: d.dest, price: d.price, tag: d.score?.tag || 'NORMAL', color: TAG_COLORS[d.score?.tag] || '#555' }
+                    };
+                }).filter(Boolean)
+            };
+
+            const routeLines = {
+                type: 'FeatureCollection',
+                features: deals.map((d, i) => {
+                    const from = getCoords(d.origin), to = getCoords(d.dest);
+                    if (!from || !to) return null;
+                    return {
+                        type: 'Feature', geometry: { type: 'LineString', coordinates: makeArc(from, to) },
+                        properties: { idx: i, tag: d.score?.tag || 'NORMAL', color: TAG_COLORS[d.score?.tag] || '#555' }
+                    };
+                }).filter(Boolean)
+            };
+
+            window.reAttachLayers = function () {
+                if (!map.isStyleLoaded()) return;
+                if (!map.getSource('routes') && routeLines) map.addSource('routes', { type: 'geojson', data: routeLines });
+                if (!map.getSource('destinations') && destPoints) map.addSource('destinations', { type: 'geojson', data: destPoints });
+                if (!map.getSource('origins') && originPoints) map.addSource('origins', { type: 'geojson', data: originPoints });
+
+                if (!map.getLayer('route-lines') && map.getSource('routes')) {
+                    map.addLayer({
+                        id: 'route-lines', type: 'line', source: 'routes',
+                        paint: { 'line-color': ['get', 'color'], 'line-width': 2, 'line-opacity': 0.6 }
+                    });
+                }
+                if (!map.getLayer('dest-circles') && map.getSource('destinations')) {
+                    map.addLayer({
+                        id: 'dest-circles', type: 'circle', source: 'destinations',
+                        paint: { 'circle-radius': 7, 'circle-color': ['get', 'color'], 'circle-stroke-width': 1.5, 'circle-stroke-color': '#fff' }
+                    });
+                }
+                if (!map.getLayer('origin-dots') && map.getSource('origins')) {
+                    map.addLayer({
+                        id: 'origin-dots', type: 'circle', source: 'origins',
+                        paint: { 'circle-radius': 6, 'circle-color': '#ff6b6b', 'circle-stroke-width': 2, 'circle-stroke-color': '#fff' }
+                    });
+                }
+                if (typeof state !== 'undefined' && state && typeof applyFilters === 'function') applyFilters();
+            };
+
+            window.reAttachLayers();
+
+            // Interactive Hover Popups
+            const hoverPopup = new maptilersdk.Popup({ closeButton: false, closeOnClick: false, offset: 12 });
+
+            map.on('mouseenter', 'dest-circles', (e) => {
+                map.getCanvas().style.cursor = 'pointer';
+                const props = e.features[0].properties;
+                const deal = deals[props.idx];
+                if (deal) {
+                    const coords = e.features[0].geometry.coordinates.slice();
+                    hoverPopup.setLngLat(coords).setHTML(`
+                        <div style="font-family: Inter, sans-serif; font-size: 12px; line-height: 1.4; color: #f0f0f5; padding: 2px;">
+                            <div style="font-weight: 800;">${deal.origin} → ${deal.destName}</div>
+                            <div style="font-weight: 800; color: ${props.color};">€${deal.price} · ${deal.score?.tag || 'DEAL'}</div>
+                            <div style="font-size: 10px; color: #8a8a9e;">${deal.tripDays}d trip · ${deal.airline}</div>
+                        </div>
+                    `).addTo(map);
+                }
+            });
+
+            map.on('mouseleave', 'dest-circles', () => {
+                map.getCanvas().style.cursor = '';
+                hoverPopup.remove();
+            });
+
+            map.on('mouseenter', 'origin-dots', (e) => {
+                map.getCanvas().style.cursor = 'pointer';
+                const props = e.features[0].properties;
+                const coords = e.features[0].geometry.coordinates.slice();
+                hoverPopup.setLngLat(coords).setHTML(`
+                    <div style="font-family: Inter, sans-serif; font-weight: 700; font-size: 12px; color: #f0f0f5; padding: 2px;">
+                        ✈️ Airport: ${props.code}
+                    </div>
+                `).addTo(map);
+            });
+
+            map.on('mouseleave', 'origin-dots', () => {
+                map.getCanvas().style.cursor = '';
+                hoverPopup.remove();
+            });
+
+            // Drawer logic
+            const drawer = document.getElementById('drawer');
+            const drawerOverlay = document.getElementById('drawer-overlay');
+            const dClose = document.getElementById('d-close');
+
+            function openDrawer(deal) {
+                document.getElementById('d-route').textContent = `${deal.origin} → ${deal.destName}`;
+                document.getElementById('d-dates').textContent = `${deal.tripDays} days · ${deal.date} to ${deal.returnDate}`;
+                document.getElementById('d-price').textContent = `€${deal.price}`;
+                document.getElementById('d-baseline').textContent = `Market Baseline: €${deal.score?.baseline || '—'}`;
+
+                const baseline = deal.score?.baseline || deal.price;
+                const diff = baseline - deal.price;
+                const discount = deal.score?.discount || 0;
+
+                if (discount > 0) {
+                    document.getElementById('d-discount').textContent = `${discount}% Below Market Baseline`;
+                    document.getElementById('d-savings').textContent = `Estimated Savings: €${diff}`;
+                    document.getElementById('d-bar-fill').style.width = `${Math.min(100, Math.max(10, discount))}%`;
+                    document.getElementById('d-bar-fill').style.background = 'linear-gradient(90deg, #ff4444, #4ecdc4)';
+                } else if (discount < 0) {
+                    const markup = Math.abs(discount);
+                    document.getElementById('d-discount').textContent = `${markup}% Above Market Baseline`;
+                    document.getElementById('d-savings').textContent = `Peak Season Premium: +€${Math.abs(diff)}`;
+                    document.getElementById('d-bar-fill').style.width = '100%';
+                    document.getElementById('d-bar-fill').style.background = '#555566';
+                } else {
+                    document.getElementById('d-discount').textContent = `At Market Baseline`;
+                    document.getElementById('d-savings').textContent = `Standard Fare`;
+                    document.getElementById('d-bar-fill').style.width = '50%';
+                    document.getElementById('d-bar-fill').style.background = '#8a8a9e';
+                }
+
+                // Outbound / Return details
+                document.getElementById('d-leg-outbound').innerHTML = `<strong>Outbound:</strong> ${deal.origin} → ${deal.dest} (${deal.airline})<br>Date: ${deal.date} · Stops: ${deal.stops > 0 ? deal.stops : 'Non-stop'}`;
+                document.getElementById('d-leg-return').innerHTML = `<strong>Return:</strong> ${deal.dest} → ${deal.origin} (${deal.airline})<br>Date: ${deal.returnDate}`;
+
+                // Duffel status
+                const dufEl = document.getElementById('d-duffel-verify');
+                if (deal.crossCheck) {
+                    dufEl.textContent = `🔍 Live Verification (Duffel): €${deal.crossCheck.duffelPrice || '—'} · Status: ${deal.crossCheck.status}`;
+                } else { dufEl.textContent = ''; }
+
+                // Links
+                const airlineUrl = deal.bookingLinks?.airline?.url || '#';
+                const skyUrl = deal.bookingLinks?.skyscanner || '#';
+                const isDupSky = airlineUrl === skyUrl || (deal.bookingLinks?.airline?.name || '').includes('Skyscanner');
+
+                const linksEl = document.getElementById('d-links');
+                linksEl.innerHTML = `
+                    <a class="btn-link" href="${airlineUrl}" target="_blank">🔗 ${deal.bookingLinks?.airline?.name || 'Airline Direct'}</a>
+                    ${!isDupSky ? `<a class="btn-link" href="${skyUrl}" target="_blank">✈️ Skyscanner</a>` : ''}
+                    <a class="btn-link" href="${deal.bookingLinks?.googleFlights || '#'}" target="_blank">🌍 Google Flights</a>
+                    ${deal.deepLink ? `<a class="btn-link" href="${deal.deepLink}" target="_blank">🥝 Kiwi.com</a>` : ''}
+                `;
+
+                drawer.classList.add('open');
+                drawerOverlay.classList.add('open');
+            }
+
+            dClose.addEventListener('click', () => {
+                drawer.classList.remove('open');
+                drawerOverlay.classList.remove('open');
+            });
+            drawerOverlay.addEventListener('click', () => {
+                drawer.classList.remove('open');
+                drawerOverlay.classList.remove('open');
+            });
+
+            function isWeekendGetaway(d) {
+                if (!d.date || !d.returnDate) return false;
+                const outDate = new Date(d.date);
+                const retDate = new Date(d.returnDate);
+                const outDay = outDate.getUTCDay(); // 4 = Thu, 5 = Fri
+                const retDay = retDate.getUTCDay(); // 0 = Sun, 1 = Mon, 2 = Tue
+                return (outDay === 4 || outDay === 5) && (retDay === 0 || retDay === 1 || retDay === 2) && d.tripDays >= 2 && d.tripDays <= 4;
+            }
+
+            // Card Rendering
+            function renderCards(filtered) {
+                const sidebar = document.getElementById('sidebar');
+                sidebar.innerHTML = '';
+                const sorted = [...filtered].sort((a, b) => {
+                    if (state.sort === 'price-asc') return a.price - b.price;
+                    if (state.sort === 'price-desc') return b.price - a.price;
+                    if (state.sort === 'discount') return (b.score?.discount || 0) - (a.score?.discount || 0);
+                    const tagOrder = { 'ERROR FARE': 0, 'GREAT DEAL': 1, 'GOOD DEAL': 2, 'NORMAL': 3 };
+                    return (tagOrder[a.score?.tag] ?? 3) - (tagOrder[b.score?.tag] ?? 3);
+                });
+
+                for (const deal of sorted) {
+                    const tagCss = (deal.score?.tag || 'normal').toLowerCase().replace(' ', '-');
+                    const discVal = deal.score?.discount || 0;
+                    const discTagStr = discVal > 0 ? `-${discVal}%` : discVal < 0 ? `+${Math.abs(discVal)}%` : '±0%';
+                    const isWknd = isWeekendGetaway(deal);
+                    const card = document.createElement('div');
+                    card.className = `deal-card glass-panel ${tagCss}`;
+                    card.innerHTML = `
+                        <div class="card-header">
+                            <span class="card-route">${deal.origin} → ${deal.destName}</span>
+                            <span class="card-price ${tagCss}">€${deal.price}</span>
+                        </div>
+                        <div class="card-tags">
+                            <span class="tag-pill ${tagCss}">${deal.score?.emoji || ''} ${deal.score?.tag || 'NORMAL'} ${discTagStr}</span>
+                            ${isWknd ? `<span class="badge-stops" style="background:rgba(78,205,196,0.15); color:#4ecdc4; border:1px solid rgba(78,205,196,0.3);">✈️ Weekend</span>` : ''}
+                            ${deal.priceCrash ? `<span class="badge-stops" style="background:rgba(255,68,68,0.2); color:#ff4444; border-color:rgba(255,68,68,0.4);">📉 -€${deal.priceCrash.dropEur} Drop</span>` : ''}
+                            ${deal.stops > 0 ? `<span class="badge-stops">${deal.stops} stop</span>` : '<span class="badge-direct">Direct</span>'}
+                        </div>
+                        <div class="card-details">
+                            ${deal.tripDays}d trip · ${deal.date} → ${deal.returnDate} · ${deal.airline}
+                        </div>
+                    `;
+                    card.addEventListener('click', () => {
+                        const coords = getCoords(deal.dest);
+                        if (coords) {
+                            map.flyTo({
+                                center: coords,
+                                zoom: 5.2,
+                                speed: 0.7,
+                                curve: 1.2,
+                                pitch: 35,
+                                easing: (t) => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t,
+                                essential: true
+                            });
+                        }
+                        openDrawer(deal);
+                    });
+                    sidebar.appendChild(card);
+                }
+            }
+
+            function applyFilters() {
+                const searchLower = state.search.toLowerCase();
+                const filtered = deals.filter(d => {
+                    if (!state.origins.has(d.origin)) return false;
+                    if (!state.tags.has(d.score?.tag || 'NORMAL')) return false;
+                    if (d.price > state.maxPrice) return false;
+                    if (state.stops === '0' && d.stops !== 0) return false;
+                    if (state.stops === '1' && d.stops > 1) return false;
+                    if (state.weekendOnly && !isWeekendGetaway(d)) return false;
+                    if (searchLower) {
+                        const matchDest = (d.destName || '').toLowerCase().includes(searchLower);
+                        const matchCountry = (d.country || '').toLowerCase().includes(searchLower);
+                        const matchCode = (d.dest || '').toLowerCase().includes(searchLower);
+                        if (!matchDest && !matchCountry && !matchCode) return false;
+                    }
+                    return true;
+                });
+
+                // Stats
+                document.getElementById('stat-error').textContent = filtered.filter(d => d.score?.tag === 'ERROR FARE').length;
+                document.getElementById('stat-great').textContent = filtered.filter(d => d.score?.tag === 'GREAT DEAL').length;
+                document.getElementById('stat-good').textContent = filtered.filter(d => d.score?.tag === 'GOOD DEAL').length;
+                document.getElementById('stat-total').textContent = filtered.length;
+
+                renderCards(filtered);
+
+                const visIdx = new Set(filtered.map(d => deals.indexOf(d)));
+                map.setFilter('route-lines', ['in', ['get', 'idx'], ['literal', [...visIdx]]]);
+                map.setFilter('dest-circles', ['in', ['get', 'idx'], ['literal', [...visIdx]]]);
+            }
+
+            // Events
+            document.getElementById('search-input').addEventListener('input', (e) => {
+                state.search = e.target.value;
+                applyFilters();
+            });
+
+            document.querySelectorAll('.chip[data-filter="origin"]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    btn.classList.toggle('active');
+                    const val = btn.dataset.value;
+                    if (state.origins.has(val)) state.origins.delete(val); else state.origins.add(val);
+                    applyFilters();
+                });
+            });
+
+            document.querySelectorAll('.chip[data-filter="tag"]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    btn.classList.toggle('active');
+                    const val = btn.dataset.value;
+                    if (state.tags.has(val)) state.tags.delete(val); else state.tags.add(val);
+                    applyFilters();
+                });
+            });
+
+            document.querySelectorAll('.chip[data-filter="stops"]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.chip[data-filter="stops"]').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    state.stops = btn.dataset.value;
+                    applyFilters();
+                });
+            });
+
+            document.querySelectorAll('.chip[data-filter="weekend"]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    state.weekendOnly = !state.weekendOnly;
+                    btn.classList.toggle('active', state.weekendOnly);
+                    applyFilters();
+                });
+            });
+
+            document.getElementById('sort-select').addEventListener('change', (e) => {
+                state.sort = e.target.value;
+                applyFilters();
+            });
+
+            const priceSlider = document.getElementById('price-slider');
+            priceSlider.addEventListener('input', (e) => {
+                state.maxPrice = Number(e.target.value);
+                document.getElementById('price-val').textContent = `€${state.maxPrice}`;
+                applyFilters();
+            });
+
+            // Mobile Nav
+            const btnMap = document.getElementById('btn-view-map');
+            const btnList = document.getElementById('btn-view-list');
+            const sidebar = document.getElementById('sidebar');
+
+            btnMap.addEventListener('click', () => {
+                btnMap.classList.add('active');
+                btnList.classList.remove('active');
+                sidebar.classList.remove('mobile-show');
+            });
+            btnList.addEventListener('click', () => {
+                btnList.classList.add('active');
+                btnMap.classList.remove('active');
+                sidebar.classList.add('mobile-show');
+            });
+
+            map.on('click', 'dest-circles', (e) => {
+                const props = e.features[0].properties;
+                const deal = deals[props.idx];
+                if (deal) openDrawer(deal);
+            });
+
+            async function triggerBackendHunt(days) {
+                const btnHunt = document.getElementById('btn-trigger-hunt');
+                btnHunt.textContent = `⏳ ${days}d Scan...`;
+                try {
+                    const res = await fetch(`${API_BASE}/api/trigger-hunt?days=${days}`, { method: 'POST' });
+                    if (res.ok || res.status === 409) {
+                        btnHunt.textContent = `⚡ ${days}d Active`;
+                        pollHuntStatus();
+                    } else {
+                        btnHunt.textContent = '❌ Failed';
+                        setTimeout(() => { btnHunt.textContent = '🔄 Live Scan'; }, 4000);
+                    }
+                } catch {
+                    btnHunt.textContent = '❌ Error';
+                    setTimeout(() => { btnHunt.textContent = '🔄 Live Scan'; }, 4000);
+                }
+            }
+
+            function pollHuntStatus() {
+                const interval = setInterval(async () => {
+                    try {
+                        const res = await fetch(`${API_BASE}/api/status`);
+                        const data = await res.json();
+                        if (!data.isHunting) {
+                            clearInterval(interval);
+                            document.getElementById('btn-trigger-hunt').textContent = '🔄 Live Scan';
+                            const repRes = await fetch(`${API_BASE}/api/report`);
+                            if (repRes.ok) {
+                                const report = await repRes.json();
+                                if (report.allResults) {
+                                    deals = report.allResults;
+                                    applyFilters();
+                                }
+                            }
+                        }
+                    } catch { }
+                }, 3000);
+            }
+
+            document.querySelectorAll('.chip[data-filter="days"]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.chip[data-filter="days"]').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    state.days = Number(btn.dataset.value);
+                    triggerBackendHunt(state.days);
+                });
+            });
+
+            // Live Trigger Hunt button
+            const btnHunt = document.getElementById('btn-trigger-hunt');
+            btnHunt.addEventListener('click', () => {
+                triggerBackendHunt(state.days || 30);
+            });
+
+            applyFilters();
+        });
+    </script>
+</body>
+
+</html>
