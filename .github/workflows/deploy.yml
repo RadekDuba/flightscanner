@@ -59,10 +59,11 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          git reset --soft origin/main
           git add error_fares_report.json flight_cache.json flight_history.json || true
-          if ! git diff --quiet || ! git diff --staged --quiet; then
+          if ! git diff --staged --quiet; then
             git commit -m "Auto-update flight deals report [skip ci]"
-            git pull --rebase origin main
             git push
           fi
 
