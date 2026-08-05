@@ -15,17 +15,18 @@
         rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #07070c;
-            --panel-bg: rgba(12, 12, 24, 0.88);
-            --panel-border: rgba(255, 255, 255, 0.08);
-            --panel-blur: blur(24px);
-            --error-color: #ff4444;
-            --great-color: #4ecdc4;
-            --good-color: #ffe66d;
+            --bg-dark: #06070b;
+            --panel-bg: rgba(13, 17, 28, 0.82);
+            --panel-border: rgba(255, 255, 255, 0.09);
+            --panel-blur: blur(28px) saturate(180%);
+            --error-color: #ff3b5c;
+            --great-color: #00f2fe;
+            --good-color: #ffb703;
             --normal-color: #777788;
-            --accent-cyan: #4ecdc4;
-            --text-main: #f0f0f5;
-            --text-muted: #8a8a9e;
+            --accent-cyan: #00f2fe;
+            --accent-mint: #4ecdc4;
+            --text-main: #f0f4f8;
+            --text-muted: #8a96a8;
         }
 
         * {
@@ -54,8 +55,8 @@
             backdrop-filter: var(--panel-blur);
             -webkit-backdrop-filter: var(--panel-blur);
             border: 1px solid var(--panel-border);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55);
-            border-radius: 16px;
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+            border-radius: 18px;
         }
 
         /* ─── Main Header Bar ────────────────────────── */
@@ -1201,7 +1202,7 @@
 
         function getCoords(code) { return geoCache[code] || ORIGIN_COORDS[code] || null; }
 
-        const TAG_COLORS = { 'ERROR FARE': '#ff4444', 'GREAT DEAL': '#4ecdc4', 'GOOD DEAL': '#ffe66d', 'NORMAL': '#777788' };
+        const TAG_COLORS = { 'ERROR FARE': '#ff3b5c', 'GREAT DEAL': '#00f2fe', 'GOOD DEAL': '#ffb703', 'NORMAL': '#777788' };
 
         function makeArc(start, end, numPoints = 50) {
             const coords = [];
