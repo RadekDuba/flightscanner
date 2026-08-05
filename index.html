@@ -181,6 +181,44 @@
             background: rgba(255, 82, 82, 0.15);
         }
 
+        /* Smart Insights Banner */
+        .smart-banner {
+            background: linear-gradient(135deg, rgba(78, 205, 196, 0.15), rgba(255, 82, 82, 0.15));
+            border: 1px solid rgba(78, 205, 196, 0.3);
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin-bottom: 12px;
+            font-size: 12px;
+            line-height: 1.45;
+            color: var(--text-main);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .sug-chip {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text-muted);
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+
+        .sug-chip:hover {
+            color: #4ecdc4;
+            border-color: #4ecdc4;
+            background: rgba(78, 205, 196, 0.15);
+        }
+
+        .card.hover-highlight {
+            border-color: #4ecdc4 !important;
+            box-shadow: 0 0 16px rgba(78, 205, 196, 0.35) !important;
+            transform: translateY(-2px);
+        }
+
         .status-dot {
             width: 6px;
             height: 6px;
@@ -909,6 +947,20 @@
             <input type="text" id="search-input" class="search-input"
                 placeholder="Search city, country, or airport (e.g. BCN, Spain)...">
         </div>
+        <div class="search-chips" id="search-chips" style="display: flex; gap: 6px; overflow-x: auto; padding-top: 2px;">
+            <button class="sug-chip" data-search="Italy">🇮🇹 Italy</button>
+            <button class="sug-chip" data-search="Spain">🇪🇸 Spain</button>
+            <button class="sug-chip" data-search="New York">🇺🇸 New York</button>
+            <button class="sug-chip" data-search="Morocco">🇲🇦 Morocco</button>
+            <button class="sug-chip" data-search="London">🇬🇧 London</button>
+        </div>
+
+        <div class="filter-group">
+            <span class="filter-label">Airline Carrier</span>
+            <select id="airline-select" class="custom-select" style="width: 100%;">
+                <option value="all">All Airlines</option>
+            </select>
+        </div>
 
         <div class="filter-group">
             <span class="filter-label">Origin Airport</span>
@@ -998,7 +1050,9 @@
     </div>
 
     <!-- Right Sidebar (Cards) -->
-    <div class="sidebar glass-panel" id="sidebar"></div>
+    <div class="sidebar glass-panel" id="sidebar">
+        <div class="smart-banner" id="smart-banner"></div>
+    </div>
 
     <!-- Detail Drawer Modal -->
     <div class="drawer-overlay" id="drawer-overlay"></div>
@@ -1081,6 +1135,7 @@
             origins: new Set(['PRG', 'VIE', 'BTS', 'KTW', 'OSR']),
             tags: new Set(['ERROR FARE', 'GREAT DEAL', 'GOOD DEAL', 'NORMAL']),
             stops: 'all',
+            airline: 'all',
             search: '',
             maxPrice: 2000,
             sort: 'score',
@@ -1445,10 +1500,47 @@
             `;
         }
 
+        function updateSmartInsights(filtered) {
+            const banner = document.getElementById('smart-banner');
+            if (!banner) return;
+            if (!filtered || !filtered.length) {
+                banner.style.display = 'none';
+                return;
+            }
+            banner.style.display = 'block';
+
+            const errorFares = filtered.filter(d => d.score?.tag === 'ERROR FARE');
+            const priceCrashes = filtered.filter(d => d.priceCrash);
+            const topDeal = errorFares.length ? errorFares[0] : filtered[0];
+
+            let text = `<strong>💡 Smart Insights:</strong> ${filtered.length} flight deals active. `;
+            if (errorFares.length > 0) {
+                text += `<span style="color:#ff4444; font-weight:700;">🔥 ${errorFares.length} Error Fares</span> spotted! `;
+            }
+            if (topDeal) {
+                text += `Top deal: <strong>${topDeal.origin} → ${topDeal.destName} €${topDeal.price}</strong> (${topDeal.score?.discount || 0}% off). `;
+            }
+            if (priceCrashes.length > 0) {
+                text += `<span style="color:#4ecdc4;">📉 ${priceCrashes.length} price crashes</span> tracked.`;
+            }
+
+            banner.innerHTML = text;
+        }
+
         function renderCards(filtered) {
             const sidebar = document.getElementById('sidebar');
             if (!sidebar) return;
+
+            let banner = document.getElementById('smart-banner');
+            if (!banner) {
+                banner = document.createElement('div');
+                banner.id = 'smart-banner';
+                banner.className = 'smart-banner';
+                sidebar.appendChild(banner);
+            }
             sidebar.innerHTML = '';
+            sidebar.appendChild(banner);
+
             const sorted = [...filtered].sort((a, b) => {
                 if (state.sort === 'price-asc') return a.price - b.price;
                 if (state.sort === 'price-desc') return b.price - a.price;
@@ -1458,12 +1550,14 @@
             });
 
             for (const deal of sorted) {
+                const idx = deals.indexOf(deal);
                 const tagCss = (deal.score?.tag || 'normal').toLowerCase().replace(' ', '-');
                 const discVal = deal.score?.discount || 0;
                 const discTagStr = discVal > 0 ? `-${discVal}%` : discVal < 0 ? `+${Math.abs(discVal)}%` : '±0%';
                 const isWknd = isWeekendGetaway(deal);
                 const card = document.createElement('div');
                 card.className = `deal-card glass-panel ${tagCss}`;
+                card.dataset.idx = idx;
                 card.innerHTML = `
                     <div class="card-header">
                         <span class="card-route">${deal.origin} → ${deal.destName}</span>
@@ -1479,6 +1573,14 @@
                         ${deal.tripDays}d trip · ${deal.date} → ${deal.returnDate} · ${deal.airline}
                     </div>
                 `;
+                card.addEventListener('mouseenter', () => {
+                    if (idx !== -1 && map && map.isStyleLoaded() && map.getLayer('route-lines')) {
+                        map.setFilter('route-lines', ['==', ['get', 'idx'], idx]);
+                    }
+                });
+                card.addEventListener('mouseleave', () => {
+                    if (typeof applyFilters === 'function') applyFilters();
+                });
                 card.addEventListener('click', () => {
                     openDrawer(deal);
                 });
@@ -1495,6 +1597,7 @@
                 if (d.price > state.maxPrice) return false;
                 if (state.stops === '0' && d.stops !== 0) return false;
                 if (state.stops === '1' && d.stops > 1) return false;
+                if (state.airline && state.airline !== 'all' && d.airline !== state.airline) return false;
                 if (state.weekendOnly && !isWeekendGetaway(d)) return false;
                 if (state.days && d.date) {
                     const flightDate = new Date(d.date);
@@ -1506,7 +1609,8 @@
                     const matchDest = (d.destName || '').toLowerCase().includes(searchLower);
                     const matchCountry = (d.country || '').toLowerCase().includes(searchLower);
                     const matchCode = (d.dest || '').toLowerCase().includes(searchLower);
-                    if (!matchDest && !matchCountry && !matchCode) return false;
+                    const matchAirline = (d.airline || '').toLowerCase().includes(searchLower);
+                    if (!matchDest && !matchCountry && !matchCode && !matchAirline) return false;
                 }
                 return true;
             });
@@ -1520,6 +1624,7 @@
             if (gudEl) gudEl.textContent = filtered.filter(d => d.score?.tag === 'GOOD DEAL').length;
             if (totEl) totEl.textContent = filtered.length;
 
+            updateSmartInsights(filtered);
             renderCards(filtered);
 
             if (map.isStyleLoaded() && map.getLayer('route-lines') && map.getLayer('dest-circles')) {
@@ -1532,6 +1637,13 @@
         async function updateMapSourcesAndFilters(newDeals) {
             deals = newDeals || [];
             if (!deals.length) return;
+
+            const airlines = [...new Set(deals.map(d => d.airline).filter(Boolean))].sort();
+            const selectEl = document.getElementById('airline-select');
+            if (selectEl) {
+                selectEl.innerHTML = '<option value="all">All Airlines</option>' +
+                    airlines.map(a => `<option value="${a}">${a}</option>`).join('');
+            }
 
             await geocodeAllDeals(deals);
 
@@ -1651,12 +1763,19 @@
                             <div style="font-size: 10px; color: #8a8a9e;">${deal.tripDays}d trip · ${deal.airline}</div>
                         </div>
                     `).addTo(map);
+
+                    document.querySelectorAll('.deal-card').forEach(c => {
+                        const isMatch = String(c.dataset.idx) === String(props.idx);
+                        c.classList.toggle('hover-highlight', isMatch);
+                        if (isMatch) c.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    });
                 }
             });
 
             map.on('mouseleave', 'dest-circles', () => {
                 map.getCanvas().style.cursor = '';
                 hoverPopup.remove();
+                document.querySelectorAll('.deal-card').forEach(c => c.classList.remove('hover-highlight'));
             });
 
             map.on('mouseenter', 'origin-dots', (e) => {
@@ -1798,6 +1917,24 @@
                     applyFilters();
                 });
             }
+
+            const airlineSelect = document.getElementById('airline-select');
+            if (airlineSelect) {
+                airlineSelect.addEventListener('change', (e) => {
+                    state.airline = e.target.value;
+                    applyFilters();
+                });
+            }
+
+            document.querySelectorAll('.sug-chip').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const searchVal = btn.dataset.search || '';
+                    const searchEl = document.getElementById('search-input');
+                    if (searchEl) searchEl.value = searchVal;
+                    state.search = searchVal;
+                    applyFilters();
+                });
+            });
 
             const priceSlider = document.getElementById('price-slider');
             if (priceSlider) {
