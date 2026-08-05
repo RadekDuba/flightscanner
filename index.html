@@ -1017,7 +1017,7 @@
                     <button class="chip active tag-error" data-filter="tag" data-value="ERROR FARE">🔥 Error</button>
                     <button class="chip active tag-great" data-filter="tag" data-value="GREAT DEAL">⭐ Great</button>
                     <button class="chip active tag-good" data-filter="tag" data-value="GOOD DEAL">✅ Good</button>
-                    <button class="chip" data-filter="tag" data-value="NORMAL">Normal</button>
+                    <button class="chip active" data-filter="tag" data-value="NORMAL">Normal</button>
                 </div>
             </div>
         </div>
@@ -1668,9 +1668,14 @@
             renderCards(filtered);
 
             if (map.isStyleLoaded() && map.getLayer('route-lines') && map.getLayer('dest-circles')) {
-                const visIdx = new Set(filtered.map(d => deals.indexOf(d)));
-                map.setFilter('route-lines', ['in', ['get', 'idx'], ['literal', [...visIdx]]]);
-                map.setFilter('dest-circles', ['in', ['get', 'idx'], ['literal', [...visIdx]]]);
+                const visIdx = [...new Set(filtered.map(d => deals.indexOf(d)))].filter(i => i !== -1);
+                if (visIdx.length > 0) {
+                    map.setFilter('route-lines', ['in', ['get', 'idx'], ['literal', visIdx]]);
+                    map.setFilter('dest-circles', ['in', ['get', 'idx'], ['literal', visIdx]]);
+                } else {
+                    map.setFilter('route-lines', ['==', ['get', 'idx'], -9999]);
+                    map.setFilter('dest-circles', ['==', ['get', 'idx'], -9999]);
+                }
             }
         }
 
