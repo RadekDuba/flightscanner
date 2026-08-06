@@ -51,6 +51,7 @@ function log(level, msg) {
     const prefix = {
         hunt: `${c.magenta}[HUNT]${c.reset}`,
         deal: `${c.bgGreen}${c.white}${c.bold} DEAL ${c.reset}`,
+        great_deal: `${c.bgCyan}${c.white}${c.bold} ⭐ GREAT DEAL ⭐ ${c.reset}`,
         error_fare: `${c.bgRed}${c.white}${c.bold} ‼ ERROR FARE ‼ ${c.reset}`,
         info: `${c.blue}[INFO]${c.reset}`,
         ok: `${c.green}[OK]${c.reset}`,
@@ -453,9 +454,10 @@ ${c.magenta}${c.bold}  ╔══════════════════
             const top5 = results.slice(0, 5);
             for (const r of top5) {
                 const score = scoreDeal(r.price, r.airlines || [], r.dest, r.origin);
-                const isError = score.tag === 'ERROR FARE' || score.tag === 'GREAT DEAL';
-                if (isError) {
+                if (score.tag === 'ERROR FARE') {
                     log('error_fare', `${c.bold}${r.origin}→${r.destName}${c.reset} ${c.green}${c.bold}€${r.price}${c.reset} (${r.tripDays}d) depart ${r.date} — ${r.airline}`);
+                } else if (score.tag === 'GREAT DEAL') {
+                    log('great_deal', `${c.bold}${r.origin}→${r.destName}${c.reset} ${c.green}${c.bold}€${r.price}${c.reset} (${r.tripDays}d) depart ${r.date} — ${r.airline}`);
                 } else {
                     log('deal', `${r.origin}→${r.destName} (${r.country}) ${c.green}€${r.price}${c.reset} (${r.tripDays}d) depart ${r.date} — ${r.airline}`);
                 }
