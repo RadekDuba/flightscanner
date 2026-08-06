@@ -1567,6 +1567,20 @@
             banner.innerHTML = text;
         }
 
+        function highlightDeal(idx) {
+            document.querySelectorAll('.deal-card').forEach(c => {
+                c.classList.toggle('hover-highlight', String(c.dataset.idx) === String(idx));
+            });
+            if (idx !== -1 && map && map.isStyleLoaded() && map.getLayer('route-lines')) {
+                map.setFilter('route-lines', ['==', ['get', 'idx'], Number(idx)]);
+            }
+        }
+
+        function unhighlightDeal() {
+            document.querySelectorAll('.deal-card').forEach(c => c.classList.remove('hover-highlight'));
+            if (typeof applyFilters === 'function') applyFilters();
+        }
+
         function renderCards(filtered) {
             const sidebar = document.getElementById('sidebar');
             if (!sidebar) return;
@@ -1614,12 +1628,10 @@
                     </div>
                 `;
                 card.addEventListener('mouseenter', () => {
-                    if (idx !== -1 && map && map.isStyleLoaded() && map.getLayer('route-lines')) {
-                        map.setFilter('route-lines', ['==', ['get', 'idx'], idx]);
-                    }
+                    highlightDeal(idx);
                 });
                 card.addEventListener('mouseleave', () => {
-                    if (typeof applyFilters === 'function') applyFilters();
+                    unhighlightDeal();
                 });
                 card.addEventListener('click', () => {
                     openDrawer(deal);
@@ -1800,6 +1812,7 @@
                 const props = e.features[0].properties;
                 const deal = deals[props.idx];
                 if (deal) {
+                    highlightDeal(props.idx);
                     const coords = e.features[0].geometry.coordinates.slice();
                     hoverPopup.setLngLat(coords).setHTML(`
                         <div style="font-family: Inter, sans-serif; font-size: 12px; line-height: 1.4; color: #f0f0f5; padding: 2px;">
@@ -1808,18 +1821,35 @@
                             <div style="font-size: 10px; color: #8a8a9e;">${deal.tripDays}d trip · ${deal.airline}</div>
                         </div>
                     `).addTo(map);
-
-                    document.querySelectorAll('.deal-card').forEach(c => {
-                        const isMatch = String(c.dataset.idx) === String(props.idx);
-                        c.classList.toggle('hover-highlight', isMatch);
-                    });
                 }
             });
 
             map.on('mouseleave', 'dest-circles', () => {
                 map.getCanvas().style.cursor = '';
                 hoverPopup.remove();
-                document.querySelectorAll('.deal-card').forEach(c => c.classList.remove('hover-highlight'));
+                unhighlightDeal();
+            });
+
+            map.on('mouseenter', 'route-lines', (e) => {
+                map.getCanvas().style.cursor = 'pointer';
+                const props = e.features[0].properties;
+                const deal = deals[props.idx];
+                if (deal) {
+                    highlightDeal(props.idx);
+                    hoverPopup.setLngLat(e.lngLat).setHTML(`
+                        <div style="font-family: Inter, sans-serif; font-size: 12px; line-height: 1.4; color: #f0f0f5; padding: 2px;">
+                            <div style="font-weight: 800;">${deal.origin} → ${deal.destName}</div>
+                            <div style="font-weight: 800; color: ${props.color};">€${deal.price} · ${deal.score?.tag || 'DEAL'}</div>
+                            <div style="font-size: 10px; color: #8a8a9e;">${deal.tripDays}d trip · ${deal.airline}</div>
+                        </div>
+                    `).addTo(map);
+                }
+            });
+
+            map.on('mouseleave', 'route-lines', () => {
+                map.getCanvas().style.cursor = '';
+                hoverPopup.remove();
+                unhighlightDeal();
             });
 
             map.on('mouseenter', 'origin-dots', (e) => {
