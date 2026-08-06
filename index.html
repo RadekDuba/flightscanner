@@ -1567,18 +1567,25 @@
             banner.innerHTML = text;
         }
 
+        let selectedDealIdx = null;
+
         function highlightDeal(idx) {
             document.querySelectorAll('.deal-card').forEach(c => {
                 c.classList.toggle('hover-highlight', String(c.dataset.idx) === String(idx));
             });
-            if (idx !== -1 && map && map.isStyleLoaded() && map.getLayer('route-lines')) {
-                map.setFilter('route-lines', ['==', ['get', 'idx'], Number(idx)]);
+            if (idx !== -1 && map && map.isStyleLoaded()) {
+                if (map.getLayer('route-lines')) map.setFilter('route-lines', ['==', ['get', 'idx'], Number(idx)]);
+                if (map.getLayer('dest-circles')) map.setFilter('dest-circles', ['==', ['get', 'idx'], Number(idx)]);
             }
         }
 
         function unhighlightDeal() {
-            document.querySelectorAll('.deal-card').forEach(c => c.classList.remove('hover-highlight'));
-            if (typeof applyFilters === 'function') applyFilters();
+            if (selectedDealIdx !== null) {
+                highlightDeal(selectedDealIdx);
+            } else {
+                document.querySelectorAll('.deal-card').forEach(c => c.classList.remove('hover-highlight'));
+                if (typeof applyFilters === 'function') applyFilters();
+            }
         }
 
         function renderCards(filtered) {
@@ -1680,13 +1687,18 @@
             renderCards(filtered);
 
             if (map.isStyleLoaded() && map.getLayer('route-lines') && map.getLayer('dest-circles')) {
-                const visIdx = [...new Set(filtered.map(d => deals.indexOf(d)))].filter(i => i !== -1);
-                if (visIdx.length > 0) {
-                    map.setFilter('route-lines', ['in', ['get', 'idx'], ['literal', visIdx]]);
-                    map.setFilter('dest-circles', ['in', ['get', 'idx'], ['literal', visIdx]]);
+                if (selectedDealIdx !== null && selectedDealIdx !== undefined) {
+                    map.setFilter('route-lines', ['==', ['get', 'idx'], Number(selectedDealIdx)]);
+                    map.setFilter('dest-circles', ['==', ['get', 'idx'], Number(selectedDealIdx)]);
                 } else {
-                    map.setFilter('route-lines', ['==', ['get', 'idx'], -9999]);
-                    map.setFilter('dest-circles', ['==', ['get', 'idx'], -9999]);
+                    const visIdx = [...new Set(filtered.map(d => deals.indexOf(d)))].filter(i => i !== -1);
+                    if (visIdx.length > 0) {
+                        map.setFilter('route-lines', ['in', ['get', 'idx'], ['literal', visIdx]]);
+                        map.setFilter('dest-circles', ['in', ['get', 'idx'], ['literal', visIdx]]);
+                    } else {
+                        map.setFilter('route-lines', ['==', ['get', 'idx'], -9999]);
+                        map.setFilter('dest-circles', ['==', ['get', 'idx'], -9999]);
+                    }
                 }
             }
         }
@@ -1868,12 +1880,31 @@
                 hoverPopup.remove();
             });
 
+            // Map Click Handlers (Destination Circles & Flight Paths)
+            map.on('click', 'dest-circles', (e) => {
+                const props = e.features[0].properties;
+                const deal = deals[props.idx];
+                if (deal) openDrawer(deal);
+            });
+
+            map.on('click', 'route-lines', (e) => {
+                const props = e.features[0].properties;
+                const deal = deals[props.idx];
+                if (deal) openDrawer(deal);
+            });
+
             // Drawer logic
             const drawer = document.getElementById('drawer');
             const drawerOverlay = document.getElementById('drawer-overlay');
             const dClose = document.getElementById('d-close');
 
             function openDrawer(deal) {
+                const idx = deals.indexOf(deal);
+                selectedDealIdx = idx !== -1 ? idx : null;
+                if (selectedDealIdx !== null) {
+                    highlightDeal(selectedDealIdx);
+                }
+
                 document.getElementById('d-route').textContent = `${deal.origin} → ${deal.destName}`;
                 document.getElementById('d-dates').textContent = `${deal.tripDays} days · ${deal.date} to ${deal.returnDate}`;
                 document.getElementById('d-price').textContent = `€${deal.price}`;
@@ -1929,8 +1960,10 @@
             }
 
             function closeDrawer() {
+                selectedDealIdx = null;
                 if (drawer) drawer.classList.remove('open');
                 if (drawerOverlay) drawerOverlay.classList.remove('open');
+                document.querySelectorAll('.deal-card').forEach(c => c.classList.remove('hover-highlight'));
                 applyFilters();
             }
 
