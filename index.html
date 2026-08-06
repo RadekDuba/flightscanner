@@ -1812,7 +1812,6 @@
                     document.querySelectorAll('.deal-card').forEach(c => {
                         const isMatch = String(c.dataset.idx) === String(props.idx);
                         c.classList.toggle('hover-highlight', isMatch);
-                        if (isMatch) c.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                     });
                 }
             });
