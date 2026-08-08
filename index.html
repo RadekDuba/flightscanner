@@ -8,6 +8,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔥</text></svg>">
     <title>Error Fare Hunter — Global Flight Intelligence</title>
     <script src="https://cdn.maptiler.com/maptiler-sdk-js/v4.0.2/maptiler-sdk.umd.min.js"></script>
     <link href="https://cdn.maptiler.com/maptiler-sdk-js/v4.0.2/maptiler-sdk.css" rel="stylesheet" />
@@ -1749,6 +1750,67 @@
             if (drawerOverlay) drawerOverlay.classList.remove('open');
             document.querySelectorAll('.deal-card').forEach(c => c.classList.remove('hover-highlight'));
             applyFilters();
+        }
+
+        let hoveredRouteKey = null;
+
+        function highlightRouteGroup(key) {
+            hoveredRouteKey = key;
+            const cards = document.querySelectorAll('.deal-card');
+            cards.forEach(c => {
+                if (c.dataset.routeKey === key) {
+                    c.classList.add('hover-highlight');
+                } else {
+                    c.classList.remove('hover-highlight');
+                }
+            });
+            if (map && map.isStyleLoaded() && map.getSource('routes') && map.getSource('destinations')) {
+                const visGroups = (allRouteGroups || []).filter(g => g.key === key);
+                if (visGroups.length > 0) {
+                    const highlightDests = {
+                        type: 'FeatureCollection',
+                        features: visGroups.map((g, i) => {
+                            const coords = getCoords(g.dest);
+                            if (!coords) return null;
+                            return {
+                                type: 'Feature',
+                                geometry: { type: 'Point', coordinates: coords },
+                                properties: {
+                                    routeKey: g.key, dest: g.dest, destName: g.destName, idx: i,
+                                    tag: g.score?.tag || 'NORMAL', color: TAG_COLORS[g.score?.tag] || '#555',
+                                    priceRangeStr: g.priceRangeStr, offerCount: g.offers.length,
+                                }
+                            };
+                        }).filter(Boolean)
+                    };
+                    const highlightLines = {
+                        type: 'FeatureCollection',
+                        features: visGroups.map((g, i) => {
+                            const from = getCoords(g.origin), to = getCoords(g.dest);
+                            if (!from || !to) return null;
+                            return {
+                                type: 'Feature',
+                                geometry: { type: 'LineString', coordinates: makeArc(from, to) },
+                                properties: {
+                                    routeKey: g.key, idx: i, tag: g.score?.tag || 'NORMAL',
+                                    color: TAG_COLORS[g.score?.tag] || '#555',
+                                    priceRangeStr: g.priceRangeStr, offerCount: g.offers.length,
+                                }
+                            };
+                        }).filter(Boolean)
+                    };
+                    map.getSource('routes').setData(highlightLines);
+                    map.getSource('destinations').setData(highlightDests);
+                }
+            }
+        }
+
+        function unhighlightRouteGroup() {
+            if (hoveredRouteKey !== null) {
+                hoveredRouteKey = null;
+                document.querySelectorAll('.deal-card').forEach(c => c.classList.remove('hover-highlight'));
+                applyFilters();
+            }
         }
 
         function renderCards(filtered) {
