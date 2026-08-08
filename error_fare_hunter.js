@@ -581,7 +581,7 @@ ${c.magenta}${c.bold}  ╔══════════════════
 
                 allResults.push(dealInfo);
 
-                const dufScore = scoreDeal(price, [airline], dest.code, origin.code);
+                const dufScore = scoreDeal(price, [cheapest.airline], dest.code, origin.code);
                 if (dufScore.tag !== 'NORMAL') {
                     log('error_fare', `${c.bold}${origin.code}→${dest.name}${c.reset} ${c.green}${c.bold}€${price}${c.reset} (${bestDays}d) ${date} — ${cheapest.airline}`);
                 } else if (price < 150) {
@@ -811,9 +811,10 @@ ${c.magenta}${c.bold}  ╔══════════════════
     console.log(`${c.magenta}${c.bold}  ${'═'.repeat(60)}${c.reset}`);
     console.log('');
     // Separate by score category
-    const errorFares = allResults.filter(r => r.score.tag === 'ERROR FARE');
-    const greatDeals = allResults.filter(r => r.score.tag === 'GREAT DEAL');
-    const goodDeals = allResults.filter(r => r.score.tag === 'GOOD DEAL');
+    // Separate by score category
+    const errorFares = allResults.filter(r => r.score?.tag === 'ERROR FARE');
+    const greatDeals = allResults.filter(r => r.score?.tag === 'GREAT DEAL');
+    const goodDeals = allResults.filter(r => r.score?.tag === 'GOOD DEAL');
 
     // Broadcast Telegram Alerts
     for (const deal of [...errorFares, ...greatDeals]) {
@@ -824,11 +825,13 @@ ${c.magenta}${c.bold}  ╔══════════════════
         console.log(`  ${c.bgRed}${c.white}${c.bold} 🔥 ${errorFares.length} POTENTIAL ERROR FARE${errorFares.length > 1 ? 'S' : ''} (70%+ below baseline) 🔥 ${c.reset}`);
         console.log('');
         for (const ef of errorFares) {
-            const baseType = ef.score.dynamic ? '📊' : '📐';
-            console.log(`  ${c.red}${c.bold}€${ef.price}${c.reset} ${c.bold}${ef.origin}→${ef.destName}${c.reset} (${ef.country}) — ${ef.score.discount}% off (${baseType} baseline €${ef.score.baseline})`);
-            console.log(`    ${ef.tripDays}d trip · ${ef.date} → ${ef.returnDate} · ${ef.airline} · ${ef.stops === 0 ? 'Direct' : ef.stops + ' stop(s)'} · ${ef.score.distance}-haul ${ef.score.isLCC ? 'LCC' : 'legacy'}`);
-            console.log(`    ${c.yellow}${c.bold}${ef.bookingLinks.airline.name}: ${c.underline}${ef.bookingLinks.airline.url}${c.reset}`);
-            console.log(`    ${c.cyan}Kiwi: ${c.underline}${ef.deepLink || ef.bookingLinks.skyscanner}${c.reset}`);
+            const baseType = ef.score?.dynamic ? '📊' : '📐';
+            const aName = ef.bookingLinks?.airline?.name || 'Airline';
+            const aUrl = ef.bookingLinks?.airline?.url || '#';
+            console.log(`  ${c.red}${c.bold}€${ef.price}${c.reset} ${c.bold}${ef.origin}→${ef.destName}${c.reset} (${ef.country}) — ${ef.score?.discount || 0}% off (${baseType} baseline €${ef.score?.baseline || 0})`);
+            console.log(`    ${ef.tripDays}d trip · ${ef.date} → ${ef.returnDate} · ${ef.airline} · ${ef.stops === 0 ? 'Direct' : ef.stops + ' stop(s)'} · ${ef.score?.distance || 'medium'}-haul ${ef.score?.isLCC ? 'LCC' : 'legacy'}`);
+            console.log(`    ${c.yellow}${c.bold}${aName}: ${c.underline}${aUrl}${c.reset}`);
+            console.log(`    ${c.cyan}Kiwi: ${c.underline}${ef.deepLink || ef.bookingLinks?.skyscanner || '#'}${c.reset}`);
             console.log('');
         }
     }
@@ -837,10 +840,12 @@ ${c.magenta}${c.bold}  ╔══════════════════
         console.log(`  ${c.bgGreen}${c.white}${c.bold} ⭐ ${greatDeals.length} GREAT DEAL${greatDeals.length > 1 ? 'S' : ''} (50-70% below baseline) ${c.reset}`);
         console.log('');
         for (const d of greatDeals) {
-            const baseType = d.score.dynamic ? '📊' : '📐';
-            console.log(`  ${c.green}${c.bold}€${d.price}${c.reset} ${c.bold}${d.origin}→${d.destName}${c.reset} (${d.country}) — ${d.score.discount}% off (${baseType} baseline €${d.score.baseline})`);
-            console.log(`    ${d.tripDays}d · ${d.date} → ${d.returnDate} · ${d.airline} · ${d.score.distance}-haul ${d.score.isLCC ? 'LCC' : 'legacy'}`);
-            console.log(`    ${c.yellow}${d.bookingLinks.airline.name}: ${c.underline}${d.bookingLinks.airline.url}${c.reset}`);
+            const baseType = d.score?.dynamic ? '📊' : '📐';
+            const aName = d.bookingLinks?.airline?.name || 'Airline';
+            const aUrl = d.bookingLinks?.airline?.url || '#';
+            console.log(`  ${c.green}${c.bold}€${d.price}${c.reset} ${c.bold}${d.origin}→${d.destName}${c.reset} (${d.country}) — ${d.score?.discount || 0}% off (${baseType} baseline €${d.score?.baseline || 0})`);
+            console.log(`    ${d.tripDays}d · ${d.date} → ${d.returnDate} · ${d.airline} · ${d.score?.distance || 'medium'}-haul ${d.score?.isLCC ? 'LCC' : 'legacy'}`);
+            console.log(`    ${c.yellow}${aName}: ${c.underline}${aUrl}${c.reset}`);
             console.log('');
         }
     }
@@ -849,10 +854,12 @@ ${c.magenta}${c.bold}  ╔══════════════════
     console.log(`  ${c.bgGreen}${c.white}${c.bold} ALL RESULTS (sorted by price) ${c.reset}`);
     console.log('');
     for (const d of allResults.slice(0, 30)) {
-        const tagColor = d.score.tag === 'ERROR FARE' ? c.red : d.score.tag === 'GREAT DEAL' ? c.green : d.score.tag === 'GOOD DEAL' ? c.yellow : c.dim;
-        const tagStr = d.score.emoji ? ` ${d.score.emoji} ${d.score.tag}` : '';
-        console.log(`  €${String(d.price).padEnd(7)} ${c.bold}${d.origin}→${d.destName}${c.reset} (${d.country}) ${c.dim}${d.tripDays}d${c.reset} — ${d.airline}  ${tagColor}${tagStr} ${d.score.discount > 0 ? `(-${d.score.discount}%)` : ''}${c.reset}`);
-        console.log(`           ${c.yellow}${d.bookingLinks.airline.name}: ${c.underline}${d.bookingLinks.airline.url}${c.reset}`);
+        const tagColor = d.score?.tag === 'ERROR FARE' ? c.red : d.score?.tag === 'GREAT DEAL' ? c.green : d.score?.tag === 'GOOD DEAL' ? c.yellow : c.dim;
+        const tagStr = d.score?.emoji ? ` ${d.score.emoji} ${d.score.tag}` : '';
+        const aName = d.bookingLinks?.airline?.name || 'Airline';
+        const aUrl = d.bookingLinks?.airline?.url || '#';
+        console.log(`  €${String(d.price).padEnd(7)} ${c.bold}${d.origin}→${d.destName}${c.reset} (${d.country}) ${c.dim}${d.tripDays}d${c.reset} — ${d.airline}  ${tagColor}${tagStr} ${d.score?.discount > 0 ? `(-${d.score.discount}%)` : ''}${c.reset}`);
+        console.log(`           ${c.yellow}${aName}: ${c.underline}${aUrl}${c.reset}`);
     }
 
     if (allResults.length > 30) {

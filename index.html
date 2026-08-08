@@ -459,6 +459,12 @@
             cursor: pointer;
         }
 
+        .custom-select option {
+            background: #0d111a !important;
+            color: #f0f0f5 !important;
+            padding: 8px 10px;
+        }
+
         .slider-container {
             flex: 1;
             display: flex;
@@ -967,40 +973,36 @@
                 <h1 class="brand-title">🔥 FlightScanner <span class="brand-version">v3.5</span></h1>
                 <span class="brand-status"><span class="status-dot"></span> Sync</span>
             </div>
-
-            <div class="search-group">
-                <div class="search-box">
-                    <span class="search-icon">🔍</span>
-                    <input type="text" id="search-input" class="search-input"
-                        placeholder="Search city, country, airport (e.g. BCN, Spain)...">
-                </div>
-                <div class="preset-chips">
-                    <button class="preset-chip" id="preset-under50">🔥 <€50</button>
-                    <button class="preset-chip" id="preset-topdeals">⭐ Top Deals</button>
-                    <button class="preset-chip" id="preset-direct">✈️ Direct</button>
-                    <button class="preset-chip" id="preset-weekend">🏖️ Weekend</button>
-                    <button class="preset-chip reset" id="preset-reset">↺ Reset</button>
-                </div>
-            </div>
-
-            <div class="header-stats">
-                <span class="stat-pill error" id="stat-error-pill">🔥 0</span>
-                <span class="stat-pill great" id="stat-great-pill">⭐ 0</span>
-                <span class="stat-pill total" id="stat-total-pill">252 Total</span>
-            </div>
         </header>
 
         <div class="app-body">
             <!-- Anchored Left Filter Panel -->
             <aside class="left-sidebar" id="left-sidebar">
                 <div class="filter-group">
-                    <span class="filter-label">Popular Destinations</span>
-                    <div class="search-chips" id="search-chips" style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin;">
-                        <button class="sug-chip" data-search="Italy">🇮🇹 Italy</button>
-                        <button class="sug-chip" data-search="Spain">🇪🇸 Spain</button>
-                        <button class="sug-chip" data-search="New York">🇺🇸 New York</button>
-                        <button class="sug-chip" data-search="Morocco">🇲🇦 Morocco</button>
-                        <button class="sug-chip" data-search="London">🇬🇧 London</button>
+                    <div class="search-box">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="search-input" class="search-input"
+                            placeholder="Search city, country, airport (e.g. BCN, Spain)...">
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <span class="filter-label">Quick Presets</span>
+                    <div class="preset-chips" style="display: flex; flex-wrap: wrap; gap: 6px;">
+                        <button class="preset-chip" id="preset-under50">🔥 <€50</button>
+                        <button class="preset-chip" id="preset-topdeals">⭐ Top Deals</button>
+                        <button class="preset-chip" id="preset-direct">✈️ Direct</button>
+                        <button class="preset-chip" id="preset-weekend">🏖️ Weekend</button>
+                        <button class="preset-chip reset" id="preset-reset">↺ Reset</button>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <span class="filter-label">Active Stats</span>
+                    <div class="header-stats" style="display: flex; gap: 6px; flex-wrap: wrap;">
+                        <span class="stat-pill error" id="stat-error-pill">🔥 0</span>
+                        <span class="stat-pill great" id="stat-great-pill">⭐ 0</span>
+                        <span class="stat-pill total" id="stat-total-pill">0 Total</span>
                     </div>
                 </div>
 
@@ -1042,13 +1044,6 @@
                         <button class="chip" data-filter="days" data-value="90">90d</button>
                         <button class="chip active" data-filter="days" data-value="365">Full Year</button>
                     </div>
-                </div>
-
-                <div class="filter-group">
-                    <span class="filter-label">Airline Carrier</span>
-                    <select id="airline-select" class="custom-select" style="width: 100%;">
-                        <option value="all">All Airlines</option>
-                    </select>
                 </div>
 
                 <div class="filter-group">
