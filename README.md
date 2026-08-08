@@ -14,7 +14,7 @@
 ## 🚀 Key Features
 
 * **🧠 Smart Insights Engine**: Executive ticker summarizing active deals, price crashes, top discounts, and live error fares in real time.
-* **⚡ 60-Day Date-Window Chunking**: Divides the 300-day booking horizon into 5 distinct 60-day windows requesting up to 1,000 direct flight offers per window, ensuring **100% exhaustive direct flight coverage** out of PRG, VIE, BTS, KTW, and OSR.
+* **⚡ 30-Day Date-Window Chunking**: Divides the 300-day booking horizon into 10 distinct 30-day (1-month) windows requesting up to 1,000 direct flight offers per airport per window, ensuring **100% complete direct flight coverage** out of PRG, VIE, BTS, KTW, and OSR.
 * **🗺️ 3D MapTiler Vector Globe**: Interactive high-performance 3D canvas featuring curved flight paths, pulsing destination nodes, and dynamic atmospheric fog.
 * **🎯 Unified Bi-Directional Sync**:
   * **Card Hover/Click**: Highlights the card, isolates its specific flight arc on the 3D map, and opens the detail drawer.

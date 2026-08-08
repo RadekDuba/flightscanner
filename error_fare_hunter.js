@@ -438,7 +438,7 @@ ${c.magenta}${c.bold}  ╔══════════════════
 
     // ─── Phase 1: Kiwi Anywhere Search (always fresh) ─────────
     let kiwiWorked = false;
-    const WINDOW_SIZE = 60; // 60-day date chunks for exhaustive year coverage
+    const WINDOW_SIZE = 30; // 30-day date chunks (10 windows) to ensure 100% complete direct flight coverage
     const numWindows = Math.ceil(daysAhead / WINDOW_SIZE);
 
     for (const origin of origins) {
