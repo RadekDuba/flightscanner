@@ -1563,28 +1563,6 @@
             }
         }
 
-        function renderCards(filtered) {
-            const sidebar = document.getElementById('sidebar');
-            if (!sidebar) return;
-
-            let banner = document.getElementById('smart-banner');
-            if (!banner) {
-                banner = document.createElement('div');
-                banner.id = 'smart-banner';
-                banner.className = 'smart-banner';
-                sidebar.appendChild(banner);
-            }
-            sidebar.innerHTML = '';
-            sidebar.appendChild(banner);
-
-            const sorted = [...filtered].sort((a, b) => {
-                if (state.sort === 'price-asc') return a.price - b.price;
-                if (state.sort === 'price-desc') return b.price - a.price;
-                if (state.sort === 'discount') return (b.score?.discount || 0) - (a.score?.discount || 0);
-                const tagOrder = { 'ERROR FARE': 0, 'GREAT DEAL': 1, 'GOOD DEAL': 2, 'NORMAL': 3 };
-                return (tagOrder[a.score?.tag] ?? 3) - (tagOrder[b.score?.tag] ?? 3);
-            });
-
         let allRouteGroups = [];
         let selectedRouteKey = null;
 
