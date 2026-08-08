@@ -1089,6 +1089,11 @@
             </div>
         </div>
 
+        <div class="itinerary-section" id="d-offers-section">
+            <span class="section-title">📅 Available Flight Offers & Dates (<span id="d-offers-count">0</span>)</span>
+            <div id="d-offers-list" style="display: flex; flex-direction: column; gap: 8px; max-height: 220px; overflow-y: auto; padding-right: 4px; margin-top: 8px;"></div>
+        </div>
+
         <div class="itinerary-section" id="d-chart-section">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <span class="section-title">📉 Price Trend & History</span>
@@ -1580,39 +1585,128 @@
                 return (tagOrder[a.score?.tag] ?? 3) - (tagOrder[b.score?.tag] ?? 3);
             });
 
-            for (const deal of sorted) {
-                const idx = deals.indexOf(deal);
-                const tagCss = (deal.score?.tag || 'normal').toLowerCase().replace(' ', '-');
-                const discVal = deal.score?.discount || 0;
+        let allRouteGroups = [];
+        let selectedRouteKey = null;
+
+        function groupDealsByRoute(dealsList) {
+            if (!dealsList || !dealsList.length) return [];
+            const routeMap = new Map();
+
+            for (const d of dealsList) {
+                const key = `${d.origin}→${d.dest}`;
+                if (!routeMap.has(key)) {
+                    routeMap.set(key, {
+                        key,
+                        origin: d.origin,
+                        dest: d.dest,
+                        destName: d.destName,
+                        country: d.country,
+                        offers: [],
+                    });
+                }
+                routeMap.get(key).offers.push(d);
+            }
+
+            const groups = [];
+            for (const group of routeMap.values()) {
+                group.offers.sort((a, b) => a.price - b.price);
+                group.minPrice = group.offers[0].price;
+                group.maxPrice = Math.max(...group.offers.map(o => o.price));
+                group.priceRangeStr = group.minPrice === group.maxPrice 
+                    ? `€${group.minPrice}` 
+                    : `€${group.minPrice} – €${group.maxPrice}`;
+                
+                const tagPriority = { 'ERROR FARE': 0, 'GREAT DEAL': 1, 'GOOD DEAL': 2, 'NORMAL': 3 };
+                const sortedByTag = [...group.offers].sort((a, b) => (tagPriority[a.score?.tag] ?? 3) - (tagPriority[b.score?.tag] ?? 3) || a.price - b.price);
+                
+                group.bestDeal = sortedByTag[0];
+                group.score = group.bestDeal.score;
+                group.isAllTimeLow = group.offers.some(o => o.isAllTimeLow);
+                group.priceCrash = group.offers.find(o => o.priceCrash)?.priceCrash || null;
+                group.airlines = [...new Set(group.offers.map(o => o.airline).filter(Boolean))].join(', ');
+                
+                groups.push(group);
+            }
+            return groups;
+        }
+
+        function highlightRouteGroup(routeKey) {
+            document.querySelectorAll('.deal-card').forEach(c => {
+                c.classList.toggle('hover-highlight', c.dataset.routeKey === routeKey);
+            });
+            if (routeKey && map && map.isStyleLoaded()) {
+                if (map.getLayer('route-lines')) map.setFilter('route-lines', ['==', ['get', 'routeKey'], routeKey]);
+                if (map.getLayer('dest-circles')) map.setFilter('dest-circles', ['==', ['get', 'routeKey'], routeKey]);
+            }
+        }
+
+        function unhighlightRouteGroup() {
+            if (selectedRouteKey !== null) {
+                highlightRouteGroup(selectedRouteKey);
+            } else {
+                document.querySelectorAll('.deal-card').forEach(c => c.classList.remove('hover-highlight'));
+                if (typeof applyFilters === 'function') applyFilters();
+            }
+        }
+
+        function renderCards(filtered) {
+            const sidebar = document.getElementById('sidebar');
+            if (!sidebar) return;
+
+            let banner = document.getElementById('smart-banner');
+            if (!banner) {
+                banner = document.createElement('div');
+                banner.id = 'smart-banner';
+                banner.className = 'smart-banner';
+                sidebar.appendChild(banner);
+            }
+            sidebar.innerHTML = '';
+            sidebar.appendChild(banner);
+
+            const groups = groupDealsByRoute(filtered);
+
+            const sortedGroups = [...groups].sort((a, b) => {
+                if (state.sort === 'price-asc') return a.minPrice - b.minPrice;
+                if (state.sort === 'price-desc') return b.minPrice - a.minPrice;
+                if (state.sort === 'discount') return (b.score?.discount || 0) - (a.score?.discount || 0);
+                const tagOrder = { 'ERROR FARE': 0, 'GREAT DEAL': 1, 'GOOD DEAL': 2, 'NORMAL': 3 };
+                return (tagOrder[a.score?.tag] ?? 3) - (tagOrder[b.score?.tag] ?? 3) || a.minPrice - b.minPrice;
+            });
+
+            for (const group of sortedGroups) {
+                const best = group.bestDeal;
+                const tagCss = (group.score?.tag || 'normal').toLowerCase().replace(' ', '-');
+                const discVal = group.score?.discount || 0;
                 const discTagStr = discVal > 0 ? `-${discVal}%` : discVal < 0 ? `+${Math.abs(discVal)}%` : '±0%';
-                const isWknd = isWeekendGetaway(deal);
+                const isWknd = group.offers.some(o => isWeekendGetaway(o));
+
                 const card = document.createElement('div');
                 card.className = `deal-card glass-panel ${tagCss}`;
-                card.dataset.idx = idx;
+                card.dataset.routeKey = group.key;
                 card.innerHTML = `
                     <div class="card-header">
-                        <span class="card-route">${deal.origin} → ${deal.destName}</span>
-                        <span class="card-price ${tagCss}">€${deal.price}</span>
+                        <span class="card-route">${group.origin} → ${group.destName}</span>
+                        <span class="card-price ${tagCss}">${group.priceRangeStr}</span>
                     </div>
                     <div class="card-tags">
-                        <span class="tag-pill ${tagCss}">${deal.score?.emoji || ''} ${deal.score?.tag || 'NORMAL'} ${discTagStr}</span>
-                        ${deal.isAllTimeLow ? `<span class="badge-stops" style="background:rgba(255,215,0,0.2); color:#ffd700; border:1px solid rgba(255,215,0,0.4); font-weight:700;">🏆 All-Time Low</span>` : ''}
+                        <span class="tag-pill ${tagCss}">${group.score?.emoji || ''} ${group.score?.tag || 'NORMAL'} ${discTagStr}</span>
+                        <span class="badge-stops" style="background:rgba(255,255,255,0.08); color:#f0f0f5; border:1px solid rgba(255,255,255,0.15);">📅 ${group.offers.length} Date${group.offers.length > 1 ? 's' : ''}</span>
+                        ${group.isAllTimeLow ? `<span class="badge-stops" style="background:rgba(255,215,0,0.2); color:#ffd700; border:1px solid rgba(255,215,0,0.4); font-weight:700;">🏆 All-Time Low</span>` : ''}
                         ${isWknd ? `<span class="badge-stops" style="background:rgba(78,205,196,0.15); color:#4ecdc4; border:1px solid rgba(78,205,196,0.3);">✈️ Weekend</span>` : ''}
-                        ${deal.priceCrash ? `<span class="badge-stops" style="background:rgba(255,68,68,0.2); color:#ff4444; border-color:rgba(255,68,68,0.4);">📉 -€${deal.priceCrash.dropEur} Drop</span>` : ''}
-                        ${deal.stops > 0 ? `<span class="badge-stops">${deal.stops} stop</span>` : '<span class="badge-direct">Direct</span>'}
+                        ${group.priceCrash ? `<span class="badge-stops" style="background:rgba(255,68,68,0.2); color:#ff4444; border-color:rgba(255,68,68,0.4);">📉 -€${group.priceCrash.dropEur} Drop</span>` : ''}
                     </div>
                     <div class="card-details">
-                        ${deal.tripDays}d trip · ${deal.date} → ${deal.returnDate} · ${deal.airline}
+                        Cheapest: €${group.minPrice} (${best.date}) · ${group.airlines}
                     </div>
                 `;
                 card.addEventListener('mouseenter', () => {
-                    highlightDeal(idx);
+                    highlightRouteGroup(group.key);
                 });
                 card.addEventListener('mouseleave', () => {
-                    unhighlightDeal();
+                    unhighlightRouteGroup();
                 });
                 card.addEventListener('click', () => {
-                    openDrawer(deal);
+                    openRouteGroupDrawer(group);
                 });
                 sidebar.appendChild(card);
             }
@@ -1645,6 +1739,8 @@
                 return true;
             });
 
+            const routeGroups = groupDealsByRoute(filtered);
+
             const numErr = filtered.filter(d => d.score?.tag === 'ERROR FARE').length;
             const numGrt = filtered.filter(d => d.score?.tag === 'GREAT DEAL').length;
             const numGoo = filtered.filter(d => d.score?.tag === 'GOOD DEAL').length;
@@ -1660,23 +1756,23 @@
             if (grtCnt) grtCnt.textContent = numGrt;
             if (gooCnt) gooCnt.textContent = numGoo;
             if (norCnt) norCnt.textContent = numNor;
-            if (totCnt) totCnt.textContent = `${filtered.length} active deals`;
+            if (totCnt) totCnt.textContent = `${routeGroups.length} routes (${filtered.length} dates)`;
 
             updateSmartInsights(filtered);
             renderCards(filtered);
 
             if (map.isStyleLoaded() && map.getLayer('route-lines') && map.getLayer('dest-circles')) {
-                if (selectedDealIdx !== null && selectedDealIdx !== undefined) {
-                    map.setFilter('route-lines', ['==', ['get', 'idx'], Number(selectedDealIdx)]);
-                    map.setFilter('dest-circles', ['==', ['get', 'idx'], Number(selectedDealIdx)]);
+                if (selectedRouteKey !== null && selectedRouteKey !== undefined) {
+                    map.setFilter('route-lines', ['==', ['get', 'routeKey'], selectedRouteKey]);
+                    map.setFilter('dest-circles', ['==', ['get', 'routeKey'], selectedRouteKey]);
                 } else {
-                    const visIdx = [...new Set(filtered.map(d => deals.indexOf(d)))].filter(i => i !== -1);
-                    if (visIdx.length > 0) {
-                        map.setFilter('route-lines', ['in', ['get', 'idx'], ['literal', visIdx]]);
-                        map.setFilter('dest-circles', ['in', ['get', 'idx'], ['literal', visIdx]]);
+                    const visKeys = routeGroups.map(g => g.key);
+                    if (visKeys.length > 0) {
+                        map.setFilter('route-lines', ['in', ['get', 'routeKey'], ['literal', visKeys]]);
+                        map.setFilter('dest-circles', ['in', ['get', 'routeKey'], ['literal', visKeys]]);
                     } else {
-                        map.setFilter('route-lines', ['==', ['get', 'idx'], -9999]);
-                        map.setFilter('dest-circles', ['==', ['get', 'idx'], -9999]);
+                        map.setFilter('route-lines', ['==', ['get', 'routeKey'], 'NONE']);
+                        map.setFilter('dest-circles', ['==', ['get', 'routeKey'], 'NONE']);
                     }
                 }
             }
@@ -1686,12 +1782,7 @@
             deals = newDeals || [];
             if (!deals.length) return;
 
-            const airlines = [...new Set(deals.map(d => d.airline).filter(Boolean))].sort();
-            const selectEl = document.getElementById('airline-select');
-            if (selectEl) {
-                selectEl.innerHTML = '<option value="all">All Airlines</option>' +
-                    airlines.map(a => `<option value="${a}">${a}</option>`).join('');
-            }
+            allRouteGroups = groupDealsByRoute(deals);
 
             await geocodeAllDeals(deals);
 
@@ -1705,24 +1796,42 @@
 
             destPoints = {
                 type: 'FeatureCollection',
-                features: deals.map((d, i) => {
-                    const coords = getCoords(d.dest);
+                features: allRouteGroups.map((g, i) => {
+                    const coords = getCoords(g.dest);
                     if (!coords) return null;
                     return {
-                        type: 'Feature', geometry: { type: 'Point', coordinates: coords },
-                        properties: { idx: i, dest: d.dest, price: d.price, tag: d.score?.tag || 'NORMAL', color: TAG_COLORS[d.score?.tag] || '#555' }
+                        type: 'Feature',
+                        geometry: { type: 'Point', coordinates: coords },
+                        properties: {
+                            routeKey: g.key,
+                            dest: g.dest,
+                            destName: g.destName,
+                            idx: i,
+                            tag: g.score?.tag || 'NORMAL',
+                            color: TAG_COLORS[g.score?.tag] || '#555',
+                            priceRangeStr: g.priceRangeStr,
+                            offerCount: g.offers.length,
+                        }
                     };
                 }).filter(Boolean)
             };
 
             routeLines = {
                 type: 'FeatureCollection',
-                features: deals.map((d, i) => {
-                    const from = getCoords(d.origin), to = getCoords(d.dest);
+                features: allRouteGroups.map((g, i) => {
+                    const from = getCoords(g.origin), to = getCoords(g.dest);
                     if (!from || !to) return null;
                     return {
-                        type: 'Feature', geometry: { type: 'LineString', coordinates: makeArc(from, to) },
-                        properties: { idx: i, tag: d.score?.tag || 'NORMAL', color: TAG_COLORS[d.score?.tag] || '#555' }
+                        type: 'Feature',
+                        geometry: { type: 'LineString', coordinates: makeArc(from, to) },
+                        properties: {
+                            routeKey: g.key,
+                            idx: i,
+                            tag: g.score?.tag || 'NORMAL',
+                            color: TAG_COLORS[g.score?.tag] || '#555',
+                            priceRangeStr: g.priceRangeStr,
+                            offerCount: g.offers.length,
+                        }
                     };
                 }).filter(Boolean)
             };
@@ -1801,15 +1910,15 @@
             map.on('mouseenter', 'dest-circles', (e) => {
                 map.getCanvas().style.cursor = 'pointer';
                 const props = e.features[0].properties;
-                const deal = deals[props.idx];
-                if (deal) {
-                    highlightDeal(props.idx);
+                const group = allRouteGroups[props.idx];
+                if (group) {
+                    highlightRouteGroup(group.key);
                     const coords = e.features[0].geometry.coordinates.slice();
                     hoverPopup.setLngLat(coords).setHTML(`
                         <div style="font-family: Inter, sans-serif; font-size: 12px; line-height: 1.4; color: #f0f0f5; padding: 2px;">
-                            <div style="font-weight: 800;">${deal.origin} → ${deal.destName}</div>
-                            <div style="font-weight: 800; color: ${props.color};">€${deal.price} · ${deal.score?.tag || 'DEAL'}</div>
-                            <div style="font-size: 10px; color: #8a8a9e;">${deal.tripDays}d trip · ${deal.airline}</div>
+                            <div style="font-weight: 800;">${group.origin} → ${group.destName} (${group.country})</div>
+                            <div style="font-weight: 800; color: ${props.color};">${group.priceRangeStr} · ${group.score?.tag || 'DEAL'}</div>
+                            <div style="font-size: 10px; color: #8a8a9e;">📅 ${group.offers.length} available flight dates · ${group.airlines}</div>
                         </div>
                     `).addTo(map);
                 }
@@ -1818,20 +1927,20 @@
             map.on('mouseleave', 'dest-circles', () => {
                 map.getCanvas().style.cursor = '';
                 hoverPopup.remove();
-                unhighlightDeal();
+                unhighlightRouteGroup();
             });
 
             map.on('mouseenter', 'route-lines', (e) => {
                 map.getCanvas().style.cursor = 'pointer';
                 const props = e.features[0].properties;
-                const deal = deals[props.idx];
-                if (deal) {
-                    highlightDeal(props.idx);
+                const group = allRouteGroups[props.idx];
+                if (group) {
+                    highlightRouteGroup(group.key);
                     hoverPopup.setLngLat(e.lngLat).setHTML(`
                         <div style="font-family: Inter, sans-serif; font-size: 12px; line-height: 1.4; color: #f0f0f5; padding: 2px;">
-                            <div style="font-weight: 800;">${deal.origin} → ${deal.destName}</div>
-                            <div style="font-weight: 800; color: ${props.color};">€${deal.price} · ${deal.score?.tag || 'DEAL'}</div>
-                            <div style="font-size: 10px; color: #8a8a9e;">${deal.tripDays}d trip · ${deal.airline}</div>
+                            <div style="font-weight: 800;">${group.origin} → ${group.destName} (${group.country})</div>
+                            <div style="font-weight: 800; color: ${props.color};">${group.priceRangeStr} · ${group.score?.tag || 'DEAL'}</div>
+                            <div style="font-size: 10px; color: #8a8a9e;">📅 ${group.offers.length} available flight dates · ${group.airlines}</div>
                         </div>
                     `).addTo(map);
                 }
@@ -1840,7 +1949,7 @@
             map.on('mouseleave', 'route-lines', () => {
                 map.getCanvas().style.cursor = '';
                 hoverPopup.remove();
-                unhighlightDeal();
+                unhighlightRouteGroup();
             });
 
             map.on('mouseenter', 'origin-dots', (e) => {
@@ -1862,14 +1971,14 @@
             // Map Click Handlers (Destination Circles & Flight Paths)
             map.on('click', 'dest-circles', (e) => {
                 const props = e.features[0].properties;
-                const deal = deals[props.idx];
-                if (deal) openDrawer(deal);
+                const group = allRouteGroups[props.idx];
+                if (group) openRouteGroupDrawer(group);
             });
 
             map.on('click', 'route-lines', (e) => {
                 const props = e.features[0].properties;
-                const deal = deals[props.idx];
-                if (deal) openDrawer(deal);
+                const group = allRouteGroups[props.idx];
+                if (group) openRouteGroupDrawer(group);
             });
 
             // Drawer logic
@@ -1877,33 +1986,26 @@
             const drawerOverlay = document.getElementById('drawer-overlay');
             const dClose = document.getElementById('d-close');
 
-            function openDrawer(deal) {
-                const idx = deals.indexOf(deal);
-                selectedDealIdx = idx !== -1 ? idx : null;
-                if (selectedDealIdx !== null) {
-                    highlightDeal(selectedDealIdx);
-                }
+            function openRouteGroupDrawer(group) {
+                selectedRouteKey = group.key;
+                highlightRouteGroup(selectedRouteKey);
+                fitMapToRoute(group.origin, group.dest);
 
-                document.getElementById('d-route').textContent = `${deal.origin} → ${deal.destName}`;
-                document.getElementById('d-dates').textContent = `${deal.tripDays} days · ${deal.date} to ${deal.returnDate}`;
-                document.getElementById('d-price').textContent = `€${deal.price}`;
-                document.getElementById('d-baseline').textContent = `Market Baseline: €${deal.score?.baseline || '—'}`;
+                const best = group.bestDeal;
+                document.getElementById('d-route').textContent = `${group.origin} → ${group.destName}`;
+                document.getElementById('d-dates').textContent = `${group.offers.length} available flight dates · Lowest: €${group.minPrice}`;
+                document.getElementById('d-price').textContent = group.priceRangeStr;
+                document.getElementById('d-baseline').textContent = `Market Baseline: €${group.score?.baseline || '—'}`;
 
-                const baseline = deal.score?.baseline || deal.price;
-                const diff = baseline - deal.price;
-                const discount = deal.score?.discount || 0;
+                const baseline = group.score?.baseline || group.minPrice;
+                const diff = baseline - group.minPrice;
+                const discount = group.score?.discount || 0;
 
                 if (discount > 0) {
                     document.getElementById('d-discount').textContent = `${discount}% Below Market Baseline`;
-                    document.getElementById('d-savings').textContent = `Estimated Savings: €${diff}`;
+                    document.getElementById('d-savings').textContent = `Estimated Savings: Up to €${diff}`;
                     document.getElementById('d-bar-fill').style.width = `${Math.min(100, Math.max(10, discount))}%`;
                     document.getElementById('d-bar-fill').style.background = 'linear-gradient(90deg, #ff4444, #4ecdc4)';
-                } else if (discount < 0) {
-                    const markup = Math.abs(discount);
-                    document.getElementById('d-discount').textContent = `${markup}% Above Market Baseline`;
-                    document.getElementById('d-savings').textContent = `Peak Season Premium: +€${Math.abs(diff)}`;
-                    document.getElementById('d-bar-fill').style.width = '100%';
-                    document.getElementById('d-bar-fill').style.background = '#555566';
                 } else {
                     document.getElementById('d-discount').textContent = `At Market Baseline`;
                     document.getElementById('d-savings').textContent = `Standard Fare`;
@@ -1911,35 +2013,61 @@
                     document.getElementById('d-bar-fill').style.background = '#8a8a9e';
                 }
 
-                // Outbound / Return details
-                document.getElementById('d-leg-outbound').innerHTML = `<strong>Outbound:</strong> ${deal.origin} → ${deal.dest} (${deal.airline})<br>Date: ${deal.date} · Stops: ${deal.stops > 0 ? deal.stops : 'Non-stop'}`;
-                document.getElementById('d-leg-return').innerHTML = `<strong>Return:</strong> ${deal.dest} → ${deal.origin} (${deal.airline})<br>Date: ${deal.returnDate}`;
+                // Render scrollable offers list
+                const offersContainer = document.getElementById('d-offers-list');
+                const offersCountEl = document.getElementById('d-offers-count');
+                if (offersCountEl) offersCountEl.textContent = group.offers.length;
+
+                if (offersContainer) {
+                    offersContainer.innerHTML = group.offers.map((o) => {
+                        const aUrl = o.bookingLinks?.airline?.url || o.deepLink || '#';
+                        const aName = o.bookingLinks?.airline?.name || o.airline;
+                        return `
+                            <div class="glass-panel" style="padding: 10px 12px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <div style="font-weight: 700; font-size: 13px; color: #f0f0f5;">📅 ${o.date} → ${o.returnDate} (${o.tripDays}d)</div>
+                                    <div style="font-size: 11px; color: #8a8a9e;">🛩️ ${o.airline} ${o.stops > 0 ? `(${o.stops} stop)` : '(Direct)'} ${o.score?.discount > 0 ? `<span style="color:#4ecdc4; font-weight:700;">-${o.score.discount}%</span>` : ''}</div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-size: 15px; font-weight: 800; color: var(--accent-cyan);">€${o.price}</div>
+                                    <a class="btn-link" href="${aUrl}" target="_blank" style="padding: 3px 8px; font-size: 11px; margin-top: 4px; display: inline-block;">🔗 Book Direct</a>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+
+                // Outbound / Return details for best deal
+                document.getElementById('d-leg-outbound').innerHTML = `<strong>Cheapest Outbound:</strong> ${best.origin} → ${best.dest} (${best.airline})<br>Date: ${best.date} · Stops: ${best.stops > 0 ? best.stops : 'Non-stop'}`;
+                document.getElementById('d-leg-return').innerHTML = `<strong>Cheapest Return:</strong> ${best.dest} → ${best.origin} (${best.airline})<br>Date: ${best.returnDate}`;
 
                 // Duffel status
                 const dufEl = document.getElementById('d-duffel-verify');
-                if (deal.crossCheck) {
-                    dufEl.textContent = `🔍 Live Verification (Duffel): €${deal.crossCheck.duffelPrice || '—'} · Status: ${deal.crossCheck.status}`;
+                if (best.crossCheck) {
+                    dufEl.textContent = `🔍 Live Verification (Duffel): €${best.crossCheck.duffelPrice || '—'} · Status: ${best.crossCheck.status}`;
                 } else { dufEl.textContent = ''; }
 
                 // Links
-                const airlineUrl = deal.bookingLinks?.airline?.url || '#';
-                const skyUrl = deal.bookingLinks?.skyscanner || '#';
-                const isDupSky = airlineUrl === skyUrl || (deal.bookingLinks?.airline?.name || '').includes('Skyscanner');
+                const airlineUrl = best.bookingLinks?.airline?.url || '#';
+                const skyUrl = best.bookingLinks?.skyscanner || '#';
+                const isDupSky = airlineUrl === skyUrl || (best.bookingLinks?.airline?.name || '').includes('Skyscanner');
 
                 const linksEl = document.getElementById('d-links');
                 linksEl.innerHTML = `
-                    <a class="btn-link" href="${airlineUrl}" target="_blank">🔗 ${deal.bookingLinks?.airline?.name || 'Airline Direct'}</a>
+                    <a class="btn-link" href="${airlineUrl}" target="_blank">🔗 ${best.bookingLinks?.airline?.name || 'Airline Direct'}</a>
                     ${!isDupSky ? `<a class="btn-link" href="${skyUrl}" target="_blank">✈️ Skyscanner</a>` : ''}
-                    <a class="btn-link" href="${deal.bookingLinks?.googleFlights || '#'}" target="_blank">🌍 Google Flights</a>
-                    ${deal.deepLink ? `<a class="btn-link" href="${deal.deepLink}" target="_blank">🥝 Kiwi.com</a>` : ''}
+                    <a class="btn-link" href="${best.bookingLinks?.googleFlights || '#'}" target="_blank">🌍 Google Flights</a>
+                    ${best.deepLink ? `<a class="btn-link" href="${best.deepLink}" target="_blank">🥝 Kiwi.com</a>` : ''}
                 `;
+
+                renderPriceChart(best.priceHistory, best.score?.baseline, best.price);
 
                 drawer.classList.add('open');
                 drawerOverlay.classList.add('open');
             }
 
             function closeDrawer() {
-                selectedDealIdx = null;
+                selectedRouteKey = null;
                 if (drawer) drawer.classList.remove('open');
                 if (drawerOverlay) drawerOverlay.classList.remove('open');
                 document.querySelectorAll('.deal-card').forEach(c => c.classList.remove('hover-highlight'));
