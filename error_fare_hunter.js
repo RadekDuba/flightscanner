@@ -262,6 +262,7 @@ async function kiwiAnywhereSearch(origin, dateFrom, dateTo, nightsMin, nightsMax
 
     for (const key of keys) {
         try {
+            await new Promise(r => setTimeout(r, 400)); // Rate limiting pacing
             const url = new URL('https://api.tequila.kiwi.com/v2/search');
             url.searchParams.set('fly_from', origin);
             // No fly_to = search EVERYWHERE
@@ -441,30 +442,30 @@ ${c.magenta}${c.bold}  ╔══════════════════
 
     // ─── Phase 1: Kiwi Anywhere Search (always fresh) ─────────
     let kiwiWorked = false;
-    const WINDOW_SIZE = 30; // 30-day date chunks (10 windows) to ensure 100% complete direct flight coverage
+    const WINDOW_SIZE = 30; // 30-day date chunks (3 windows over 90 days) for maximum exposure
     const numWindows = Math.ceil(daysAhead / WINDOW_SIZE);
 
     for (const origin of origins) {
         console.log(`  ${c.cyan}${'─'.repeat(60)}${c.reset}`);
-        log('hunt', `${c.bold}${origin.name} (${origin.code}) → EVERYWHERE${c.reset} (${numWindows} date windows, max 1000 deals/window)`);
+        log('hunt', `${c.bold}${origin.name} (${origin.code}) → EVERYWHERE${c.reset} (${numWindows} date windows, 2 passes/window for maximum exposure)`);
         console.log(`  ${c.cyan}${'─'.repeat(60)}${c.reset}`);
 
         const originResultsMap = new Map();
 
-        // 1. Guaranteed City-Coverage Pass (one_for_city=1) over full horizon
-        const cityDeals = await kiwiAnywhereSearch(origin.code, today, dateTo, nightsMin, nightsMax, 1000, { one_for_city: 1 });
-        for (const r of cityDeals) {
-            const key = `${r.origin}_${r.dest}_${r.date}_${r.price}`;
-            originResultsMap.set(key, r);
-        }
-
-        // 2. Date-Window Chunks for exhaustive flight date combinations
         for (let w = 0; w < numWindows; w++) {
             const wStart = addDays(today, w * WINDOW_SIZE);
             const wEnd = addDays(today, Math.min(daysAhead, (w + 1) * WINDOW_SIZE));
-            const chunkResults = await kiwiAnywhereSearch(origin.code, wStart, wEnd, nightsMin, nightsMax, 1000);
 
-            for (const r of chunkResults) {
+            // Pass A: City-Coverage Pass (one_for_city=1) for this window
+            const cityDeals = await kiwiAnywhereSearch(origin.code, wStart, wEnd, nightsMin, nightsMax, 1000, { one_for_city: 1 });
+            for (const r of cityDeals) {
+                const key = `${r.origin}_${r.dest}_${r.date}_${r.price}`;
+                originResultsMap.set(key, r);
+            }
+
+            // Pass B: Deep Price Pass (all offers) for this window
+            const priceDeals = await kiwiAnywhereSearch(origin.code, wStart, wEnd, nightsMin, nightsMax, 1000);
+            for (const r of priceDeals) {
                 const key = `${r.origin}_${r.dest}_${r.date}_${r.price}`;
                 if (!originResultsMap.has(key)) {
                     originResultsMap.set(key, r);
