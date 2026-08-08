@@ -1618,13 +1618,98 @@
             }
         }
 
-        function unhighlightRouteGroup() {
-            if (selectedRouteKey !== null) {
-                highlightRouteGroup(selectedRouteKey);
+        function openRouteGroupDrawer(group) {
+            const drawer = document.getElementById('drawer');
+            const drawerOverlay = document.getElementById('drawer-overlay');
+            if (!group || !drawer) return;
+
+            selectedRouteKey = group.key;
+            highlightRouteGroup(selectedRouteKey);
+            fitMapToRoute(group.origin, group.dest);
+
+            const best = group.bestDeal;
+            document.getElementById('d-route').textContent = `${group.origin} → ${group.destName}`;
+            document.getElementById('d-dates').textContent = `${group.offers.length} available flight dates · Lowest: €${group.minPrice}`;
+            document.getElementById('d-price').textContent = group.priceRangeStr;
+            document.getElementById('d-baseline').textContent = `Market Baseline: €${group.score?.baseline || '—'}`;
+
+            const baseline = group.score?.baseline || group.minPrice;
+            const diff = baseline - group.minPrice;
+            const discount = group.score?.discount || 0;
+
+            if (discount > 0) {
+                document.getElementById('d-discount').textContent = `${discount}% Below Market Baseline`;
+                document.getElementById('d-savings').textContent = `Estimated Savings: Up to €${diff}`;
+                document.getElementById('d-bar-fill').style.width = `${Math.min(100, Math.max(10, discount))}%`;
+                document.getElementById('d-bar-fill').style.background = 'linear-gradient(90deg, #ff4444, #4ecdc4)';
             } else {
-                document.querySelectorAll('.deal-card').forEach(c => c.classList.remove('hover-highlight'));
-                if (typeof applyFilters === 'function') applyFilters();
+                document.getElementById('d-discount').textContent = `At Market Baseline`;
+                document.getElementById('d-savings').textContent = `Standard Fare`;
+                document.getElementById('d-bar-fill').style.width = '50%';
+                document.getElementById('d-bar-fill').style.background = '#8a8a9e';
             }
+
+            // Render scrollable offers list
+            const offersContainer = document.getElementById('d-offers-list');
+            const offersCountEl = document.getElementById('d-offers-count');
+            if (offersCountEl) offersCountEl.textContent = group.offers.length;
+
+            if (offersContainer) {
+                offersContainer.innerHTML = group.offers.map((o) => {
+                    const aUrl = o.bookingLinks?.airline?.url || o.deepLink || '#';
+                    const aName = o.bookingLinks?.airline?.name || o.airline;
+                    return `
+                        <div class="glass-panel" style="padding: 10px 12px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: 700; font-size: 13px; color: #f0f0f5;">📅 ${o.date} → ${o.returnDate} (${o.tripDays}d)</div>
+                                <div style="font-size: 11px; color: #8a8a9e;">🛩️ ${o.airline} ${o.stops > 0 ? `(${o.stops} stop)` : '(Direct)'} ${o.score?.discount > 0 ? `<span style="color:#4ecdc4; font-weight:700;">-${o.score.discount}%</span>` : ''}</div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-size: 15px; font-weight: 800; color: var(--accent-cyan);">€${o.price}</div>
+                                <a class="btn-link" href="${aUrl}" target="_blank" style="padding: 3px 8px; font-size: 11px; margin-top: 4px; display: inline-block;">🔗 Book Direct</a>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // Outbound / Return details for best deal
+            document.getElementById('d-leg-outbound').innerHTML = `<strong>Cheapest Outbound:</strong> ${best.origin} → ${best.dest} (${best.airline})<br>Date: ${best.date} · Stops: ${best.stops > 0 ? best.stops : 'Non-stop'}`;
+            document.getElementById('d-leg-return').innerHTML = `<strong>Cheapest Return:</strong> ${best.dest} → ${best.origin} (${best.airline})<br>Date: ${best.returnDate}`;
+
+            // Duffel status
+            const dufEl = document.getElementById('d-duffel-verify');
+            if (best.crossCheck) {
+                dufEl.textContent = `🔍 Live Verification (Duffel): €${best.crossCheck.duffelPrice || '—'} · Status: ${best.crossCheck.status}`;
+            } else { dufEl.textContent = ''; }
+
+            // Links
+            const airlineUrl = best.bookingLinks?.airline?.url || '#';
+            const skyUrl = best.bookingLinks?.skyscanner || '#';
+            const isDupSky = airlineUrl === skyUrl || (best.bookingLinks?.airline?.name || '').includes('Skyscanner');
+
+            const linksEl = document.getElementById('d-links');
+            linksEl.innerHTML = `
+                <a class="btn-link" href="${airlineUrl}" target="_blank">🔗 ${best.bookingLinks?.airline?.name || 'Airline Direct'}</a>
+                ${!isDupSky ? `<a class="btn-link" href="${skyUrl}" target="_blank">✈️ Skyscanner</a>` : ''}
+                <a class="btn-link" href="${best.bookingLinks?.googleFlights || '#'}" target="_blank">🌍 Google Flights</a>
+                ${best.deepLink ? `<a class="btn-link" href="${best.deepLink}" target="_blank">🥝 Kiwi.com</a>` : ''}
+            `;
+
+            renderPriceChart(best.priceHistory, best.score?.baseline, best.price);
+
+            drawer.classList.add('open');
+            if (drawerOverlay) drawerOverlay.classList.add('open');
+        }
+
+        function closeDrawer() {
+            const drawer = document.getElementById('drawer');
+            const drawerOverlay = document.getElementById('drawer-overlay');
+            selectedRouteKey = null;
+            if (drawer) drawer.classList.remove('open');
+            if (drawerOverlay) drawerOverlay.classList.remove('open');
+            document.querySelectorAll('.deal-card').forEach(c => c.classList.remove('hover-highlight'));
+            applyFilters();
         }
 
         function renderCards(filtered) {
@@ -1739,18 +1824,18 @@
             updateSmartInsights(filtered);
             renderCards(filtered);
 
-            if (map.isStyleLoaded() && map.getLayer('route-lines') && map.getLayer('dest-circles')) {
+            if (map && map.isStyleLoaded() && map.getLayer('route-lines') && map.getLayer('dest-circles')) {
                 if (selectedRouteKey !== null && selectedRouteKey !== undefined) {
-                    map.setFilter('route-lines', ['==', ['get', 'routeKey'], selectedRouteKey]);
-                    map.setFilter('dest-circles', ['==', ['get', 'routeKey'], selectedRouteKey]);
+                    map.setFilter('route-lines', ['==', 'routeKey', selectedRouteKey]);
+                    map.setFilter('dest-circles', ['==', 'routeKey', selectedRouteKey]);
                 } else {
                     const visKeys = routeGroups.map(g => g.key);
                     if (visKeys.length > 0) {
-                        map.setFilter('route-lines', ['in', ['get', 'routeKey'], ['literal', visKeys]]);
-                        map.setFilter('dest-circles', ['in', ['get', 'routeKey'], ['literal', visKeys]]);
+                        map.setFilter('route-lines', ['in', 'routeKey', ...visKeys]);
+                        map.setFilter('dest-circles', ['in', 'routeKey', ...visKeys]);
                     } else {
-                        map.setFilter('route-lines', ['==', ['get', 'routeKey'], 'NONE']);
-                        map.setFilter('dest-circles', ['==', ['get', 'routeKey'], 'NONE']);
+                        map.setFilter('route-lines', ['==', 'routeKey', 'NONE']);
+                        map.setFilter('dest-circles', ['==', 'routeKey', 'NONE']);
                     }
                 }
             }
@@ -1959,101 +2044,10 @@
                 if (group) openRouteGroupDrawer(group);
             });
 
-            // Drawer logic
-            const drawer = document.getElementById('drawer');
-            const drawerOverlay = document.getElementById('drawer-overlay');
-            const dClose = document.getElementById('d-close');
-
-            function openRouteGroupDrawer(group) {
-                selectedRouteKey = group.key;
-                highlightRouteGroup(selectedRouteKey);
-                fitMapToRoute(group.origin, group.dest);
-
-                const best = group.bestDeal;
-                document.getElementById('d-route').textContent = `${group.origin} → ${group.destName}`;
-                document.getElementById('d-dates').textContent = `${group.offers.length} available flight dates · Lowest: €${group.minPrice}`;
-                document.getElementById('d-price').textContent = group.priceRangeStr;
-                document.getElementById('d-baseline').textContent = `Market Baseline: €${group.score?.baseline || '—'}`;
-
-                const baseline = group.score?.baseline || group.minPrice;
-                const diff = baseline - group.minPrice;
-                const discount = group.score?.discount || 0;
-
-                if (discount > 0) {
-                    document.getElementById('d-discount').textContent = `${discount}% Below Market Baseline`;
-                    document.getElementById('d-savings').textContent = `Estimated Savings: Up to €${diff}`;
-                    document.getElementById('d-bar-fill').style.width = `${Math.min(100, Math.max(10, discount))}%`;
-                    document.getElementById('d-bar-fill').style.background = 'linear-gradient(90deg, #ff4444, #4ecdc4)';
-                } else {
-                    document.getElementById('d-discount').textContent = `At Market Baseline`;
-                    document.getElementById('d-savings').textContent = `Standard Fare`;
-                    document.getElementById('d-bar-fill').style.width = '50%';
-                    document.getElementById('d-bar-fill').style.background = '#8a8a9e';
-                }
-
-                // Render scrollable offers list
-                const offersContainer = document.getElementById('d-offers-list');
-                const offersCountEl = document.getElementById('d-offers-count');
-                if (offersCountEl) offersCountEl.textContent = group.offers.length;
-
-                if (offersContainer) {
-                    offersContainer.innerHTML = group.offers.map((o) => {
-                        const aUrl = o.bookingLinks?.airline?.url || o.deepLink || '#';
-                        const aName = o.bookingLinks?.airline?.name || o.airline;
-                        return `
-                            <div class="glass-panel" style="padding: 10px 12px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center;">
-                                <div>
-                                    <div style="font-weight: 700; font-size: 13px; color: #f0f0f5;">📅 ${o.date} → ${o.returnDate} (${o.tripDays}d)</div>
-                                    <div style="font-size: 11px; color: #8a8a9e;">🛩️ ${o.airline} ${o.stops > 0 ? `(${o.stops} stop)` : '(Direct)'} ${o.score?.discount > 0 ? `<span style="color:#4ecdc4; font-weight:700;">-${o.score.discount}%</span>` : ''}</div>
-                                </div>
-                                <div style="text-align: right;">
-                                    <div style="font-size: 15px; font-weight: 800; color: var(--accent-cyan);">€${o.price}</div>
-                                    <a class="btn-link" href="${aUrl}" target="_blank" style="padding: 3px 8px; font-size: 11px; margin-top: 4px; display: inline-block;">🔗 Book Direct</a>
-                                </div>
-                            </div>
-                        `;
-                    }).join('');
-                }
-
-                // Outbound / Return details for best deal
-                document.getElementById('d-leg-outbound').innerHTML = `<strong>Cheapest Outbound:</strong> ${best.origin} → ${best.dest} (${best.airline})<br>Date: ${best.date} · Stops: ${best.stops > 0 ? best.stops : 'Non-stop'}`;
-                document.getElementById('d-leg-return').innerHTML = `<strong>Cheapest Return:</strong> ${best.dest} → ${best.origin} (${best.airline})<br>Date: ${best.returnDate}`;
-
-                // Duffel status
-                const dufEl = document.getElementById('d-duffel-verify');
-                if (best.crossCheck) {
-                    dufEl.textContent = `🔍 Live Verification (Duffel): €${best.crossCheck.duffelPrice || '—'} · Status: ${best.crossCheck.status}`;
-                } else { dufEl.textContent = ''; }
-
-                // Links
-                const airlineUrl = best.bookingLinks?.airline?.url || '#';
-                const skyUrl = best.bookingLinks?.skyscanner || '#';
-                const isDupSky = airlineUrl === skyUrl || (best.bookingLinks?.airline?.name || '').includes('Skyscanner');
-
-                const linksEl = document.getElementById('d-links');
-                linksEl.innerHTML = `
-                    <a class="btn-link" href="${airlineUrl}" target="_blank">🔗 ${best.bookingLinks?.airline?.name || 'Airline Direct'}</a>
-                    ${!isDupSky ? `<a class="btn-link" href="${skyUrl}" target="_blank">✈️ Skyscanner</a>` : ''}
-                    <a class="btn-link" href="${best.bookingLinks?.googleFlights || '#'}" target="_blank">🌍 Google Flights</a>
-                    ${best.deepLink ? `<a class="btn-link" href="${best.deepLink}" target="_blank">🥝 Kiwi.com</a>` : ''}
-                `;
-
-                renderPriceChart(best.priceHistory, best.score?.baseline, best.price);
-
-                drawer.classList.add('open');
-                drawerOverlay.classList.add('open');
-            }
-
-            function closeDrawer() {
-                selectedRouteKey = null;
-                if (drawer) drawer.classList.remove('open');
-                if (drawerOverlay) drawerOverlay.classList.remove('open');
-                document.querySelectorAll('.deal-card').forEach(c => c.classList.remove('hover-highlight'));
-                applyFilters();
-            }
-
-            dClose.addEventListener('click', closeDrawer);
-            drawerOverlay.addEventListener('click', closeDrawer);
+            const dCloseEl = document.getElementById('d-close');
+            const drawerOverlayEl = document.getElementById('drawer-overlay');
+            if (dCloseEl) dCloseEl.addEventListener('click', closeDrawer);
+            if (drawerOverlayEl) drawerOverlayEl.addEventListener('click', closeDrawer);
             window.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') closeDrawer();
             });
