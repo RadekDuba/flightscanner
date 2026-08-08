@@ -75,6 +75,10 @@ export function buildHubSpokeCombos(leg1Flights, leg2Flights) {
                     return: []
                 },
                 bookingLinks: {
+                    airline: {
+                        name: `${l1.airline || 'Leg 1'} + ${l2.airline || 'Leg 2'}`,
+                        url: l1.bookingLinks?.airline?.url || l1.bookingLinks?.skyscanner || '#'
+                    },
                     leg1: l1.bookingLinks?.airline || null,
                     leg2: l2.bookingLinks?.airline || null,
                     skyscanner: l1.bookingLinks?.skyscanner || null,
