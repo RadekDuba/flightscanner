@@ -710,9 +710,9 @@ ${c.magenta}${c.bold}  ╔══════════════════
                     historyPoints.push({ date: dStr, price: r.price });
                 } else {
                     const ratio = i / steps;
-                    const jitter = Math.sin(i * 2.2) * 0.06;
-                    const p = Math.round(baseline * (0.85 + ratio * 0.25 + jitter));
-                    historyPoints.push({ date: dStr, price: Math.max(r.price, p) });
+                    const wave = Math.sin(i * 1.6) * 0.15;
+                    const p = Math.round(r.price * (1.08 + ratio * 0.2 + wave));
+                    historyPoints.push({ date: dStr, price: Math.max(15, p) });
                 }
             }
         }

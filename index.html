@@ -1457,15 +1457,27 @@
                 return;
             }
 
-            const width = container.clientWidth || 360;
+            const width = Math.max(320, container.clientWidth || 360);
             const height = 110;
-            const padX = 24;
-            const padY = 16;
+            const padX = 28;
+            const padY = 20;
 
             const prices = history.map(h => h.price);
-            if (baseline) prices.push(baseline);
-            const minP = Math.max(0, Math.min(...prices) * 0.85);
-            const maxP = Math.max(...prices) * 1.1;
+            let minP = Math.min(...prices);
+            let maxP = Math.max(...prices);
+            if (baseline) {
+                minP = Math.min(minP, baseline);
+                maxP = Math.max(maxP, baseline);
+            }
+
+            if (maxP === minP) {
+                minP = Math.max(0, currentPrice * 0.75);
+                maxP = currentPrice * 1.25;
+            } else {
+                const range = maxP - minP;
+                minP = Math.max(0, minP - range * 0.25);
+                maxP = maxP + range * 0.25;
+            }
 
             const getX = (i) => padX + (i / (history.length - 1)) * (width - padX * 2);
             const getY = (price) => height - padY - ((price - minP) / (maxP - minP || 1)) * (height - padY * 2);
@@ -1484,14 +1496,15 @@
             const firstPoint = points[0];
             const areaPath = `${dPath} L ${lastPoint[0]} ${height - padY} L ${firstPoint[0]} ${height - padY} Z`;
 
-            const isCrash = baseline && currentPrice <= baseline * 0.6;
+            const isCrash = baseline && currentPrice <= baseline * 0.7;
             const lineColor = isCrash ? '#ff4444' : '#4ecdc4';
             const gradId = `chartGrad_${Math.floor(Math.random() * 100000)}`;
 
-            const baselineY = baseline ? getY(baseline) : null;
+            const rawBaselineY = baseline ? getY(baseline) : null;
+            const baselineY = rawBaselineY ? Math.max(14, Math.min(height - 18, rawBaselineY)) : null;
 
             let dotsSvg = points.map((p, i) => `
-                <circle cx="${p[0]}" cy="${p[1]}" r="${i === points.length - 1 ? 5 : 3}" fill="${i === points.length - 1 ? lineColor : '#fff'}" stroke="${lineColor}" stroke-width="2">
+                <circle cx="${p[0]}" cy="${p[1]}" r="${i === points.length - 1 ? 5 : 3.5}" fill="${i === points.length - 1 ? lineColor : '#fff'}" stroke="${lineColor}" stroke-width="2">
                     <title>${history[i].date}: €${history[i].price}</title>
                 </circle>
             `).join('');
@@ -1504,8 +1517,8 @@
                             <stop offset="100%" stop-color="${lineColor}" stop-opacity="0.0"/>
                         </linearGradient>
                     </defs>
-                    ${baselineY ? `<line x1="${padX}" y1="${baselineY}" x2="${width - padX}" y2="${baselineY}" stroke="rgba(255,255,255,0.25)" stroke-dasharray="3 3" stroke-width="1.5"/>
-                    <text x="${width - padX}" y="${baselineY - 4}" fill="#8a8a9e" font-size="9" text-anchor="end">Market Base €${baseline}</text>` : ''}
+                    ${baselineY ? `<line x1="${padX}" y1="${baselineY}" x2="${width - padX}" y2="${baselineY}" stroke="rgba(255,255,255,0.3)" stroke-dasharray="4 4" stroke-width="1.5"/>
+                    <text x="${width - padX}" y="${Math.max(12, baselineY - 4)}" fill="#8a8a9e" font-size="9" font-weight="600" text-anchor="end">Market Base €${baseline}</text>` : ''}
                     <path d="${areaPath}" fill="url(#${gradId})" />
                     <path d="${dPath}" fill="none" stroke="${lineColor}" stroke-width="2.5" stroke-linecap="round" />
                     ${dotsSvg}
@@ -1627,76 +1640,101 @@
             highlightRouteGroup(selectedRouteKey);
             fitMapToRoute(group.origin, group.dest);
 
-            const best = group.bestDeal;
             document.getElementById('d-route').textContent = `${group.origin} → ${group.destName}`;
             document.getElementById('d-dates').textContent = `${group.offers.length} available flight dates · Lowest: €${group.minPrice}`;
             document.getElementById('d-price').textContent = group.priceRangeStr;
             document.getElementById('d-baseline').textContent = `Market Baseline: €${group.score?.baseline || '—'}`;
 
-            const baseline = group.score?.baseline || group.minPrice;
-            const diff = baseline - group.minPrice;
-            const discount = group.score?.discount || 0;
+            function selectOffer(offer, cardEl) {
+                if (cardEl) {
+                    document.querySelectorAll('.offer-card-item').forEach(c => c.style.borderColor = 'rgba(255,255,255,0.08)');
+                    cardEl.style.borderColor = 'var(--accent-cyan)';
+                }
 
-            if (discount > 0) {
-                document.getElementById('d-discount').textContent = `${discount}% Below Market Baseline`;
-                document.getElementById('d-savings').textContent = `Estimated Savings: Up to €${diff}`;
-                document.getElementById('d-bar-fill').style.width = `${Math.min(100, Math.max(10, discount))}%`;
-                document.getElementById('d-bar-fill').style.background = 'linear-gradient(90deg, #ff4444, #4ecdc4)';
-            } else {
-                document.getElementById('d-discount').textContent = `At Market Baseline`;
-                document.getElementById('d-savings').textContent = `Standard Fare`;
-                document.getElementById('d-bar-fill').style.width = '50%';
-                document.getElementById('d-bar-fill').style.background = '#8a8a9e';
+                const baseline = offer.score?.baseline || group.minPrice;
+                const diff = baseline - offer.price;
+                const discount = offer.score?.discount || 0;
+
+                if (discount > 0) {
+                    document.getElementById('d-discount').textContent = `${discount}% Below Market Baseline`;
+                    document.getElementById('d-savings').textContent = `Estimated Savings: €${diff}`;
+                    document.getElementById('d-bar-fill').style.width = `${Math.min(100, Math.max(10, discount))}%`;
+                    document.getElementById('d-bar-fill').style.background = 'linear-gradient(90deg, #ff4444, #4ecdc4)';
+                } else {
+                    document.getElementById('d-discount').textContent = `At Market Baseline`;
+                    document.getElementById('d-savings').textContent = `Standard Fare`;
+                    document.getElementById('d-bar-fill').style.width = '50%';
+                    document.getElementById('d-bar-fill').style.background = '#8a8a9e';
+                }
+
+                document.getElementById('d-leg-outbound').innerHTML = `<strong>Outbound:</strong> ${offer.origin} → ${offer.dest} (${offer.airline})<br>Date: ${offer.date} · Stops: ${offer.stops > 0 ? offer.stops : 'Non-stop'}`;
+                document.getElementById('d-leg-return').innerHTML = `<strong>Return:</strong> ${offer.dest} → ${offer.origin} (${offer.airline})<br>Date: ${offer.returnDate}`;
+
+                const dufEl = document.getElementById('d-duffel-verify');
+                if (offer.crossCheck) {
+                    dufEl.textContent = `🔍 Live Verification (Duffel): €${offer.crossCheck.duffelPrice || '—'} · Status: ${offer.crossCheck.status}`;
+                } else { dufEl.textContent = ''; }
+
+                const airlineUrl = offer.bookingLinks?.airline?.url || offer.deepLink || '#';
+                const skyUrl = offer.bookingLinks?.skyscanner || '#';
+                const googleUrl = offer.bookingLinks?.googleFlights || '#';
+                const kiwiUrl = offer.deepLink || '#';
+                const isDupSky = airlineUrl === skyUrl || (offer.bookingLinks?.airline?.name || '').includes('Skyscanner');
+
+                const linksEl = document.getElementById('d-links');
+                linksEl.innerHTML = `
+                    <a class="btn-link" href="${airlineUrl}" target="_blank">🔗 ${offer.bookingLinks?.airline?.name || offer.airline || 'Airline Direct'}</a>
+                    ${!isDupSky ? `<a class="btn-link" href="${skyUrl}" target="_blank">✈️ Skyscanner</a>` : ''}
+                    <a class="btn-link" href="${googleUrl}" target="_blank">🌍 Google Flights</a>
+                    ${kiwiUrl && kiwiUrl !== '#' ? `<a class="btn-link" href="${kiwiUrl}" target="_blank">🥝 Kiwi.com</a>` : ''}
+                `;
+
+                setTimeout(() => renderPriceChart(offer.priceHistory || group.bestDeal.priceHistory, offer.score?.baseline || group.score?.baseline, offer.price), 50);
             }
 
-            // Render scrollable offers list
+            // Render scrollable offers list with ALL 4 booking options per flight card
             const offersContainer = document.getElementById('d-offers-list');
             const offersCountEl = document.getElementById('d-offers-count');
             if (offersCountEl) offersCountEl.textContent = group.offers.length;
 
             if (offersContainer) {
-                offersContainer.innerHTML = group.offers.map((o) => {
+                offersContainer.innerHTML = group.offers.map((o, idx) => {
+                    const aName = o.bookingLinks?.airline?.name || o.airline || 'Airline Direct';
                     const aUrl = o.bookingLinks?.airline?.url || o.deepLink || '#';
-                    const aName = o.bookingLinks?.airline?.name || o.airline;
+                    const skyUrl = o.bookingLinks?.skyscanner || '#';
+                    const googleUrl = o.bookingLinks?.googleFlights || '#';
+                    const kiwiUrl = o.deepLink || '#';
+
                     return `
-                        <div class="glass-panel" style="padding: 10px 12px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <div style="font-weight: 700; font-size: 13px; color: #f0f0f5;">📅 ${o.date} → ${o.returnDate} (${o.tripDays}d)</div>
-                                <div style="font-size: 11px; color: #8a8a9e;">🛩️ ${o.airline} ${o.stops > 0 ? `(${o.stops} stop)` : '(Direct)'} ${o.score?.discount > 0 ? `<span style="color:#4ecdc4; font-weight:700;">-${o.score.discount}%</span>` : ''}</div>
+                        <div class="glass-panel offer-card-item" data-offer-idx="${idx}" style="padding: 10px 12px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid ${idx === 0 ? 'var(--accent-cyan)' : 'rgba(255,255,255,0.08)'}; margin-bottom: 8px; cursor: pointer; transition: all 0.2s ease;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                <div>
+                                    <div style="font-weight: 700; font-size: 13px; color: #f0f0f5;">📅 ${o.date} → ${o.returnDate} (${o.tripDays}d)</div>
+                                    <div style="font-size: 11px; color: #8a8a9e;">🛩️ ${o.airline} ${o.stops > 0 ? `(${o.stops} stop)` : '(Direct)'} ${o.score?.discount > 0 ? `<span style="color:#4ecdc4; font-weight:700;">-${o.score.discount}%</span>` : ''}</div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-size: 15px; font-weight: 800; color: var(--accent-cyan);">€${o.price}</div>
+                                </div>
                             </div>
-                            <div style="text-align: right;">
-                                <div style="font-size: 15px; font-weight: 800; color: var(--accent-cyan);">€${o.price}</div>
-                                <a class="btn-link" href="${aUrl}" target="_blank" style="padding: 3px 8px; font-size: 11px; margin-top: 4px; display: inline-block;">🔗 Book Direct</a>
+                            <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
+                                <a class="btn-link" href="${aUrl}" target="_blank" onclick="event.stopPropagation();" style="padding: 3px 8px; font-size: 11px;">🔗 ${aName}</a>
+                                <a class="btn-link" href="${skyUrl}" target="_blank" onclick="event.stopPropagation();" style="padding: 3px 8px; font-size: 11px;">✈️ Skyscanner</a>
+                                <a class="btn-link" href="${googleUrl}" target="_blank" onclick="event.stopPropagation();" style="padding: 3px 8px; font-size: 11px;">🌍 Google Flights</a>
+                                ${kiwiUrl && kiwiUrl !== '#' ? `<a class="btn-link" href="${kiwiUrl}" target="_blank" onclick="event.stopPropagation();" style="padding: 3px 8px; font-size: 11px;">🥝 Kiwi.com</a>` : ''}
                             </div>
                         </div>
                     `;
                 }).join('');
+
+                offersContainer.querySelectorAll('.offer-card-item').forEach((item) => {
+                    item.addEventListener('click', () => {
+                        const idx = Number(item.dataset.offerIdx);
+                        if (group.offers[idx]) selectOffer(group.offers[idx], item);
+                    });
+                });
             }
 
-            // Outbound / Return details for best deal
-            document.getElementById('d-leg-outbound').innerHTML = `<strong>Cheapest Outbound:</strong> ${best.origin} → ${best.dest} (${best.airline})<br>Date: ${best.date} · Stops: ${best.stops > 0 ? best.stops : 'Non-stop'}`;
-            document.getElementById('d-leg-return').innerHTML = `<strong>Cheapest Return:</strong> ${best.dest} → ${best.origin} (${best.airline})<br>Date: ${best.returnDate}`;
-
-            // Duffel status
-            const dufEl = document.getElementById('d-duffel-verify');
-            if (best.crossCheck) {
-                dufEl.textContent = `🔍 Live Verification (Duffel): €${best.crossCheck.duffelPrice || '—'} · Status: ${best.crossCheck.status}`;
-            } else { dufEl.textContent = ''; }
-
-            // Links
-            const airlineUrl = best.bookingLinks?.airline?.url || '#';
-            const skyUrl = best.bookingLinks?.skyscanner || '#';
-            const isDupSky = airlineUrl === skyUrl || (best.bookingLinks?.airline?.name || '').includes('Skyscanner');
-
-            const linksEl = document.getElementById('d-links');
-            linksEl.innerHTML = `
-                <a class="btn-link" href="${airlineUrl}" target="_blank">🔗 ${best.bookingLinks?.airline?.name || 'Airline Direct'}</a>
-                ${!isDupSky ? `<a class="btn-link" href="${skyUrl}" target="_blank">✈️ Skyscanner</a>` : ''}
-                <a class="btn-link" href="${best.bookingLinks?.googleFlights || '#'}" target="_blank">🌍 Google Flights</a>
-                ${best.deepLink ? `<a class="btn-link" href="${best.deepLink}" target="_blank">🥝 Kiwi.com</a>` : ''}
-            `;
-
-            renderPriceChart(best.priceHistory, best.score?.baseline, best.price);
+            selectOffer(group.bestDeal, offersContainer?.querySelector('.offer-card-item'));
 
             drawer.classList.add('open');
             if (drawerOverlay) drawerOverlay.classList.add('open');
