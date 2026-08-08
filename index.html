@@ -1623,6 +1623,7 @@
                     </div>
                     <div class="card-tags">
                         <span class="tag-pill ${tagCss}">${deal.score?.emoji || ''} ${deal.score?.tag || 'NORMAL'} ${discTagStr}</span>
+                        ${deal.isAllTimeLow ? `<span class="badge-stops" style="background:rgba(255,215,0,0.2); color:#ffd700; border:1px solid rgba(255,215,0,0.4); font-weight:700;">🏆 All-Time Low</span>` : ''}
                         ${isWknd ? `<span class="badge-stops" style="background:rgba(78,205,196,0.15); color:#4ecdc4; border:1px solid rgba(78,205,196,0.3);">✈️ Weekend</span>` : ''}
                         ${deal.priceCrash ? `<span class="badge-stops" style="background:rgba(255,68,68,0.2); color:#ff4444; border-color:rgba(255,68,68,0.4);">📉 -€${deal.priceCrash.dropEur} Drop</span>` : ''}
                         ${deal.stops > 0 ? `<span class="badge-stops">${deal.stops} stop</span>` : '<span class="badge-direct">Direct</span>'}
