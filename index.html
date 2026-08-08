@@ -987,26 +987,6 @@
                 </div>
 
                 <div class="filter-group">
-                    <span class="filter-label">Quick Presets</span>
-                    <div class="preset-chips" style="display: flex; flex-wrap: wrap; gap: 6px;">
-                        <button class="preset-chip" id="preset-under50">🔥 <€50</button>
-                        <button class="preset-chip" id="preset-topdeals">⭐ Top Deals</button>
-                        <button class="preset-chip" id="preset-direct">✈️ Direct</button>
-                        <button class="preset-chip" id="preset-weekend">🏖️ Weekend</button>
-                        <button class="preset-chip reset" id="preset-reset">↺ Reset</button>
-                    </div>
-                </div>
-
-                <div class="filter-group">
-                    <span class="filter-label">Active Stats</span>
-                    <div class="header-stats" style="display: flex; gap: 6px; flex-wrap: wrap;">
-                        <span class="stat-pill error" id="stat-error-pill">🔥 0</span>
-                        <span class="stat-pill great" id="stat-great-pill">⭐ 0</span>
-                        <span class="stat-pill total" id="stat-total-pill">0 Total</span>
-                    </div>
-                </div>
-
-                <div class="filter-group">
                     <span class="filter-label">Origin Airport</span>
                     <div class="filter-chips">
                         <button class="chip active origin-prg" data-filter="origin" data-value="PRG">PRG</button>
@@ -1018,21 +998,20 @@
                 </div>
 
                 <div class="filter-group">
-                    <span class="filter-label">Deal Rating</span>
+                    <span class="filter-label">Deal Rating & Active Deals</span>
                     <div class="filter-chips">
-                        <button class="chip active tag-error" data-filter="tag" data-value="ERROR FARE">🔥 Error</button>
-                        <button class="chip active tag-great" data-filter="tag" data-value="GREAT DEAL">⭐ Great</button>
-                        <button class="chip active tag-good" data-filter="tag" data-value="GOOD DEAL">✅ Good</button>
-                        <button class="chip active" data-filter="tag" data-value="NORMAL">Normal</button>
+                        <button class="chip active tag-error" data-filter="tag" data-value="ERROR FARE">🔥 Error (<span id="stat-error-cnt">0</span>)</button>
+                        <button class="chip active tag-great" data-filter="tag" data-value="GREAT DEAL">⭐ Great (<span id="stat-great-cnt">0</span>)</button>
+                        <button class="chip active tag-good" data-filter="tag" data-value="GOOD DEAL">✅ Good (<span id="stat-good-cnt">0</span>)</button>
+                        <button class="chip active" data-filter="tag" data-value="NORMAL">Normal (<span id="stat-normal-cnt">0</span>)</button>
                     </div>
+                    <div style="font-size: 11px; font-weight: 600; color: var(--text-muted); margin-top: 4px;">Total Deals Tracked: <span id="stat-total-cnt" style="color: var(--accent-cyan); font-weight: 700;">0 active deals</span></div>
                 </div>
 
                 <div class="filter-group">
-                    <span class="filter-label">Flight Type</span>
+                    <span class="filter-label">Flight Filter</span>
                     <div class="filter-chips">
-                        <button class="chip active" data-filter="stops" data-value="all">All</button>
-                        <button class="chip" data-filter="stops" data-value="0">Direct</button>
-                        <button class="chip" data-filter="weekend" data-value="true">✈️ Weekend</button>
+                        <button class="chip" data-filter="weekend" data-value="true">✈️ Weekend Only</button>
                     </div>
                 </div>
 
@@ -1667,14 +1646,22 @@
                 return true;
             });
 
-            const errPill = document.getElementById('stat-error-pill');
-            const grtPill = document.getElementById('stat-great-pill');
-            const totPill = document.getElementById('stat-total-pill');
             const numErr = filtered.filter(d => d.score?.tag === 'ERROR FARE').length;
             const numGrt = filtered.filter(d => d.score?.tag === 'GREAT DEAL').length;
-            if (errPill) errPill.textContent = `🔥 ${numErr}`;
-            if (grtPill) grtPill.textContent = `⭐ ${numGrt}`;
-            if (totPill) totPill.textContent = `${filtered.length} Total`;
+            const numGoo = filtered.filter(d => d.score?.tag === 'GOOD DEAL').length;
+            const numNor = filtered.filter(d => d.score?.tag === 'NORMAL').length;
+
+            const errCnt = document.getElementById('stat-error-cnt');
+            const grtCnt = document.getElementById('stat-great-cnt');
+            const gooCnt = document.getElementById('stat-good-cnt');
+            const norCnt = document.getElementById('stat-normal-cnt');
+            const totCnt = document.getElementById('stat-total-cnt');
+
+            if (errCnt) errCnt.textContent = numErr;
+            if (grtCnt) grtCnt.textContent = numGrt;
+            if (gooCnt) gooCnt.textContent = numGoo;
+            if (norCnt) norCnt.textContent = numNor;
+            if (totCnt) totCnt.textContent = `${filtered.length} active deals`;
 
             updateSmartInsights(filtered);
             renderCards(filtered);
