@@ -250,7 +250,7 @@ function makeBookingLinks(from, to, date, retDate, airlineCodes) {
 
 // ─── Kiwi.com "Anywhere" Search ─────────────────────────────
 // One API call → top 50 cheapest destinations from an airport
-async function kiwiAnywhereSearch(origin, dateFrom, dateTo, nightsMin, nightsMax, limit) {
+async function kiwiAnywhereSearch(origin, dateFrom, dateTo, nightsMin, nightsMax, limit = 1000, extraParams = {}) {
     const rawKeys = ACTIVE_KEYS.kiwi || [];
     const keys = rawKeys.map(k => typeof k === 'string' ? k : k.key).filter(Boolean);
     if (keys.length === 0) {
@@ -277,8 +277,11 @@ async function kiwiAnywhereSearch(origin, dateFrom, dateTo, nightsMin, nightsMax
             url.searchParams.set('max_stopovers', '0');  // Strictly direct non-stop flights only
             url.searchParams.set('ret_from_diff_city', '0');  // Must return from same city you landed in
             url.searchParams.set('ret_to_diff_city', '0');    // Must return to same city you departed from
+            if (extraParams.one_for_city) {
+                url.searchParams.set('one_for_city', String(extraParams.one_for_city));
+            }
 
-            log('kiwi', `Searching from ${c.bold}${origin}${c.reset} → everywhere (${dateFrom} to ${dateTo}, ${nightsMin}-${nightsMax} nights)...`);
+            log('kiwi', `Searching from ${c.bold}${origin}${c.reset} → everywhere (${dateFrom} to ${dateTo}, ${nightsMin}-${nightsMax} nights${extraParams.one_for_city ? ', 1 per city' : ''})...`);
 
             const res = await fetch(url.toString(), {
                 headers: { 'apikey': key, 'Accept': 'application/json' },
@@ -448,6 +451,14 @@ ${c.magenta}${c.bold}  ╔══════════════════
 
         const originResultsMap = new Map();
 
+        // 1. Guaranteed City-Coverage Pass (one_for_city=1) over full horizon
+        const cityDeals = await kiwiAnywhereSearch(origin.code, today, dateTo, nightsMin, nightsMax, 1000, { one_for_city: 1 });
+        for (const r of cityDeals) {
+            const key = `${r.origin}_${r.dest}_${r.date}_${r.price}`;
+            originResultsMap.set(key, r);
+        }
+
+        // 2. Date-Window Chunks for exhaustive flight date combinations
         for (let w = 0; w < numWindows; w++) {
             const wStart = addDays(today, w * WINDOW_SIZE);
             const wEnd = addDays(today, Math.min(daysAhead, (w + 1) * WINDOW_SIZE));
