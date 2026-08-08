@@ -7888,7 +7888,7 @@
           "tripDays": 12
         }
       ],
-      "avgPrice": 54
+      "avgPrice": 55
     },
     "BTS→KSC": {
       "origin": "BTS",
@@ -12780,7 +12780,7 @@
           "tripDays": 9
         }
       ],
-      "avgPrice": 93
+      "avgPrice": 92
     },
     "BTS→VAR": {
       "origin": "BTS",
@@ -15888,7 +15888,7 @@
           "tripDays": 11
         }
       ],
-      "avgPrice": 49
+      "avgPrice": 50
     },
     "BTS→RMO": {
       "origin": "BTS",
@@ -23526,7 +23526,7 @@
           "tripDays": 4
         }
       ],
-      "avgPrice": 121
+      "avgPrice": 120
     },
     "BTS→LTN": {
       "origin": "BTS",
@@ -24284,7 +24284,7 @@
           "tripDays": 9
         }
       ],
-      "avgPrice": 125
+      "avgPrice": 124
     },
     "BTS→EVN": {
       "origin": "BTS",
@@ -41172,7 +41172,7 @@
           "tripDays": 12
         }
       ],
-      "avgPrice": 409
+      "avgPrice": 410
     },
     "VIE→TFS": {
       "origin": "VIE",
