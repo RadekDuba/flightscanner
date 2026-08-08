@@ -397,7 +397,7 @@ ${c.magenta}${c.bold}  ╔══════════════════
     const today = new Date().toISOString().split('T')[0];
 
     // Parse options
-    let daysAhead = 290; // rest of 2026
+    let daysAhead = 90; // 90 days (3 months) max horizon for 100% complete flight coverage
     let nightsMin = 3;
     let nightsMax = 14;
     let limit = 500;
@@ -405,7 +405,7 @@ ${c.magenta}${c.bold}  ╔══════════════════
 
     for (let i = 0; i < args.length; i++) {
         switch (args[i]) {
-            case '--days': daysAhead = parseInt(args[++i]) || 290; break;
+            case '--days': daysAhead = parseInt(args[++i]) || 90; break;
             case '--nights-min': nightsMin = parseInt(args[++i]) || 3; break;
             case '--nights-max': nightsMax = parseInt(args[++i]) || 14; break;
             case '--limit': limit = parseInt(args[++i]) || 80; break;
