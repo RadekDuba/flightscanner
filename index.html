@@ -1280,47 +1280,6 @@
             }
             toast.textContent = message;
             toast.style.opacity = '1';
-            toast.style.transform = 'translateX(-50%) translateY(0)';
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateX(-50%) translateY(20px)';
-            }, 2500);
-        }
-
-        function isWeekendGetaway(d) {
-            if (!d.date || !d.returnDate) return false;
-            const outDate = new Date(d.date);
-            const retDate = new Date(d.returnDate);
-            const outDay = outDate.getUTCDay(); // 4 = Thu, 5 = Fri
-            const retDay = retDate.getUTCDay(); // 0 = Sun, 1 = Mon, 2 = Tue
-            return (outDay === 4 || outDay === 5) && (retDay === 0 || retDay === 1 || retDay === 2) && d.tripDays >= 2 && d.tripDays <= 4;
-        }
-
-        function fitMapToRoute(originCode, destCode) {
-            const from = getCoords(originCode);
-            const to = getCoords(destCode);
-            if (!from || !to || !map) return;
-
-            const bounds = new maptilersdk.LngLatBounds();
-            bounds.extend(from);
-            bounds.extend(to);
-
-            const isMobile = window.innerWidth <= 900;
-            const padding = isMobile 
-                ? { top: 60, bottom: 280, left: 30, right: 30 }
-                : { top: 100, bottom: 100, left: 100, right: 460 };
-
-            map.fitBounds(bounds, {
-                padding,
-                maxZoom: 6,
-                duration: 1200,
-                essential: true
-            });
-        }
-
-        function openDrawer(deal) {
-            const rEl = document.getElementById('d-route');
-            if (rEl) rEl.textContent = `${deal.origin} → ${deal.destName}`;
             const dtEl = document.getElementById('d-dates');
             if (dtEl) dtEl.textContent = `${deal.tripDays} days · ${deal.date} to ${deal.returnDate}`;
             const pEl = document.getElementById('d-price');
