@@ -270,12 +270,11 @@ async function kiwiAnywhereSearch(origin, dateFrom, dateTo, nightsMin, nightsMax
             url.searchParams.set('nights_in_dst_from', String(nightsMin));
             url.searchParams.set('nights_in_dst_to', String(nightsMax));
             url.searchParams.set('flight_type', 'round');
-            url.searchParams.set('one_for_city', '1');  // 1 result per city
             url.searchParams.set('curr', 'EUR');
             url.searchParams.set('locale', 'en');
             url.searchParams.set('sort', 'price');
             url.searchParams.set('limit', String(limit));
-            url.searchParams.set('max_stopovers', '0');  // Direct flights only
+            url.searchParams.set('max_stopovers', '0');  // Strictly direct non-stop flights only
             url.searchParams.set('ret_from_diff_city', '0');  // Must return from same city you landed in
             url.searchParams.set('ret_to_diff_city', '0');    // Must return to same city you departed from
 
@@ -401,7 +400,7 @@ ${c.magenta}${c.bold}  ╔══════════════════
     let daysAhead = 290; // rest of 2026
     let nightsMin = 3;
     let nightsMax = 14;
-    let limit = 80;
+    let limit = 500;
     let originsFilter = null;
 
     for (let i = 0; i < args.length; i++) {
