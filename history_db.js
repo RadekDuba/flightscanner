@@ -46,20 +46,23 @@ export function processHistoryAndCrashes(deals, minDropEur = 30, minDropPct = 20
         if (!deal || !deal.origin || !deal.dest || !deal.price) continue;
         const routeKey = `${deal.origin}→${deal.dest}`;
 
-        if (!db.routes[routeKey]) {
+        if (!db.routes[routeKey] || Array.isArray(db.routes[routeKey])) {
+            const oldHistory = Array.isArray(db.routes[routeKey]) ? db.routes[routeKey] : [];
+            const oldPrices = oldHistory.map(h => h.price).filter(Boolean);
             db.routes[routeKey] = {
                 origin: deal.origin,
                 dest: deal.dest,
                 destName: deal.destName,
-                allTimeLow: deal.price,
+                allTimeLow: oldPrices.length > 0 ? Math.min(...oldPrices, deal.price) : deal.price,
                 allTimeLowDate: deal.date,
-                allTimeHigh: deal.price,
-                scansCount: 0,
-                history: [],
+                allTimeHigh: oldPrices.length > 0 ? Math.max(...oldPrices, deal.price) : deal.price,
+                scansCount: oldHistory.length,
+                history: oldHistory,
             };
         }
 
         const routeMeta = db.routes[routeKey];
+        if (!Array.isArray(routeMeta.history)) routeMeta.history = [];
         routeMeta.scansCount = (routeMeta.scansCount || 0) + 1;
 
         // Check All-Time Low & High
