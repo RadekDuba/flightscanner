@@ -13914,7 +13914,7 @@
           "tripDays": 13
         }
       ],
-      "avgPrice": 36
+      "avgPrice": 35
     },
     "BTS→SUF": {
       "origin": "BTS",
@@ -22112,7 +22112,7 @@
           "tripDays": 14
         }
       ],
-      "avgPrice": 39
+      "avgPrice": 38
     },
     "PRG→TIA": {
       "origin": "PRG",
@@ -27756,7 +27756,7 @@
           "tripDays": 8
         }
       ],
-      "avgPrice": 120
+      "avgPrice": 119
     },
     "PRG→FLR": {
       "origin": "PRG",
@@ -30054,7 +30054,7 @@
           "tripDays": 8
         }
       ],
-      "avgPrice": 112
+      "avgPrice": 111
     },
     "VIE→OLB": {
       "origin": "VIE",
@@ -35704,7 +35704,7 @@
           "tripDays": 3
         }
       ],
-      "avgPrice": 116
+      "avgPrice": 115
     },
     "VIE→CAG": {
       "origin": "VIE",
@@ -36504,8 +36504,8 @@
       "origin": "PRG",
       "dest": "AYT",
       "destName": "Antalya",
-      "allTimeLow": 162,
-      "allTimeLowDate": "2026-10-06",
+      "allTimeLow": 149,
+      "allTimeLowDate": "2026-11-06",
       "allTimeHigh": 197,
       "scansCount": 4,
       "history": [
