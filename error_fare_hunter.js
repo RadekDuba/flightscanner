@@ -438,19 +438,40 @@ ${c.magenta}${c.bold}  ╔══════════════════
 
     // ─── Phase 1: Kiwi Anywhere Search (always fresh) ─────────
     let kiwiWorked = false;
+    const WINDOW_SIZE = 60; // 60-day date chunks for exhaustive year coverage
+    const numWindows = Math.ceil(daysAhead / WINDOW_SIZE);
+
     for (const origin of origins) {
         console.log(`  ${c.cyan}${'─'.repeat(60)}${c.reset}`);
-        log('hunt', `${c.bold}${origin.name} (${origin.code}) → EVERYWHERE${c.reset}`);
+        log('hunt', `${c.bold}${origin.name} (${origin.code}) → EVERYWHERE${c.reset} (${numWindows} date windows, max 1000 deals/window)`);
         console.log(`  ${c.cyan}${'─'.repeat(60)}${c.reset}`);
 
-        const results = await kiwiAnywhereSearch(origin.code, today, dateTo, nightsMin, nightsMax, limit);
+        const originResultsMap = new Map();
+
+        for (let w = 0; w < numWindows; w++) {
+            const wStart = addDays(today, w * WINDOW_SIZE);
+            const wEnd = addDays(today, Math.min(daysAhead, (w + 1) * WINDOW_SIZE));
+            const chunkResults = await kiwiAnywhereSearch(origin.code, wStart, wEnd, nightsMin, nightsMax, 1000);
+
+            for (const r of chunkResults) {
+                const key = `${r.origin}_${r.dest}_${r.date}_${r.price}`;
+                if (!originResultsMap.has(key)) {
+                    originResultsMap.set(key, r);
+                }
+            }
+        }
+
+        const results = [...originResultsMap.values()];
 
         if (results.length > 0) {
             kiwiWorked = true;
             for (const r of results) allResults.push(r);
 
-            // Show top 5 immediately
-            const top5 = results.slice(0, 5);
+            log('ok', `${c.bold}${results.length}${c.reset} total direct flight options collected for ${origin.name} (${origin.code})`);
+
+            // Show top 5 cheapest immediately
+            const sortedResults = [...results].sort((a, b) => a.price - b.price);
+            const top5 = sortedResults.slice(0, 5);
             for (const r of top5) {
                 const score = scoreDeal(r.price, r.airlines || [], r.dest, r.origin);
                 if (score.tag === 'ERROR FARE') {
@@ -462,7 +483,7 @@ ${c.magenta}${c.bold}  ╔══════════════════
                 }
             }
             if (results.length > 5) {
-                log('info', `${c.dim}... and ${results.length - 5} more from ${origin.code}${c.reset}`);
+                log('info', `${c.dim}... and ${results.length - 5} more direct flights from ${origin.code}${c.reset}`);
             }
         }
         console.log('');
