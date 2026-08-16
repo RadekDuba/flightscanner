@@ -20,6 +20,14 @@ function loadEnvConfig() {
     return { token, chatId };
 }
 
+function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+
 export async function sendTelegramAlert(deal) {
     const { token, chatId } = loadEnvConfig();
     if (!token || !chatId) {
@@ -33,18 +41,23 @@ export async function sendTelegramAlert(deal) {
     const baseline = deal.score?.baseline || '—';
     const savings = Math.max(0, (baseline - deal.price) || 0);
 
-    const messageText = `
-${tagEmoji} <b>${tagText} DETECTED!</b> (${discount}% OFF)
+    const origin = escapeHtml(deal.origin);
+    const destName = escapeHtml(deal.destName);
+    const dest = escapeHtml(deal.dest);
+    const airline = escapeHtml(deal.airline);
 
-✈️ <b>${deal.origin} → ${deal.destName} (${deal.dest})</b>
+    const messageText = `
+${tagEmoji} <b>${escapeHtml(tagText)} DETECTED!</b> (${discount}% OFF)
+
+✈️ <b>${origin} → ${destName} (${dest})</b>
 💰 <b>Price: €${deal.price}</b> <s>(Baseline: €${baseline})</s>
 💵 <b>Total Savings: €${savings}</b>
 
 📅 <b>Dates:</b> ${deal.date} → ${deal.returnDate} (${deal.tripDays} days)
-🛩️ <b>Airline:</b> ${deal.airline} ${deal.stops > 0 ? `(${deal.stops} stop)` : '(Direct)'}
+🛩️ <b>Airline:</b> ${airline} ${deal.stops > 0 ? `(${deal.stops} stop)` : '(Direct)'}
 📊 <b>Haul:</b> ${deal.score?.distance || 'medium'}-haul ${deal.score?.isLCC ? 'LCC' : 'Legacy'}
 
-${deal.crossCheck ? `🔍 <i>Duffel Verification: €${deal.crossCheck.duffelPrice || '—'} (${deal.crossCheck.status})</i>` : ''}
+${deal.crossCheck ? `🔍 <i>Duffel Verification: €${deal.crossCheck.duffelPrice || '—'} (${escapeHtml(deal.crossCheck.status)})</i>` : ''}
 `.trim();
 
     const inlineKeyboard = [];

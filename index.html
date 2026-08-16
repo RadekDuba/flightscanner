@@ -3,37 +3,99 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="theme-color" content="#0d0f17">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#06070b">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="FlightScanner v3.6 — Real-time 3D flight intelligence and error fare hunter. Discover direct flight error fares and cheapest round-trips from Central European hubs with interactive 3D vector globe visualization.">
+    <meta name="keywords" content="flight deals, error fares, cheap flights, prague flights, vienna flights, flight scanner, travel intelligence, 3d flight map, duffel ndc">
+    <meta name="author" content="Radek Duba">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://radekduba.github.io/flightscanner/">
+
+    <!-- Open Graph / Social Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://radekduba.github.io/flightscanner/">
+    <meta property="og:title" content="FlightScanner v3.6 — Real-Time Flight Intelligence & Error Fare Hunter">
+    <meta property="og:description" content="Discover direct flight error fares and cheapest round-trips from Prague, Vienna, Bratislava, and Katowice with interactive 3D globe visualization.">
+    <meta property="og:site_name" content="FlightScanner">
+
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="FlightScanner v3.6 — Real-Time Flight Intelligence & Error Fare Hunter">
+    <meta name="twitter:description" content="Discover direct flight error fares and cheapest round-trips from Central European hubs.">
+
+    <!-- JSON-LD Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "FlightScanner",
+      "applicationCategory": "TravelApplication",
+      "operatingSystem": "All",
+      "description": "Real-time flight deal intelligence and error fare detection platform with interactive 3D vector globe.",
+      "url": "https://radekduba.github.io/flightscanner/",
+      "author": {
+        "@type": "Person",
+        "name": "Radek Duba"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR"
+      }
+    }
+    </script>
+
+    <!-- Resource Preconnects for Optimal Performance -->
+    <link rel="preconnect" href="https://cdn.maptiler.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://api.maptiler.com">
+
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔥</text></svg>">
-    <title>Error Fare Hunter — Global Flight Intelligence</title>
+    
+    <title>FlightScanner v3.6 — Real-Time Flight Intelligence &amp; Error Fare Hunter</title>
+
     <script src="https://cdn.maptiler.com/maptiler-sdk-js/v4.0.2/maptiler-sdk.umd.min.js"></script>
     <link href="https://cdn.maptiler.com/maptiler-sdk-js/v4.0.2/maptiler-sdk.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
     <style>
         :root {
             --bg-dark: #06070b;
-            --panel-bg: rgba(13, 17, 28, 0.82);
-            --panel-border: rgba(255, 255, 255, 0.09);
-            --panel-blur: blur(28px) saturate(180%);
+            --panel-bg: rgba(11, 15, 25, 0.90);
+            --panel-border: rgba(255, 255, 255, 0.12);
+            --panel-blur: blur(24px) saturate(180%);
             --error-color: #ff3b5c;
             --great-color: #00f2fe;
             --good-color: #ffb703;
-            --normal-color: #777788;
+            --normal-color: #94a3b8;
             --accent-cyan: #00f2fe;
             --accent-mint: #4ecdc4;
-            --text-main: #f0f4f8;
-            --text-muted: #8a96a8;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --text-subtle: #cbd5e1;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        /* Screen reader utility for 100% Accessibility */
+        .visually-hidden {
+            position: absolute !important;
+            width: 1px !important;
+            height: 1px !important;
+            padding: 0 !important;
+            margin: -1px !important;
+            overflow: hidden !important;
+            clip: rect(0, 0, 0, 0) !important;
+            white-space: nowrap !important;
+            border: 0 !important;
         }
 
         body {
@@ -43,11 +105,13 @@
             overflow: hidden;
             height: 100vh;
             width: 100vw;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
         }
 
-        #map {
-            width: 100vw;
-            height: 100vh;
+        :focus-visible {
+            outline: 2px solid var(--accent-cyan);
+            outline-offset: 2px;
         }
 
         /* Glass Panel Common */
@@ -56,11 +120,11 @@
             backdrop-filter: var(--panel-blur);
             -webkit-backdrop-filter: var(--panel-blur);
             border: 1px solid var(--panel-border);
-            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.12);
-            border-radius: 18px;
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
         }
 
-        /* ─── Unified Full-Bleed Grid Dashboard Layout ──── */
+        /* App Layout */
         .app-layout {
             display: flex;
             flex-direction: column;
@@ -69,11 +133,12 @@
             overflow: hidden;
         }
 
+        /* Top Header Bar */
         .app-header {
             height: 56px;
-            background: rgba(11, 14, 23, 0.95);
+            background: rgba(8, 11, 18, 0.95);
             backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.10);
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -91,187 +156,36 @@
         }
 
         .brand-title {
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 800;
             letter-spacing: -0.4px;
             background: linear-gradient(135deg, #ff3b5c, #ffab40, #00f2fe);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .brand-version {
             font-size: 11px;
             font-weight: 600;
             color: var(--text-muted);
+            -webkit-text-fill-color: var(--text-muted);
         }
 
-        .search-group {
+        .brand-status {
             display: flex;
             align-items: center;
-            gap: 10px;
-            flex: 1;
-            max-width: 680px;
-        }
-
-        .search-box {
-            position: relative;
-            flex: 1;
-            min-width: 160px;
-        }
-
-        .search-input {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 7px 12px 7px 32px;
-            font-size: 12px;
-            color: var(--text-main);
-            outline: none;
-            transition: all 0.2s ease;
-        }
-
-        .search-input:focus {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: #00f2fe;
-            box-shadow: 0 0 12px rgba(0, 242, 254, 0.25);
-        }
-
-        .preset-chips {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .header-stats {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            white-space: nowrap;
-        }
-
-        .stat-pill {
+            gap: 5px;
             font-size: 11px;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .stat-pill.error { color: #ff3b5c; border-color: rgba(255, 59, 92, 0.3); background: rgba(255, 59, 92, 0.1); }
-        .stat-pill.great { color: #00f2fe; border-color: rgba(0, 242, 254, 0.3); background: rgba(0, 242, 254, 0.1); }
-
-        .app-body {
-            display: flex;
-            flex: 1;
-            height: calc(100vh - 56px);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .left-sidebar {
-            width: 320px;
-            background: rgba(11, 14, 23, 0.95);
-            backdrop-filter: blur(24px);
-            border-right: 1px solid rgba(255, 255, 255, 0.08);
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            padding: 16px;
-            overflow-y: auto;
-            z-index: 30;
-            flex-shrink: 0;
-        }
-
-        .map-viewport {
-            flex: 1;
-            height: 100%;
-            position: relative;
-        }
-
-        #map {
-            width: 100%;
-            height: 100%;
-        }
-
-        .filter-popover.open {
-            display: flex;
-        }
-
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .preset-chip {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--text-main);
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
             font-weight: 600;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.2s ease;
-        }
-
-        .preset-chip:hover, .preset-chip.active {
-            background: rgba(78, 205, 196, 0.2);
-            border-color: #4ecdc4;
-            color: #4ecdc4;
-            transform: translateY(-1px);
-        }
-
-        .preset-chip.reset {
-            color: var(--text-muted);
-            border-color: rgba(255, 255, 255, 0.08);
-        }
-
-        .preset-chip.reset:hover {
-            color: #ff5252;
-            border-color: #ff5252;
-            background: rgba(255, 82, 82, 0.15);
-        }
-
-        /* Smart Insights Banner */
-        .smart-banner {
-            background: linear-gradient(135deg, rgba(78, 205, 196, 0.15), rgba(255, 82, 82, 0.15));
-            border: 1px solid rgba(78, 205, 196, 0.3);
-            border-radius: 12px;
-            padding: 12px 14px;
-            margin-bottom: 12px;
-            font-size: 12px;
-            line-height: 1.45;
-            color: var(--text-main);
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-        }
-
-        .sug-chip {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: var(--text-muted);
+            color: var(--accent-mint);
+            background: rgba(78, 205, 196, 0.12);
             padding: 3px 8px;
             border-radius: 12px;
-            font-size: 11px;
-            font-weight: 600;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.2s ease;
-        }
-
-        .sug-chip:hover {
-            color: #4ecdc4;
-            border-color: #4ecdc4;
-            background: rgba(78, 205, 196, 0.15);
-        }
-
-        .card.hover-highlight {
-            border-color: #4ecdc4 !important;
-            box-shadow: 0 0 16px rgba(78, 205, 196, 0.35) !important;
-            transform: translateY(-2px);
+            border: 1px solid rgba(78, 205, 196, 0.3);
         }
 
         .status-dot {
@@ -284,71 +198,121 @@
         }
 
         @keyframes pulse {
-
-            0%,
-            100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0.4;
-            }
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.85); }
         }
 
-        /* Stats Grid */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            padding: 10px 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        .preset-chips {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            overflow-x: auto;
+            scrollbar-width: none;
         }
+        .preset-chips::-webkit-scrollbar { display: none; }
 
-        .stat-box {
-            text-align: center;
-        }
-
-        .stat-box .val {
-            font-size: 20px;
-            font-weight: 800;
-        }
-
-        .stat-box .lbl {
-            font-size: 9px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-top: 2px;
-        }
-
-        .stat-box.error .val {
-            color: var(--error-color);
-        }
-
-        .stat-box.great .val {
-            color: var(--great-color);
-        }
-
-        .stat-box.good .val {
-            color: var(--good-color);
-        }
-
-        .stat-box.total .val {
+        .preset-chip {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.14);
             color: var(--text-main);
+            padding: 5px 11px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s ease;
         }
+
+        .preset-chip:hover {
+            background: rgba(78, 205, 196, 0.18);
+            border-color: #4ecdc4;
+            color: #4ecdc4;
+            transform: translateY(-1px);
+        }
+
+        .preset-chip.active {
+            background: rgba(78, 205, 196, 0.25);
+            border-color: #4ecdc4;
+            color: #4ecdc4;
+            box-shadow: 0 0 10px rgba(78, 205, 196, 0.35);
+        }
+
+        .preset-chip.reset {
+            color: var(--text-muted);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .preset-chip.reset:hover {
+            color: #ff5252;
+            border-color: #ff5252;
+            background: rgba(255, 82, 82, 0.18);
+        }
+
+        .header-stats {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .stat-pill {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 9px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .stat-pill.error { color: #ff3b5c; border-color: rgba(255, 59, 92, 0.35); background: rgba(255, 59, 92, 0.12); }
+        .stat-pill.great { color: #00f2fe; border-color: rgba(0, 242, 254, 0.35); background: rgba(0, 242, 254, 0.12); }
+        .stat-pill.routes { color: #4ecdc4; border-color: rgba(78, 205, 196, 0.35); background: rgba(78, 205, 196, 0.12); }
+
+        /* Main Workspace */
+        .app-body {
+            display: flex;
+            flex: 1;
+            height: calc(100vh - 56px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Left Filter Sidebar */
+        .left-sidebar {
+            width: 320px;
+            background: rgba(8, 11, 18, 0.95);
+            backdrop-filter: blur(24px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 13px;
+            padding: 14px;
+            overflow-y: auto;
+            z-index: 30;
+            flex-shrink: 0;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
+        }
+
+        .left-sidebar::-webkit-scrollbar { width: 4px; }
+        .left-sidebar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.16); border-radius: 4px; }
 
         /* Search Input */
         .search-box {
             position: relative;
+            width: 100%;
         }
 
         .search-input {
             width: 100%;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.14);
             border-radius: 10px;
-            padding: 9px 12px 9px 34px;
+            padding: 8px 12px 8px 34px;
             font-size: 12px;
             color: var(--text-main);
             outline: none;
@@ -356,9 +320,9 @@
         }
 
         .search-input:focus {
+            background: rgba(255, 255, 255, 0.09);
             border-color: var(--accent-cyan);
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 0 12px rgba(78, 205, 196, 0.2);
+            box-shadow: 0 0 12px rgba(0, 242, 254, 0.3);
         }
 
         .search-icon {
@@ -375,82 +339,90 @@
         .filter-group {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
         }
 
         .filter-label {
-            font-size: 10px;
-            font-weight: 600;
-            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-subtle);
             text-transform: uppercase;
             letter-spacing: 0.6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .filter-chips {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
+            gap: 5px;
         }
 
         .chip {
             font-family: inherit;
             font-size: 11px;
             font-weight: 600;
-            padding: 5px 10px;
+            padding: 5px 9px;
             border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.04);
             color: var(--text-muted);
             cursor: pointer;
             transition: all 0.15s ease;
+            user-select: none;
         }
 
         .chip:hover {
-            border-color: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.25);
             color: #fff;
         }
 
         .chip.active {
-            background: rgba(78, 205, 196, 0.15);
-            border-color: rgba(78, 205, 196, 0.4);
+            background: rgba(78, 205, 196, 0.18);
+            border-color: rgba(78, 205, 196, 0.5);
             color: var(--accent-cyan);
         }
 
         .chip.active.origin-prg {
-            background: rgba(255, 107, 107, 0.15);
-            border-color: rgba(255, 107, 107, 0.4);
+            background: rgba(255, 107, 107, 0.2);
+            border-color: rgba(255, 107, 107, 0.6);
             color: #ff6b6b;
         }
 
         .chip.active.tag-error {
-            background: rgba(255, 68, 68, 0.15);
-            border-color: rgba(255, 68, 68, 0.4);
+            background: rgba(255, 59, 92, 0.2);
+            border-color: rgba(255, 59, 92, 0.6);
             color: var(--error-color);
         }
 
         .chip.active.tag-great {
-            background: rgba(78, 205, 196, 0.15);
-            border-color: rgba(78, 205, 196, 0.4);
+            background: rgba(0, 242, 254, 0.2);
+            border-color: rgba(0, 242, 254, 0.6);
             color: var(--great-color);
         }
 
         .chip.active.tag-good {
-            background: rgba(255, 230, 109, 0.15);
-            border-color: rgba(255, 230, 109, 0.4);
+            background: rgba(255, 183, 3, 0.2);
+            border-color: rgba(255, 183, 3, 0.6);
             color: var(--good-color);
         }
 
-        /* Price & Sort Controls */
-        .controls-row {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            justify-content: space-between;
+        .chip.active.trip-weekend {
+            background: rgba(78, 205, 196, 0.22);
+            border-color: rgba(78, 205, 196, 0.6);
+            color: #4ecdc4;
+        }
+
+        .chip.active.trip-atl {
+            background: rgba(255, 215, 0, 0.22);
+            border-color: rgba(255, 215, 0, 0.6);
+            color: #ffd700;
         }
 
         .custom-select {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.14);
             color: var(--text-main);
             font-size: 11px;
             font-weight: 500;
@@ -458,6 +430,7 @@
             border-radius: 8px;
             outline: none;
             cursor: pointer;
+            width: 100%;
         }
 
         .custom-select option {
@@ -467,10 +440,10 @@
         }
 
         .slider-container {
-            flex: 1;
             display: flex;
             align-items: center;
             gap: 8px;
+            margin-top: 4px;
         }
 
         .slider-container input[type=range] {
@@ -487,220 +460,165 @@
             text-align: right;
         }
 
-        /* MapTiler Popup Glassmorphism Overrides */
+        /* 3D Map Viewport */
+        .map-viewport {
+            flex: 1;
+            height: 100%;
+            position: relative;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* MapTiler Popup Glassmorphism */
         .maplibregl-popup-content,
         .maptilersdk-popup-content {
-            background: rgba(12, 12, 24, 0.94) !important;
+            background: rgba(10, 14, 24, 0.96) !important;
             backdrop-filter: blur(20px) !important;
             -webkit-backdrop-filter: blur(20px) !important;
-            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+            border: 1px solid rgba(255, 255, 255, 0.16) !important;
             border-radius: 12px !important;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7) !important;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.75) !important;
             padding: 10px 14px !important;
             color: #f0f0f5 !important;
         }
 
         .maplibregl-popup-tip,
         .maptilersdk-popup-tip {
-            border-top-color: rgba(12, 12, 24, 0.94) !important;
-            border-bottom-color: rgba(12, 12, 24, 0.94) !important;
+            border-top-color: rgba(10, 14, 24, 0.96) !important;
+            border-bottom-color: rgba(10, 14, 24, 0.96) !important;
         }
 
-        /* ─── Sidebar (Deal Cards) ────────────────────── */
+        /* Right Deals Sidebar */
         .sidebar {
-            width: 380px;
-            background: rgba(11, 14, 23, 0.95);
+            width: 370px;
+            background: rgba(8, 11, 18, 0.95);
             backdrop-filter: blur(24px);
-            border-left: 1px solid rgba(255, 255, 255, 0.08);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
             overflow-y: auto;
             display: flex;
             flex-direction: column;
             gap: 10px;
-            padding: 16px;
+            padding: 14px;
             z-index: 30;
             flex-shrink: 0;
             scrollbar-width: thin;
-            scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+            scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
         }
 
-        .sidebar::-webkit-scrollbar {
-            width: 4px;
-        }
+        .sidebar::-webkit-scrollbar { width: 4px; }
+        .sidebar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.16); border-radius: 4px; }
 
-        .sidebar::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 4px;
+        /* Smart Insights Banner */
+        .smart-banner {
+            background: linear-gradient(135deg, rgba(78, 205, 196, 0.14), rgba(255, 59, 92, 0.14));
+            border: 1px solid rgba(78, 205, 196, 0.35);
+            border-radius: 12px;
+            padding: 11px 13px;
+            font-size: 11px;
+            line-height: 1.45;
+            color: var(--text-main);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
         }
 
         .deal-card {
-            padding: 14px 16px;
-            border-radius: 14px;
+            padding: 13px 15px;
+            border-radius: 13px;
             cursor: pointer;
             transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .deal-card:hover {
             transform: translateY(-2px);
-            border-color: rgba(255, 255, 255, 0.22);
-            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.6);
+            border-color: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
         }
 
-        .deal-card.error-fare {
-            border-left: 4px solid var(--error-color);
-        }
+        .deal-card.error-fare { border-left: 4px solid var(--error-color); }
+        .deal-card.great-deal { border-left: 4px solid var(--great-color); }
+        .deal-card.good-deal { border-left: 4px solid var(--good-color); }
+        .deal-card.normal { border-left: 4px solid var(--normal-color); }
 
-        .deal-card.great-deal {
-            border-left: 4px solid var(--great-color);
-        }
-
-        .deal-card.good-deal {
-            border-left: 4px solid var(--good-color);
-        }
-
-        .deal-card.normal {
-            border-left: 4px solid var(--normal-color);
-        }
-
-        .deal-card.active {
-            border-color: var(--accent-cyan) !important;
-            box-shadow: 0 0 24px rgba(78, 205, 196, 0.35), 0 8px 32px rgba(0, 0, 0, 0.6);
-            background: rgba(18, 22, 40, 0.95);
+        .deal-card.hover-highlight {
+            border-color: #4ecdc4 !important;
+            box-shadow: 0 0 20px rgba(78, 205, 196, 0.35) !important;
+            transform: translateY(-2px);
+            background: rgba(16, 24, 38, 0.95);
         }
 
         .card-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
         }
 
         .card-route {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 700;
-            letter-spacing: -0.3px;
+            letter-spacing: -0.2px;
         }
 
         .card-price {
-            font-size: 19px;
+            font-size: 17px;
             font-weight: 800;
         }
 
-        .card-price.error-fare {
-            color: var(--error-color);
-        }
-
-        .card-price.great-deal {
-            color: var(--great-color);
-        }
-
-        .card-price.good-deal {
-            color: var(--good-color);
-        }
+        .card-price.error-fare { color: var(--error-color); }
+        .card-price.great-deal { color: var(--great-color); }
+        .card-price.good-deal { color: var(--good-color); }
 
         .card-tags {
             display: flex;
-            gap: 6px;
+            gap: 5px;
             align-items: center;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             flex-wrap: wrap;
         }
 
         .tag-pill {
             font-size: 9px;
             font-weight: 700;
-            padding: 2px 7px;
+            padding: 2px 6px;
             border-radius: 4px;
             text-transform: uppercase;
             letter-spacing: 0.4px;
         }
 
-        .tag-pill.error-fare {
-            background: rgba(255, 68, 68, 0.2);
-            color: #ff6666;
-        }
-
-        .tag-pill.great-deal {
-            background: rgba(78, 205, 196, 0.2);
-            color: #4ecdc4;
-        }
-
-        .tag-pill.good-deal {
-            background: rgba(255, 230, 109, 0.2);
-            color: #ffe66d;
-        }
-
-        .tag-pill.normal {
-            background: rgba(120, 120, 140, 0.2);
-            color: #8a8a9e;
-        }
+        .tag-pill.error-fare { background: rgba(255, 59, 92, 0.22); color: #ff6666; }
+        .tag-pill.great-deal { background: rgba(0, 242, 254, 0.22); color: #4ecdc4; }
+        .tag-pill.good-deal { background: rgba(255, 183, 3, 0.22); color: #ffe66d; }
+        .tag-pill.normal { background: rgba(120, 120, 140, 0.22); color: #94a3b8; }
 
         .badge-stops {
             font-size: 9px;
             font-weight: 600;
             padding: 2px 6px;
             border-radius: 4px;
-            background: rgba(255, 165, 0, 0.15);
-            color: #ffa500;
-        }
-
-        .badge-direct {
-            font-size: 9px;
-            font-weight: 600;
-            padding: 2px 6px;
-            border-radius: 4px;
-            background: rgba(78, 205, 196, 0.15);
-            color: #4ecdc4;
+            background: rgba(255, 255, 255, 0.08);
+            color: #f0f0f5;
+            border: 1px solid rgba(255, 255, 255, 0.12);
         }
 
         .card-details {
             font-size: 11px;
             color: var(--text-muted);
-            line-height: 1.5;
+            line-height: 1.45;
         }
 
-        .layover-info {
-            font-size: 10px;
-            color: #ffab40;
-            background: rgba(255, 171, 64, 0.08);
-            padding: 3px 8px;
-            border-radius: 6px;
-            margin-top: 6px;
-            display: inline-block;
-        }
-
-        .card-links {
-            display: flex;
-            gap: 6px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-
-        .btn-link {
-            font-size: 10px;
-            font-weight: 600;
-            color: var(--accent-cyan);
-            text-decoration: none;
-            padding: 4px 9px;
-            border-radius: 6px;
-            background: rgba(78, 205, 196, 0.1);
-            border: 1px solid rgba(78, 205, 196, 0.2);
-            transition: all 0.15s ease;
-        }
-
-        .btn-link:hover {
-            background: rgba(78, 205, 196, 0.25);
-            border-color: var(--accent-cyan);
-        }
-
-        /* ─── Detail Drawer (Sliding Panel) ───────────── */
+        /* Detail Drawer Modal */
         .drawer-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: transparent;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(4px);
             z-index: 99;
             opacity: 0;
             pointer-events: none;
@@ -715,22 +633,20 @@
         .drawer {
             position: fixed;
             top: 0;
-            right: -480px;
-            width: 460px;
+            right: -490px;
+            width: 470px;
             height: 100vh;
             z-index: 100;
-            padding: 28px 24px;
+            padding: 24px 22px;
             display: flex;
             flex-direction: column;
-            gap: 18px;
+            gap: 16px;
             overflow-y: auto;
             transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-            border-left: 1px solid rgba(255, 255, 255, 0.12);
+            border-left: 1px solid rgba(255, 255, 255, 0.14);
         }
 
-        .drawer.open {
-            right: 0;
-        }
+        .drawer.open { right: 0; }
 
         .drawer-header {
             display: flex;
@@ -739,9 +655,9 @@
         }
 
         .drawer-title {
-            font-size: 22px;
+            font-size: 21px;
             font-weight: 800;
-            letter-spacing: -0.5px;
+            letter-spacing: -0.4px;
         }
 
         .drawer-close {
@@ -764,19 +680,19 @@
             color: #fff;
         }
 
-        /* Savings Gauge */
+        /* Savings Box */
         .savings-box {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 12px;
-            padding: 16px;
+            padding: 14px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
         }
 
         .savings-bar-container {
-            height: 8px;
+            height: 7px;
             width: 100%;
             background: rgba(255, 255, 255, 0.08);
             border-radius: 4px;
@@ -786,7 +702,7 @@
 
         .savings-bar-fill {
             height: 100%;
-            background: linear-gradient(90deg, #ff4444, #4ecdc4);
+            background: linear-gradient(90deg, #ff3b5c, #4ecdc4);
             border-radius: 4px;
             transition: width 0.6s ease;
         }
@@ -798,15 +714,14 @@
             color: var(--text-muted);
         }
 
-        /* Itinerary Timeline */
         .itinerary-section {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 8px;
         }
 
         .section-title {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.6px;
@@ -814,48 +729,74 @@
         }
 
         .flight-leg {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.04);
             border-left: 3px solid var(--accent-cyan);
             border-radius: 8px;
-            padding: 12px 14px;
-            font-size: 12px;
-            line-height: 1.6;
+            padding: 10px 12px;
+            font-size: 11px;
+            line-height: 1.55;
         }
 
-        /* ─── Legend ────────────────────────────────── */
+        .btn-link {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            text-decoration: none;
+            padding: 6px 11px;
+            border-radius: 7px;
+            background: rgba(78, 205, 196, 0.12);
+            border: 1px solid rgba(78, 205, 196, 0.3);
+            transition: all 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn-link:hover {
+            background: rgba(78, 205, 196, 0.28);
+            border-color: var(--accent-cyan);
+        }
+
+        .card-links {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        /* Sidebar Legend */
         .sidebar-legend {
             margin-top: 4px;
-            padding-top: 12px;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .legend-items-sidebar {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 8px 10px;
+            gap: 6px 8px;
             background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            padding: 10px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 8px 10px;
             border-radius: 10px;
         }
 
         .legend-item {
             display: flex;
             align-items: center;
-            gap: 6px;
-            font-size: 11px;
+            gap: 5px;
+            font-size: 10px;
             font-weight: 500;
             color: var(--text-main);
         }
 
         .legend-dot {
-            width: 8px;
-            height: 8px;
+            width: 7px;
+            height: 7px;
             border-radius: 50%;
             flex-shrink: 0;
         }
 
-        /* ─── Mobile View Switcher ──────────────────── */
+        /* Mobile View Switcher */
         .mobile-nav {
             display: none;
             position: fixed;
@@ -863,16 +804,16 @@
             left: 50%;
             transform: translateX(-50%);
             z-index: 90;
-            padding: 6px 12px;
+            padding: 5px 10px;
             border-radius: 30px;
-            gap: 8px;
+            gap: 6px;
         }
 
         .mobile-nav button {
             font-family: inherit;
             font-size: 12px;
             font-weight: 700;
-            padding: 8px 16px;
+            padding: 7px 14px;
             border-radius: 20px;
             border: none;
             background: transparent;
@@ -892,48 +833,37 @@
             height: 4px;
             background: rgba(255, 255, 255, 0.3);
             border-radius: 2px;
-            margin: 0 auto 12px auto;
+            margin: 0 auto 10px auto;
         }
 
         @media (max-width: 900px) {
-            .header {
-                width: calc(100vw - 24px);
-                left: 12px;
-                top: 12px;
-                padding: 12px;
-                max-height: 280px;
-                overflow-y: auto;
+            .app-header {
+                padding: 0 10px;
+                gap: 8px;
             }
-
-            .filter-row {
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                padding-bottom: 4px;
-                scrollbar-width: none;
+            .header-stats { display: none; }
+            .left-sidebar {
+                position: fixed;
+                left: -320px;
+                top: 56px;
+                height: calc(100vh - 56px);
+                z-index: 45;
+                transition: left 0.3s ease;
             }
-            .filter-row::-webkit-scrollbar {
-                display: none;
-            }
-
+            .left-sidebar.mobile-show { left: 0; }
             .sidebar {
-                top: auto;
-                bottom: 72px;
-                left: 12px;
-                right: 12px;
+                position: fixed;
+                bottom: 60px;
+                left: 10px;
+                right: 10px;
                 width: auto;
-                height: 55vh;
+                height: 50vh;
                 display: none;
+                z-index: 40;
+                border-radius: 16px;
             }
-
-            .sidebar.mobile-show {
-                display: flex;
-            }
-
-            .mobile-nav {
-                display: flex;
-            }
-
-            /* Bottom Sheet Drawer on Mobile */
+            .sidebar.mobile-show { display: flex; }
+            .mobile-nav { display: flex; }
             .drawer {
                 top: auto;
                 bottom: -100vh;
@@ -941,102 +871,121 @@
                 left: 0;
                 width: 100vw;
                 height: auto;
-                max-height: 85vh;
-                border-radius: 24px 24px 0 0;
+                max-height: 82vh;
+                border-radius: 20px 20px 0 0;
                 border-bottom: none;
-                transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), bottom 0.35s ease;
-                transform: translateY(100%);
-                overflow-y: auto;
-                padding: 16px 20px 32px 20px;
+                transition: bottom 0.35s ease;
+                padding: 16px 18px 28px 18px;
             }
-
-            .drawer.open {
-                bottom: 0;
-                transform: translateY(0);
-            }
-
-            .mobile-handle-bar {
-                display: block;
-            }
-
-            .legend {
-                display: none;
-            }
+            .drawer.open { bottom: 0; right: 0; }
+            .mobile-handle-bar { display: block; }
         }
     </style>
 </head>
 
 <body>
     <div class="app-layout">
-        <!-- 100% Full-Width Top Header Bar -->
-        <header class="app-header" id="app-header">
+        <!-- 100% Full-Width Top Header Bar with Live Presets & Stats -->
+        <header class="app-header" id="app-header" role="banner">
             <div class="brand-group">
-                <h1 class="brand-title">🔥 FlightScanner <span class="brand-version">v3.5</span></h1>
-                <span class="brand-status"><span class="status-dot"></span> Sync</span>
+                <h1 class="brand-title">🔥 FlightScanner <span class="brand-version">v3.6</span></h1>
+                <span class="brand-status"><span class="status-dot"></span> Direct Flights Only</span>
+            </div>
+
+            <!-- Quick Filter Presets -->
+            <div class="preset-chips" role="toolbar" aria-label="Flight filter presets">
+                <button class="preset-chip" id="preset-topdeals">🔥 Error Fares</button>
+                <button class="preset-chip" id="preset-under50">💰 Under €50</button>
+                <button class="preset-chip" id="preset-weekend">🏖️ Weekend Trips</button>
+                <button class="preset-chip" id="preset-atl">🏆 All-Time Lows</button>
+                <button class="preset-chip reset" id="preset-reset">↺ Reset All</button>
+            </div>
+
+            <!-- Executive Deal Counters -->
+            <div class="header-stats" aria-label="Live deal counters">
+                <div class="stat-pill error">🔥 <span id="hdr-error-cnt">0</span> Errors</div>
+                <div class="stat-pill great">⭐ <span id="hdr-great-cnt">0</span> Great</div>
+                <div class="stat-pill routes">📍 <span id="hdr-routes-cnt">0</span> Routes</div>
             </div>
         </header>
 
         <div class="app-body">
-            <!-- Anchored Left Filter Panel -->
-            <aside class="left-sidebar" id="left-sidebar">
+            <!-- Left Filter Sidebar -->
+            <aside class="left-sidebar" id="left-sidebar" aria-label="Flight Search Filters">
                 <div class="filter-group">
+                    <label for="search-input" class="filter-label">Quick Search</label>
                     <div class="search-box">
-                        <span class="search-icon">🔍</span>
+                        <span class="search-icon" aria-hidden="true">🔍</span>
                         <input type="text" id="search-input" class="search-input"
-                            placeholder="Search city, country, airport (e.g. BCN, Spain)...">
+                            aria-label="Search destinations, countries, or airports"
+                            placeholder="Search destination, country, airport...">
                     </div>
                 </div>
 
                 <div class="filter-group">
-                    <span class="filter-label">Origin Airport</span>
-                    <div class="filter-chips">
-                        <button class="chip active origin-prg" data-filter="origin" data-value="PRG">PRG</button>
-                        <button class="chip active" data-filter="origin" data-value="VIE">VIE</button>
-                        <button class="chip active" data-filter="origin" data-value="BTS">BTS</button>
-                        <button class="chip active" data-filter="origin" data-value="KTW">KTW</button>
-                        <button class="chip active" data-filter="origin" data-value="OSR">OSR</button>
+                    <span class="filter-label" id="origin-label">Origin Airports</span>
+                    <div class="filter-chips" role="group" aria-labelledby="origin-label">
+                        <button class="chip active origin-prg" data-filter="origin" data-value="PRG">PRG (Prague) (<span id="cnt-orig-PRG">0</span>)</button>
+                        <button class="chip active" data-filter="origin" data-value="VIE">VIE (Vienna) (<span id="cnt-orig-VIE">0</span>)</button>
+                        <button class="chip active" data-filter="origin" data-value="BTS">BTS (Bratislava) (<span id="cnt-orig-BTS">0</span>)</button>
+                        <button class="chip active" data-filter="origin" data-value="KTW">KTW (Katowice) (<span id="cnt-orig-KTW">0</span>)</button>
+                        <button class="chip active" data-filter="origin" data-value="OSR">OSR (Ostrava) (<span id="cnt-orig-OSR">0</span>)</button>
                     </div>
                 </div>
 
                 <div class="filter-group">
-                    <span class="filter-label">Deal Rating & Active Deals</span>
-                    <div class="filter-chips">
+                    <span class="filter-label" id="rating-label">Deal Rating</span>
+                    <div class="filter-chips" role="group" aria-labelledby="rating-label">
                         <button class="chip active tag-error" data-filter="tag" data-value="ERROR FARE">🔥 Error (<span id="stat-error-cnt">0</span>)</button>
                         <button class="chip active tag-great" data-filter="tag" data-value="GREAT DEAL">⭐ Great (<span id="stat-great-cnt">0</span>)</button>
                         <button class="chip active tag-good" data-filter="tag" data-value="GOOD DEAL">✅ Good (<span id="stat-good-cnt">0</span>)</button>
-                        <button class="chip active" data-filter="tag" data-value="NORMAL">Normal (<span id="stat-normal-cnt">0</span>)</button>
+                        <button class="chip active tag-normal" data-filter="tag" data-value="NORMAL">Normal (<span id="stat-normal-cnt">0</span>)</button>
                     </div>
-                    <div style="font-size: 11px; font-weight: 600; color: var(--text-muted); margin-top: 4px;">Total Deals Tracked: <span id="stat-total-cnt" style="color: var(--accent-cyan); font-weight: 700;">0 active deals</span></div>
-                </div>
-
-                <div class="filter-group">
-                    <span class="filter-label">Flight Filter</span>
-                    <div class="filter-chips">
-                        <button class="chip" data-filter="weekend" data-value="true">✈️ Weekend Only</button>
+                    <div style="font-size: 10px; font-weight: 600; color: var(--text-muted); margin-top: 3px;">
+                        Active Flight Offers: <span id="stat-total-cnt" style="color: var(--accent-cyan); font-weight: 700;">0 active</span>
                     </div>
                 </div>
 
                 <div class="filter-group">
-                    <span class="filter-label">Search Range Window</span>
-                    <div class="filter-chips">
-                        <button class="chip" data-filter="days" data-value="7">7d</button>
-                        <button class="chip" data-filter="days" data-value="30">30d</button>
-                        <button class="chip active" data-filter="days" data-value="90">90d (Max)</button>
+                    <span class="filter-label" id="trip-style-label">Trip Style &amp; Highlights</span>
+                    <div class="filter-chips" role="group" aria-labelledby="trip-style-label">
+                        <button class="chip trip-weekend" data-filter="weekend" data-value="true">🏖️ Weekend Trips (<span id="cnt-weekend">0</span>)</button>
+                        <button class="chip trip-atl" data-filter="atl" data-value="true">🏆 All-Time Lows (<span id="cnt-atl">0</span>)</button>
                     </div>
                 </div>
 
                 <div class="filter-group">
-                    <span class="filter-label">Sort & Max Price</span>
-                    <select id="sort-select" class="custom-select" style="width: 100%; margin-bottom: 6px;">
-                        <option value="score">Sort: Best Deals</option>
-                        <option value="price-asc">Sort: Price ↑</option>
-                        <option value="price-desc">Sort: Price ↓</option>
-                        <option value="discount">Sort: Discount %</option>
-                        <option value="date">Sort: Date</option>
+                    <label for="airline-select" class="filter-label">Airlines</label>
+                    <select id="airline-select" class="custom-select" aria-label="Filter flights by airline">
+                        <option value="all">All Airlines</option>
                     </select>
-                    <div class="slider-container">
-                        <input type="range" id="price-slider" min="0" max="2000" value="2000">
+                </div>
+
+                <div class="filter-group">
+                    <span class="filter-label" id="horizon-label">Booking Horizon</span>
+                    <div class="filter-chips" role="group" aria-labelledby="horizon-label">
+                        <button class="chip" data-filter="days" data-value="7">7 Days</button>
+                        <button class="chip" data-filter="days" data-value="30">30 Days</button>
+                        <button class="chip active" data-filter="days" data-value="90">90 Days (Max)</button>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <label for="sort-select" class="filter-label">Sort By</label>
+                    <select id="sort-select" class="custom-select" style="margin-bottom: 4px;" aria-label="Sort flight deals">
+                        <option value="score">Sort: Best Deals First</option>
+                        <option value="price-asc">Sort: Price (Lowest First)</option>
+                        <option value="price-desc">Sort: Price (Highest First)</option>
+                        <option value="discount">Sort: Highest Discount %</option>
+                        <option value="date">Sort: Departure Date</option>
+                    </select>
+                    <label for="price-slider" class="filter-label" style="margin-top: 6px;">
+                        <span>Max Price</span>
                         <span class="price-badge" id="price-val">€2000</span>
+                    </label>
+                    <div class="slider-container">
+                        <input type="range" id="price-slider" min="10" max="2000" value="2000" step="5"
+                            aria-label="Maximum flight price in Euros" aria-valuemin="10" aria-valuemax="2000" aria-valuenow="2000">
                     </div>
                 </div>
 
@@ -1052,36 +1001,35 @@
             </aside>
 
             <!-- Center 3D Globe Map Viewport -->
-            <main class="map-viewport">
-                <div id="map"></div>
+            <main class="map-viewport" role="main" aria-label="Interactive 3D Flight Map">
+                <div id="map" role="region" aria-label="3D Vector Map"></div>
             </main>
 
             <!-- Anchored Right Deals Sidebar -->
-            <aside class="sidebar" id="sidebar">
-                <div class="smart-banner" id="smart-banner"></div>
+            <aside class="sidebar" id="sidebar" aria-label="Flight Deals List">
+                <div class="smart-banner" id="smart-banner" role="status"></div>
             </aside>
         </div>
     </div>
 
     <!-- Detail Drawer Modal -->
-    <div class="drawer-overlay" id="drawer-overlay"></div>
-    <div class="drawer glass-panel" id="drawer">
+    <div class="drawer-overlay" id="drawer-overlay" aria-hidden="true"></div>
+    <section class="drawer glass-panel" id="drawer" role="dialog" aria-modal="true" aria-labelledby="d-route">
         <div class="mobile-handle-bar"></div>
         <div class="drawer-header">
             <div>
-                <div class="drawer-title" id="d-route">PRG → BCN</div>
-                <div style="font-size: 13px; color: var(--text-muted);" id="d-dates">2026-09-01 → 2026-09-08 (7 days)
-                </div>
+                <h2 class="drawer-title" id="d-route">PRG → BCN</h2>
+                <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;" id="d-dates">2026-09-01 → 2026-09-08 (7 days)</div>
             </div>
-            <button class="drawer-close" id="d-close">×</button>
+            <button class="drawer-close" id="d-close" aria-label="Close deal details drawer" title="Close">×</button>
         </div>
 
         <div class="savings-box">
             <div style="display: flex; justify-content: space-between; align-items: baseline;">
-                <span style="font-size: 24px; font-weight: 800; color: var(--accent-cyan);" id="d-price">€48</span>
-                <span style="font-size: 12px; color: var(--text-muted);" id="d-baseline">Baseline: €175</span>
+                <span style="font-size: 23px; font-weight: 800; color: var(--accent-cyan);" id="d-price">€48</span>
+                <span style="font-size: 11px; color: var(--text-muted);" id="d-baseline">Baseline: €175</span>
             </div>
-            <div class="savings-bar-container">
+            <div class="savings-bar-container" role="progressbar" aria-label="Discount percentage against market baseline" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100">
                 <div class="savings-bar-fill" id="d-bar-fill" style="width: 72%;"></div>
             </div>
             <div class="savings-stats">
@@ -1091,47 +1039,44 @@
         </div>
 
         <div class="itinerary-section" id="d-offers-section">
-            <span class="section-title">📅 Available Flight Offers & Dates (<span id="d-offers-count">0</span>)</span>
-            <div id="d-offers-list" style="display: flex; flex-direction: column; gap: 8px; max-height: 220px; overflow-y: auto; padding-right: 4px; margin-top: 8px;"></div>
+            <span class="section-title">📅 Available Flight Dates (<span id="d-offers-count">0</span>)</span>
+            <div id="d-offers-list" style="display: flex; flex-direction: column; gap: 7px; max-height: 210px; overflow-y: auto; padding-right: 4px;"></div>
         </div>
 
         <div class="itinerary-section" id="d-chart-section">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span class="section-title">📉 Price Trend & History</span>
-                <span id="d-crash-badge" style="font-size: 11px; font-weight: 700; color: var(--error-color);"></span>
+                <span class="section-title">📉 Price Trend &amp; History</span>
+                <span id="d-crash-badge" style="font-size: 10px; font-weight: 700; color: var(--error-color);"></span>
             </div>
-            <div id="d-chart-container" style="width: 100%; height: 130px; background: rgba(0,0,0,0.3); border-radius: 10px; padding: 10px 12px; border: 1px solid rgba(255,255,255,0.08);"></div>
+            <div id="d-chart-container" style="width: 100%; height: 125px; background: rgba(0,0,0,0.35); border-radius: 10px; padding: 8px 10px; border: 1px solid rgba(255,255,255,0.08); position: relative; overflow: visible;"></div>
         </div>
 
         <div class="itinerary-section">
-            <span class="section-title">Flight Details & Itinerary</span>
+            <span class="section-title">Selected Flight Itinerary</span>
             <div class="flight-leg" id="d-leg-outbound">
-                <strong>Outbound Flight:</strong> Direct flight via Ryanair<br>
-                Departs PRG → Arrives BCN
+                <strong>Outbound Flight:</strong> PRG → BCN<br>Direct Flight
             </div>
             <div class="flight-leg" id="d-leg-return">
-                <strong>Return Flight:</strong> Direct flight via Ryanair<br>
-                Departs BCN → Arrives PRG
+                <strong>Return Flight:</strong> BCN → PRG<br>Direct Flight
             </div>
             <div id="d-duffel-verify" style="font-size: 11px; color: var(--accent-cyan);"></div>
         </div>
 
         <div class="itinerary-section">
-            <span class="section-title">Book Direct</span>
-            <div class="card-links" id="d-links" style="gap: 8px;"></div>
+            <span class="section-title">Instant Booking &amp; Share</span>
+            <div class="card-links" id="d-links"></div>
         </div>
-    </div>
+    </section>
 
     <!-- Mobile View Navigation -->
-    <div class="mobile-nav glass-panel" id="mobile-nav">
-        <button class="active" id="btn-view-map">🗺️ Map View</button>
-        <button id="btn-view-list">📋 Deals List</button>
-    </div>
-
-
+    <nav class="mobile-nav glass-panel" id="mobile-nav" role="navigation" aria-label="Mobile View Switcher">
+        <button class="active" id="btn-view-map" aria-label="Switch to map view">🗺️ Map</button>
+        <button id="btn-view-list" aria-label="Switch to deals list view">📋 Deals</button>
+        <button id="btn-view-filters" aria-label="Switch to filters view">⚙️ Filters</button>
+    </nav>
 
     <script>
-        // PWA Service Worker Registration
+        // Register Progressive Web App Service Worker
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js').catch(() => {});
@@ -1139,26 +1084,65 @@
         }
 
         const MAPTILER_KEY = 'LxXxUn18K1zwkMYaixQN';
-        const GEO_CACHE_KEY = 'efh_geocache_v6';
+        const GEO_CACHE_KEY = 'efh_geocache_v7';
 
-        // Auto-detect API server base (supports Live Server on port 5500, static file hosts, etc.)
-        const API_BASE = window.location.port === '3000' ? '' : 'http://localhost:3000';
+        // Auto-detect API server base
+        const API_BASE = (window.location.port === '3000' || window.location.port === '3001') ? '' : 'http://localhost:3000';
 
-        // Filter & Drawer Global State (defined at top of script to prevent TDZ ReferenceError)
+        // Filter State
         const state = {
             origins: new Set(['PRG', 'VIE', 'BTS', 'KTW', 'OSR']),
             tags: new Set(['ERROR FARE', 'GREAT DEAL', 'GOOD DEAL', 'NORMAL']),
-            stops: 'all',
             airline: 'all',
             search: '',
             maxPrice: 2000,
             sort: 'score',
             days: 90,
-            weekendOnly: false
+            weekendOnly: false,
+            atlOnly: false
         };
-        let deals = [];
 
-                const AIRPORT_COORDS = {"TZL":[18.7248001099,44.4586982727],"PDV":[24.8507995605,42.0677986145],"SKP":[21.6214008331,41.9616012573],"OHD":[20.7423000336,41.1800003052],"TIA":[19.7206001282,41.4146995544],"GHV":[25.52352,45.70622],"BLL":[9.1517801285,55.7402992249],"VAR":[27.8250999451,43.2321014404],"PMO":[13.0909996033,38.1759986877],"SUF":[16.2423000336,38.9053993225],"VNO":[25.2858009338,54.6341018677],"WAW":[20.9671001434,52.1656990051],"ALC":[-0.5581560135,38.2821998596],"TGD":[19.2518997192,42.3594017029],"NAP":[14.2908000946,40.8860015869],"LTN":[-0.3683330119,51.8746986389],"OSL":[11.100399971,60.193901062],"SPU":[16.2980003357,43.538898468],"BSL":[7.5299100876,47.5895996094],"RMO":[28.9309997559,46.9277000427],"BCN":[2.0784599781,41.2971000671],"BER":[13.503333,52.366667],"PRN":[21.0358009338,42.5727996826],"ATH":[23.9444999695,37.9364013672],"FCO":[12.2508001328,41.8045005798],"DTM":[7.6122398377,51.5182991028],"EVN":[44.3959007263,40.1473007202],"KSC":[21.2411003113,48.6631011963],"RJK":[14.5703001022,45.2168998718],"BDS":[17.9470005035,40.6576004028],"EIN":[5.3745298386,51.4500999451],"LGW":[-0.1902779937,51.1481018066],"CTA":[15.0663995743,37.4668006897],"MLA":[14.4775,35.857498],"MAD":[-3.56676,40.4936],"NCE":[7.2158699036,43.6584014893],"KUT":[42.4826011658,42.176700592],"AGP":[-4.4991102219,36.6749000549],"CPH":[12.6560001373,55.6179008484],"SOF":[23.4114360809,42.6966934204],"MXP":[8.7281103134,45.6305999756],"DBV":[18.2681999207,42.5614013672],"OPO":[-8.6813898087,41.2481002808],"JMK":[25.3481006622,37.4351005554],"RMI":[12.611700058,44.0203018188],"CIY":[14.6071815491,36.9946010208],"FLR":[11.2051000595,43.8100013733],"LIN":[9.2767400742,45.445098877],"LCA":[33.6249008179,34.8750991821],"BIO":[-2.9106099606,43.3011016846],"CFU":[19.911699295,39.6018981934],"MAN":[-2.2749500275,53.3536987305],"ORY":[2.3594400883,48.7252998352],"GVA":[6.1089501381,46.2380981445],"BOJ":[27.5151996613,42.5695991516],"CGN":[7.1427397728,50.8658981323],"AGA":[-9.413069725,30.3250007629],"TLL":[24.8327999115,59.4132995605],"DUB":[-6.270070076,53.4212989807],"EDI":[-3.3724999428,55.9500007629],"HAM":[9.9882297516,53.6304016113],"KEF":[-22.6056003571,63.9850006104],"MST":[5.7701401711,50.9117012024],"FAO":[-7.9659099579,37.0144004822],"HER":[25.1802997589,35.3396987915],"KRK":[19.7847995758,50.0777015686],"DUS":[6.7667798996,51.2895011902],"SAW":[29.3092002869,40.898601532],"TLV":[34.8866996765,32.0113983154],"PMI":[2.7388100624,39.551700592],"AYT":[30.8005008698,36.8987007141],"CDG":[2.5499999523,49.0127983093],"AMS":[4.7638897896,52.3086013794],"FRA":[8.543129921,50.0264015198],"BEG":[20.3090991974,44.8184013367],"ZAD":[15.3466997147,44.1082992554],"VCE":[12.3519001007,45.5052986145],"SSH":[34.3950004578,27.9773006439],"BRU":[4.4844398499,50.9014015198],"OLB":[9.5176296234,40.8987007141],"FUE":[-13.8638000488,28.4526996613],"ESB":[32.995098114,40.1281013489],"RIX":[23.9710998535,56.9235992432],"BLQ":[11.2887001038,44.5354003906],"BRI":[16.7605991364,41.1389007568],"AUH":[54.6511001587,24.4330005646],"HRG":[33.7994003296,27.1783008575],"LIS":[-9.1359195709,38.7812995911],"RMF":[34.5836982727,25.557100296],"RAK":[-8.0362997055,31.6068992615],"ARN":[17.9186000824,59.6519012451],"TFS":[-16.5725002289,28.044500351],"SKG":[22.9708995819,40.5196990967],"VLC":[-0.4816249907,39.4892997742],"IBZ":[1.3731199503,38.8728981018],"CAG":[9.0542802811,39.251499176],"LHR":[-0.4619410038,51.4706001282],"HEL":[24.963300705,60.317199707],"RHO":[28.0862007141,36.4053993225],"ZRH":[8.5491695404,47.4646987915],"JTR":[25.4792995453,36.3992004395],"FNC":[-16.7744998932,32.6978988647],"KGS":[27.0916996002,36.7933006287],"CHQ":[24.1497001648,35.5317001343],"ZTH":[20.8843002319,37.7509002686],"AMM":[35.9931983948,31.7226009369],"TIV":[18.7233009338,42.4047012329],"LPA":[-15.3865995407,27.9319000244],"EFL":[20.5004997253,38.120098114],"DWC":[55.1613888889,24.8966666667],"PDL":[-25.6979007721,37.7411994934],"TBS":[44.95470047,41.6692008972],"SHJ":[55.51720047,25.3285999298],"CAI":[31.4055995941,30.1219005585],"NQZ":[71.4669036865,51.0222015381],"SIN":[103.9940032959,1.3501900434],"TAS":[69.2811965942,41.257900238],"LAX":[-118.4079971,33.94250107],"JFK":[-73.77890015,40.63980103],"EWR":[-74.1687011719,40.6925010681],"BKK":[100.7470016479,13.6810998917],"DEL":[77.1031036377,28.5664997101],"GRO":[2.7605500221,41.9010009766],"MLE":[73.5290985107,4.1918301582],"MRU":[57.6836013794,-20.4302005768],"NRT":[140.3860015869,35.7647018433],"BTS":[17.2126998901,48.1702003479],"PRG":[14.2600002289,50.1007995605],"KTW":[19.0799999237,50.4743003845],"VIE":[16.5697002411,48.1102981567],"OSR":[18.1110992432,49.6963005066]};
+        let deals = [];
+        let allRouteGroups = [];
+        let selectedRouteKey = null;
+
+        const AIRPORT_COORDS = {
+            "TZL":[18.7248,44.4586],"PDV":[24.8507,42.0677],"SKP":[21.6214,41.9616],"OHD":[20.7423,41.1800],
+            "TIA":[19.7206,41.4146],"GHV":[25.5235,45.7062],"BLL":[9.1517,55.7402],"VAR":[27.8250,43.2321],
+            "PMO":[13.0909,38.1759],"SUF":[16.2423,38.9053],"VNO":[25.2858,54.6341],"WAW":[20.9671,52.1656],
+            "ALC":[-0.5581,38.2821],"TGD":[19.2518,42.3594],"NAP":[14.2908,40.8860],"LTN":[-0.3683,51.8746],
+            "OSL":[11.1003,60.1939],"SPU":[16.2980,43.5388],"BSL":[7.5299,47.5895],"RMO":[28.9309,46.9277],
+            "BCN":[2.0784,41.2971],"BER":[13.5033,52.3666],"PRN":[21.0358,42.5727],"ATH":[23.9444,37.9364],
+            "FCO":[12.2508,41.8045],"DTM":[7.6122,51.5182],"EVN":[44.3959,40.1473],"KSC":[21.2411,48.6631],
+            "RJK":[14.5703,45.2168],"BDS":[17.9470,40.6576],"EIN":[5.3745,51.4500],"LGW":[-0.1902,51.1481],
+            "CTA":[15.0663,37.4668],"MLA":[14.4775,35.8574],"MAD":[-3.5667,40.4936],"NCE":[7.2158,43.6584],
+            "KUT":[42.4826,42.1767],"AGP":[-4.4991,36.6749],"CPH":[12.6560,55.6179],"SOF":[23.4114,42.6966],
+            "MXP":[8.7281,45.6305],"DBV":[18.2681,42.5614],"OPO":[-8.6813,41.2481],"JMK":[25.3481,37.4351],
+            "RMI":[12.6117,44.0203],"CIY":[14.6071,36.9946],"FLR":[11.2051,43.8100],"LIN":[9.2767,45.4450],
+            "LCA":[33.6249,34.8750],"BIO":[-2.9106,43.3011],"CFU":[19.9116,39.6018],"MAN":[-2.2749,53.3536],
+            "ORY":[2.3594,48.7252],"GVA":[6.1089,46.2380],"BOJ":[27.5151,42.5695],"CGN":[7.1427,50.8658],
+            "AGA":[-9.4130,30.3250],"TLL":[24.8327,59.4132],"DUB":[-6.2700,53.4212],"EDI":[-3.3724,55.9500],
+            "HAM":[9.9882,53.6304],"KEF":[-22.6056,63.9850],"MST":[5.7701,50.9117],"FAO":[-7.9659,37.0144],
+            "HER":[25.1802,35.3396],"KRK":[19.7847,50.0777],"DUS":[6.7667,51.2895],"SAW":[29.3092,40.8986],
+            "TLV":[34.8866,32.0113],"PMI":[2.7388,39.5517],"AYT":[30.8005,36.8987],"CDG":[2.5500,49.0127],
+            "AMS":[4.7638,52.3086],"FRA":[8.5431,50.0264],"BEG":[20.3090,44.8184],"ZAD":[15.3466,44.1082],
+            "VCE":[12.3519,45.5052],"SSH":[34.3950,27.9773],"BRU":[4.4844,50.9014],"OLB":[9.5176,40.8987],
+            "FUE":[-13.8638,28.4526],"ESB":[32.9950,40.1281],"RIX":[23.9710,56.9235],"BLQ":[11.2887,44.5354],
+            "BRI":[16.7605,41.1389],"AUH":[54.6511,24.4330],"HRG":[33.7994,27.1783],"LIS":[-9.1359,38.7812],
+            "RMF":[34.5836,25.5571],"RAK":[-8.0362,31.6068],"ARN":[17.9186,59.6519],"TFS":[-16.5725,28.0445],
+            "SKG":[22.9708,40.5196],"VLC":[-0.4816,39.4892],"IBZ":[1.3731,38.8728],"CAG":[9.0542,39.2514],
+            "LHR":[-0.4619,51.4706],"HEL":[24.9633,60.3171],"RHO":[28.0862,36.4053],"ZRH":[8.5491,47.4646],
+            "JTR":[25.4792,36.3992],"FNC":[-16.7744,32.6978],"KGS":[27.0916,36.7933],"CHQ":[24.1497,35.5317],
+            "ZTH":[20.8843,37.7509],"AMM":[35.9931,31.7226],"TIV":[18.7233,42.4047],"LPA":[-15.3865,27.9319],
+            "EFL":[20.5004,38.1200],"DWC":[55.1613,24.8966],"PDL":[-25.6979,37.7411],"TBS":[44.9547,41.6692],
+            "SHJ":[55.5172,25.3285],"CAI":[31.4055,30.1219],"NQZ":[71.4669,51.0222],"SIN":[103.9940,1.3501],
+            "TAS":[69.2811,41.2579],"LAX":[-118.4079,33.9425],"JFK":[-73.7789,40.6398],"EWR":[-74.1687,40.6925],
+            "BKK":[100.7470,13.6810],"DEL":[77.1031,28.5664],"GRO":[2.7605,41.9010],"MLE":[73.5290,4.1918],
+            "MRU":[57.6836,-20.4302],"NRT":[140.3860,35.7647],"BTS":[17.2126,48.1702],"PRG":[14.2600,50.1007],
+            "KTW":[19.0799,50.4743],"VIE":[16.5697,48.1102],"OSR":[18.1110,49.6963],
+            "STN":[-0.2350,51.8860],"BGY":[9.7041,45.6738]
+        };
+
         const ORIGIN_COORDS = {
             PRG: [14.267, 50.101], VIE: [16.570, 48.110], BTS: [17.213, 48.170],
             KTW: [19.080, 50.474], OSR: [18.111, 49.696],
@@ -1167,24 +1151,13 @@
         let geoCache = {};
         try { geoCache = JSON.parse(localStorage.getItem(GEO_CACHE_KEY) || '{}'); } catch { }
 
+        function getCoords(code) {
+            return AIRPORT_COORDS[code] || geoCache[code] || ORIGIN_COORDS[code] || null;
+        }
+
         async function geocodeCity(cityName, country, iataCode) {
             if (geoCache[iataCode]) return geoCache[iataCode];
             if (ORIGIN_COORDS[iataCode]) { geoCache[iataCode] = ORIGIN_COORDS[iataCode]; return ORIGIN_COORDS[iataCode]; }
-            if (country) {
-                try {
-                    const res = await maptilersdk.geocoding.forward(`${iataCode}, ${country}`, {
-                        types: ['poi'],
-                        limit: 5,
-                        language: ['en']
-                    });
-                    if (res?.features?.length > 0) {
-                        const coords = res.features[0].geometry.coordinates;
-                        geoCache[iataCode] = coords;
-                        localStorage.setItem(GEO_CACHE_KEY, JSON.stringify(geoCache));
-                        return coords;
-                    }
-                } catch { }
-            }
             try {
                 const res = await maptilersdk.geocoding.forward(`${cityName}${country ? ', ' + country : ''}`, {
                     types: ['place', 'municipality'],
@@ -1201,10 +1174,12 @@
             return null;
         }
 
-        async function geocodeAllDeals(deals) {
+        async function geocodeAllDeals(dealList) {
             const unique = new Map();
-            for (const d of deals) {
-                if (!unique.has(d.dest)) unique.set(d.dest, { city: d.destName, country: d.country });
+            for (const d of dealList) {
+                if (!unique.has(d.dest) && !AIRPORT_COORDS[d.dest]) {
+                    unique.set(d.dest, { city: d.destName, country: d.country });
+                }
             }
             const entries = [...unique.entries()];
             for (let i = 0; i < entries.length; i += 5) {
@@ -1214,11 +1189,14 @@
             return geoCache;
         }
 
-        function getCoords(code) { return AIRPORT_COORDS[code] || geoCache[code] || ORIGIN_COORDS[code] || null; }
+        const TAG_COLORS = {
+            'ERROR FARE': '#ff3b5c',
+            'GREAT DEAL': '#00f2fe',
+            'GOOD DEAL': '#ffb703',
+            'NORMAL': '#94a3b8'
+        };
 
-        const TAG_COLORS = { 'ERROR FARE': '#ff3b5c', 'GREAT DEAL': '#00f2fe', 'GOOD DEAL': '#ffb703', 'NORMAL': '#777788' };
-
-        function makeArc(start, end, numPoints = 50) {
+        function makeArc(start, end, numPoints = 40) {
             const coords = [];
             for (let i = 0; i <= numPoints; i++) {
                 const t = i / numPoints;
@@ -1231,48 +1209,29 @@
             return coords;
         }
 
-        maptilersdk.config.apiKey = MAPTILER_KEY;
-        maptilersdk.config.maxTileCacheSize = 500;
-        maptilersdk.prewarm();
-
-        const map = new maptilersdk.Map({
-            container: 'map',
-            style: maptilersdk.MapStyle.DATAVIZ.DARK,
-            center: [15, 48],
-            zoom: 3.6,
-            projection: 'globe',
-            halo: true,
-            space: true,
-            navigationControl: false,
-            scaleControl: false,
-            geolocateControl: false,
-        });
-
-        map.on('load', () => { setTimeout(() => map.resize(), 100); });
-
-        let routeLines = null, destPoints = null, originPoints = null;
-
         function showToast(message) {
             let toast = document.getElementById('app-toast');
             if (!toast) {
                 toast = document.createElement('div');
                 toast.id = 'app-toast';
+                toast.setAttribute('role', 'alert');
                 toast.style.cssText = `
                     position: fixed;
-                    bottom: 32px;
+                    bottom: 28px;
                     left: 50%;
                     transform: translateX(-50%) translateY(20px);
-                    background: rgba(12, 24, 20, 0.95);
+                    background: rgba(10, 20, 26, 0.96);
                     color: #4ecdc4;
                     border: 1px solid rgba(78, 205, 196, 0.4);
-                    padding: 10px 22px;
+                    padding: 9px 20px;
                     border-radius: 30px;
-                    font-size: 13px;
+                    font-size: 12px;
                     font-weight: 700;
                     z-index: 9999;
-                    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-                    transition: all 0.3s ease;
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.65);
+                    transition: all 0.25s ease;
                     pointer-events: none;
+                    opacity: 0;
                 `;
                 document.body.appendChild(toast);
             }
@@ -1282,7 +1241,7 @@
             setTimeout(() => {
                 toast.style.opacity = '0';
                 toast.style.transform = 'translateX(-50%) translateY(20px)';
-            }, 2500);
+            }, 2400);
         }
 
         function isWeekendGetaway(d) {
@@ -1294,12 +1253,60 @@
             return (outDay === 4 || outDay === 5) && (retDay === 0 || retDay === 1 || retDay === 2) && d.tripDays >= 2 && d.tripDays <= 4;
         }
 
+        // Initialize MapTiler Map with Localhost Fallback Style (prevents 403 referer errors)
+        const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        maptilersdk.config.apiKey = MAPTILER_KEY;
+        maptilersdk.config.maxTileCacheSize = 500;
+        try { maptilersdk.prewarm(); } catch { }
+
+        const DARK_FALLBACK_STYLE = {
+            version: 8,
+            name: 'Dark Background',
+            sources: {
+                'dark-tiles': {
+                    type: 'raster',
+                    tiles: [
+                        'https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+                        'https://b.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'
+                    ],
+                    tileSize: 256
+                }
+            },
+            layers: [
+                {
+                    id: 'dark-tiles-layer',
+                    type: 'raster',
+                    source: 'dark-tiles',
+                    minzoom: 0,
+                    maxzoom: 19
+                }
+            ]
+        };
+
+        const map = new maptilersdk.Map({
+            container: 'map',
+            style: isLocalHost ? DARK_FALLBACK_STYLE : maptilersdk.MapStyle.DATAVIZ.DARK,
+            center: [15, 48],
+            zoom: 3.6,
+            projection: 'globe',
+            halo: true,
+            space: true,
+            navigationControl: false,
+            scaleControl: false,
+            geolocateControl: false,
+        });
+
+        map.on('error', () => { /* gracefully handle network hiccups */ });
+        map.on('load', () => { setTimeout(() => map.resize(), 100); });
+
+        let routeLinesData = null, destPointsData = null, originPointsData = null;
+
         function fitMapToRoute(originCode, destCode) {
             const from = getCoords(originCode);
             const to = getCoords(destCode);
             if (!from || !to || !map) return;
             const isMobile = window.innerWidth <= 900;
-            const padding = isMobile ? { top: 60, bottom: 280, left: 30, right: 30 } : { top: 100, bottom: 100, left: 100, right: 460 };
+            const padding = isMobile ? { top: 50, bottom: 260, left: 20, right: 20 } : { top: 90, bottom: 90, left: 340, right: 400 };
             try {
                 const minLng = Math.min(from[0], to[0]);
                 const maxLng = Math.max(from[0], to[0]);
@@ -1309,90 +1316,156 @@
                     [minLng === maxLng ? minLng - 0.1 : minLng, minLat === maxLat ? minLat - 0.1 : minLat],
                     [minLng === maxLng ? maxLng + 0.1 : maxLng, minLat === maxLat ? maxLat + 0.1 : maxLat]
                 ];
-                map.fitBounds(bounds, { padding, maxZoom: 6, duration: 1200, essential: true });
+                map.fitBounds(bounds, { padding, maxZoom: 6.5, duration: 1000, essential: true });
             } catch (err) {
                 console.warn('fitBounds error:', err);
             }
         }
 
-        function openDrawer(deal) {
-            const rEl = document.getElementById('d-route');
-            if (rEl) rEl.textContent = `${deal.origin} → ${deal.destName}`;
-            const dtEl = document.getElementById('d-dates');
-            if (dtEl) dtEl.textContent = `${deal.tripDays} days · ${deal.date} to ${deal.returnDate}`;
-            const pEl = document.getElementById('d-price');
-            if (pEl) pEl.textContent = `€${deal.price}`;
-            const bEl = document.getElementById('d-baseline');
-            if (bEl) bEl.textContent = `Market Baseline: €${deal.score?.baseline || '—'}`;
+        function groupDealsByRoute(dealsList) {
+            if (!dealsList || !dealsList.length) return [];
+            const routeMap = new Map();
 
-            const baseline = deal.score?.baseline || deal.price;
-            const diff = baseline - deal.price;
-            const discount = deal.score?.discount || 0;
-
-            const discEl = document.getElementById('d-discount');
-            const savEl = document.getElementById('d-savings');
-            const fillEl = document.getElementById('d-bar-fill');
-
-            if (discount > 0) {
-                if (discEl) discEl.textContent = `${discount}% Below Market Baseline`;
-                if (savEl) savEl.textContent = `Estimated Savings: €${diff}`;
-                if (fillEl) {
-                    fillEl.style.width = `${Math.min(100, Math.max(10, discount))}%`;
-                    fillEl.style.background = 'linear-gradient(90deg, #ff4444, #4ecdc4)';
+            for (const d of dealsList) {
+                const key = `${d.origin}→${d.dest}`;
+                if (!routeMap.has(key)) {
+                    routeMap.set(key, {
+                        key,
+                        origin: d.origin,
+                        dest: d.dest,
+                        destName: d.destName,
+                        country: d.country,
+                        offers: [],
+                    });
                 }
-            } else if (discount < 0) {
-                const markup = Math.abs(discount);
-                if (discEl) discEl.textContent = `${markup}% Above Market Baseline`;
-                if (savEl) savEl.textContent = `Peak Season Premium: +€${Math.abs(diff)}`;
-                if (fillEl) {
-                    fillEl.style.width = '100%';
-                    fillEl.style.background = '#555566';
+                routeMap.get(key).offers.push(d);
+            }
+
+            const groups = [];
+            for (const group of routeMap.values()) {
+                group.offers.sort((a, b) => a.price - b.price);
+                group.minPrice = group.offers[0].price;
+                group.maxPrice = Math.max(...group.offers.map(o => o.price));
+                group.priceRangeStr = group.minPrice === group.maxPrice
+                    ? `€${group.minPrice}`
+                    : `€${group.minPrice} – €${group.maxPrice}`;
+
+                const tagPriority = { 'ERROR FARE': 0, 'GREAT DEAL': 1, 'GOOD DEAL': 2, 'NORMAL': 3 };
+                const sortedByTag = [...group.offers].sort((a, b) => (tagPriority[a.score?.tag] ?? 3) - (tagPriority[b.score?.tag] ?? 3) || a.price - b.price);
+
+                group.bestDeal = sortedByTag[0];
+                group.score = group.bestDeal.score;
+                group.isAllTimeLow = group.offers.some(o => o.isAllTimeLow);
+                group.priceCrash = group.offers.find(o => o.priceCrash)?.priceCrash || null;
+                group.airlines = [...new Set(group.offers.map(o => o.airline).filter(Boolean))].join(', ');
+
+                groups.push(group);
+            }
+            return groups;
+        }
+
+        function getRouteGroupByKey(key) {
+            if (!key) return null;
+            return (allRouteGroups || []).find(g => g.key === key);
+        }
+
+        function highlightRouteGroup(key) {
+            document.querySelectorAll('.deal-card').forEach(c => {
+                c.classList.toggle('hover-highlight', c.dataset.routeKey === key);
+            });
+            if (map && map.isStyleLoaded() && map.getLayer('route-lines')) {
+                if (key) {
+                    map.setPaintProperty('route-lines', 'line-width', ['case', ['==', ['get', 'routeKey'], key], 4, 1.5]);
+                    map.setPaintProperty('route-lines', 'line-opacity', ['case', ['==', ['get', 'routeKey'], key], 1, 0.25]);
+                } else {
+                    map.setPaintProperty('route-lines', 'line-width', 2);
+                    map.setPaintProperty('route-lines', 'line-opacity', 0.6);
                 }
+            }
+        }
+
+        function unhighlightRouteGroup() {
+            if (selectedRouteKey) {
+                highlightRouteGroup(selectedRouteKey);
             } else {
-                if (discEl) discEl.textContent = `At Market Baseline`;
-                if (savEl) savEl.textContent = `Standard Fare`;
-                if (fillEl) {
-                    fillEl.style.width = '50%';
-                    fillEl.style.background = '#8a8a9e';
+                document.querySelectorAll('.deal-card').forEach(c => c.classList.remove('hover-highlight'));
+                if (map && map.isStyleLoaded() && map.getLayer('route-lines')) {
+                    map.setPaintProperty('route-lines', 'line-width', 2);
+                    map.setPaintProperty('route-lines', 'line-opacity', 0.6);
                 }
             }
+        }
 
-            const outEl = document.getElementById('d-leg-outbound');
-            if (outEl) outEl.innerHTML = `<strong>Outbound:</strong> ${deal.origin} → ${deal.dest} (${deal.airline})<br>Date: ${deal.date} · Stops: ${deal.stops > 0 ? deal.stops : 'Non-stop'}`;
-            const retEl = document.getElementById('d-leg-return');
-            if (retEl) retEl.innerHTML = `<strong>Return:</strong> ${deal.dest} → ${deal.origin} (${deal.airline})<br>Date: ${deal.returnDate}`;
+        function openRouteGroupDrawer(group) {
+            const drawer = document.getElementById('drawer');
+            const drawerOverlay = document.getElementById('drawer-overlay');
+            if (!group || !drawer) return;
 
-            const dufEl = document.getElementById('d-duffel-verify');
-            if (dufEl) {
-                if (deal.crossCheck) {
-                    dufEl.textContent = `🔍 Live Verification (Duffel): €${deal.crossCheck.duffelPrice || '—'} · Status: ${deal.crossCheck.status}`;
+            selectedRouteKey = group.key;
+            highlightRouteGroup(selectedRouteKey);
+            fitMapToRoute(group.origin, group.dest);
+
+            document.getElementById('d-route').textContent = `${group.origin} → ${group.destName}`;
+            document.getElementById('d-dates').textContent = `${group.offers.length} available flight dates · Lowest: €${group.minPrice}`;
+            document.getElementById('d-price').textContent = group.priceRangeStr;
+            document.getElementById('d-baseline').textContent = `Market Baseline: €${group.score?.baseline || '—'}`;
+
+            function selectOffer(offer, cardEl) {
+                if (cardEl) {
+                    document.querySelectorAll('.offer-card-item').forEach(c => c.style.borderColor = 'rgba(255,255,255,0.08)');
+                    cardEl.style.borderColor = 'var(--accent-cyan)';
+                }
+
+                const baseline = offer.score?.baseline || group.minPrice;
+                const diff = baseline - offer.price;
+                const discount = offer.score?.discount || 0;
+
+                if (discount > 0) {
+                    document.getElementById('d-discount').textContent = `${discount}% Below Market Baseline`;
+                    document.getElementById('d-savings').textContent = `Estimated Savings: €${diff}`;
+                    document.getElementById('d-bar-fill').style.width = `${Math.min(100, Math.max(10, discount))}%`;
+                    document.getElementById('d-bar-fill').style.background = 'linear-gradient(90deg, #ff3b5c, #4ecdc4)';
+                } else {
+                    document.getElementById('d-discount').textContent = `At Market Baseline`;
+                    document.getElementById('d-savings').textContent = `Standard Fare`;
+                    document.getElementById('d-bar-fill').style.width = '50%';
+                    document.getElementById('d-bar-fill').style.background = '#8a8a9e';
+                }
+
+                document.getElementById('d-leg-outbound').innerHTML = `<strong>Outbound:</strong> ${offer.origin} → ${offer.dest} (${offer.airline})<br>Date: ${offer.date} · Direct Non-Stop`;
+                document.getElementById('d-leg-return').innerHTML = `<strong>Return:</strong> ${offer.dest} → ${offer.origin} (${offer.airline})<br>Date: ${offer.returnDate} · Direct Non-Stop`;
+
+                const dufEl = document.getElementById('d-duffel-verify');
+                if (offer.crossCheck) {
+                    dufEl.textContent = `🔍 Live Verification (Duffel): €${offer.crossCheck.duffelPrice || '—'} · Status: ${offer.crossCheck.status}`;
                 } else { dufEl.textContent = ''; }
-            }
 
-            const airlineUrl = deal.bookingLinks?.airline?.url || '#';
-            const skyUrl = deal.bookingLinks?.skyscanner || '#';
-            const isDupSky = airlineUrl === skyUrl || (deal.bookingLinks?.airline?.name || '').includes('Skyscanner');
+                const airlineUrl = offer.bookingLinks?.airline?.url || offer.deepLink || '#';
+                const skyUrl = offer.bookingLinks?.skyscanner || '#';
+                const googleUrl = offer.bookingLinks?.googleFlights || '#';
+                const kiwiUrl = offer.deepLink || '#';
+                const isDupSky = airlineUrl === skyUrl || (offer.bookingLinks?.airline?.name || '').includes('Skyscanner');
 
-            const linksEl = document.getElementById('d-links');
-            if (linksEl) {
+                const linksEl = document.getElementById('d-links');
                 linksEl.innerHTML = `
-                    <a class="btn-link" href="${airlineUrl}" target="_blank">🔗 ${deal.bookingLinks?.airline?.name || 'Airline Direct'}</a>
-                    ${!isDupSky ? `<a class="btn-link" href="${skyUrl}" target="_blank">✈️ Skyscanner</a>` : ''}
-                    <a class="btn-link" href="${deal.bookingLinks?.googleFlights || '#'}" target="_blank">🌍 Google Flights</a>
-                    ${deal.deepLink ? `<a class="btn-link" href="${deal.deepLink}" target="_blank">🥝 Kiwi.com</a>` : ''}
-                    <a class="btn-link" id="btn-share-deal" href="#" style="background:rgba(78,205,196,0.15); color:#4ecdc4; border-color:rgba(78,205,196,0.3); cursor:pointer;">📲 Share Deal</a>
+                    <a class="btn-link" href="${airlineUrl}" target="_blank" rel="noopener noreferrer">🔗 ${offer.bookingLinks?.airline?.name || offer.airline || 'Airline Direct'}</a>
+                    ${!isDupSky ? `<a class="btn-link" href="${skyUrl}" target="_blank" rel="noopener noreferrer">✈️ Skyscanner</a>` : ''}
+                    <a class="btn-link" href="${googleUrl}" target="_blank" rel="noopener noreferrer">🌍 Google Flights</a>
+                    ${kiwiUrl && kiwiUrl !== '#' ? `<a class="btn-link" href="${kiwiUrl}" target="_blank" rel="noopener noreferrer">🥝 Kiwi.com</a>` : ''}
+                    <button class="btn-link" id="btn-share-deal" style="background:rgba(78,205,196,0.18); color:#4ecdc4; border-color:rgba(78,205,196,0.4); cursor:pointer; font-family:inherit;">📲 Share Deal</button>
                 `;
+
                 const btnShare = document.getElementById('btn-share-deal');
                 if (btnShare) {
                     btnShare.addEventListener('click', async (e) => {
                         e.preventDefault();
                         const shareUrl = airlineUrl !== '#' ? airlineUrl : window.location.href;
-                        const shareText = `🔥 Flight Deal: ${deal.origin} → ${deal.destName} for €${deal.price} (${deal.tripDays}d trip, ${deal.date} → ${deal.returnDate})! Check deal: ${shareUrl}`;
+                        const shareText = `🔥 Flight Deal: ${offer.origin} → ${offer.destName} for €${offer.price} (${offer.tripDays}d trip, ${offer.date} → ${offer.returnDate})! Check deal: ${shareUrl}`;
 
                         if (navigator.share) {
                             try {
                                 await navigator.share({
-                                    title: `Flight Deal: ${deal.origin} → ${deal.destName}`,
+                                    title: `Flight Deal: ${offer.origin} → ${offer.destName}`,
                                     text: shareText,
                                     url: shareUrl
                                 });
@@ -1409,43 +1482,76 @@
                             btnShare.textContent = '✓ Copied!';
                             setTimeout(() => { btnShare.textContent = '📲 Share Deal'; }, 2500);
                         } catch {
-                            const input = document.createElement('textarea');
-                            input.value = shareText;
-                            document.body.appendChild(input);
-                            input.select();
-                            document.execCommand('copy');
-                            document.body.removeChild(input);
-                            showToast('📋 Copied deal link to clipboard!');
-                            btnShare.textContent = '✓ Copied!';
-                            setTimeout(() => { btnShare.textContent = '📲 Share Deal'; }, 2500);
+                            showToast('📋 Link: ' + shareUrl);
                         }
                     });
                 }
+
+                setTimeout(() => renderPriceChart(offer.priceHistory || group.bestDeal.priceHistory, offer.score?.baseline || group.score?.baseline, offer.price), 50);
             }
 
-            const crashBadgeEl = document.getElementById('d-crash-badge');
-            if (crashBadgeEl) {
-                if (deal.priceCrash) {
-                    crashBadgeEl.textContent = `📉 -€${deal.priceCrash.dropEur} Drop (-${deal.priceCrash.dropPercent}%)`;
-                } else {
-                    crashBadgeEl.textContent = '';
-                }
+            // Render offers list
+            const offersContainer = document.getElementById('d-offers-list');
+            const offersCountEl = document.getElementById('d-offers-count');
+            if (offersCountEl) offersCountEl.textContent = group.offers.length;
+
+            if (offersContainer) {
+                offersContainer.innerHTML = group.offers.map((o, idx) => {
+                    const aName = o.bookingLinks?.airline?.name || o.airline || 'Airline Direct';
+                    const aUrl = o.bookingLinks?.airline?.url || o.deepLink || '#';
+                    const skyUrl = o.bookingLinks?.skyscanner || '#';
+                    const googleUrl = o.bookingLinks?.googleFlights || '#';
+                    const kiwiUrl = o.deepLink || '#';
+
+                    return `
+                        <div class="glass-panel offer-card-item" data-offer-idx="${idx}" role="button" tabindex="0" style="padding: 9px 11px; border-radius: 8px; background: rgba(255,255,255,0.04); border: 1px solid ${idx === 0 ? 'var(--accent-cyan)' : 'rgba(255,255,255,0.1)'}; margin-bottom: 6px; cursor: pointer; transition: all 0.2s ease;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                <div>
+                                    <div style="font-weight: 700; font-size: 12px; color: #f0f0f5;">📅 ${o.date} → ${o.returnDate} (${o.tripDays}d)</div>
+                                    <div style="font-size: 10px; color: #94a3b8;">🛩️ ${o.airline} (Direct) ${o.score?.discount > 0 ? `<span style="color:#4ecdc4; font-weight:700;">-${o.score.discount}%</span>` : ''}</div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-size: 15px; font-weight: 800; color: var(--accent-cyan);">€${o.price}</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; flex-wrap: wrap; gap: 5px; align-items: center;">
+                                <a class="btn-link" href="${aUrl}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" style="padding: 2px 7px; font-size: 10px;">🔗 ${aName}</a>
+                                <a class="btn-link" href="${skyUrl}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" style="padding: 2px 7px; font-size: 10px;">✈️ Skyscanner</a>
+                                <a class="btn-link" href="${googleUrl}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" style="padding: 2px 7px; font-size: 10px;">🌍 Google</a>
+                                ${kiwiUrl && kiwiUrl !== '#' ? `<a class="btn-link" href="${kiwiUrl}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" style="padding: 2px 7px; font-size: 10px;">🥝 Kiwi</a>` : ''}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                offersContainer.querySelectorAll('.offer-card-item').forEach((item) => {
+                    item.addEventListener('click', () => {
+                        const idx = Number(item.dataset.offerIdx);
+                        if (group.offers[idx]) selectOffer(group.offers[idx], item);
+                    });
+                    item.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            const idx = Number(item.dataset.offerIdx);
+                            if (group.offers[idx]) selectOffer(group.offers[idx], item);
+                        }
+                    });
+                });
             }
 
-            renderPriceChart(deal.priceHistory, deal.score?.baseline, deal.price);
+            selectOffer(group.bestDeal, offersContainer?.querySelector('.offer-card-item'));
 
-            const idx = deals.indexOf(deal);
-            if (idx !== -1 && map && map.isStyleLoaded()) {
-                if (map.getLayer('route-lines')) map.setFilter('route-lines', ['==', ['get', 'idx'], idx]);
-                if (map.getLayer('dest-circles')) map.setFilter('dest-circles', ['==', ['get', 'idx'], idx]);
-            }
+            drawer.classList.add('open');
+            if (drawerOverlay) drawerOverlay.classList.add('open');
+        }
 
-            fitMapToRoute(deal.origin, deal.dest);
-
+        function closeDrawer() {
             const drawer = document.getElementById('drawer');
             const drawerOverlay = document.getElementById('drawer-overlay');
-            if (drawer) drawer.classList.add('open');
-            if (drawerOverlay) drawerOverlay.classList.add('open');
+            selectedRouteKey = null;
+            if (drawer) drawer.classList.remove('open');
+            if (drawerOverlay) drawerOverlay.classList.remove('open');
+            document.querySelectorAll('.deal-card').forEach(c => c.classList.remove('hover-highlight'));
+            unhighlightRouteGroup();
         }
 
         function renderPriceChart(history, baseline, currentPrice) {
@@ -1457,8 +1563,8 @@
             }
 
             const width = Math.max(320, container.clientWidth || 360);
-            const height = 110;
-            const padX = 28;
+            const height = 105;
+            const padX = 24;
             const padY = 20;
 
             const prices = history.map(h => h.price);
@@ -1496,35 +1602,105 @@
             const areaPath = `${dPath} L ${lastPoint[0]} ${height - padY} L ${firstPoint[0]} ${height - padY} Z`;
 
             const isCrash = baseline && currentPrice <= baseline * 0.7;
-            const lineColor = isCrash ? '#ff4444' : '#4ecdc4';
+            const lineColor = isCrash ? '#ff3b5c' : '#4ecdc4';
             const gradId = `chartGrad_${Math.floor(Math.random() * 100000)}`;
 
             const rawBaselineY = baseline ? getY(baseline) : null;
-            const baselineY = rawBaselineY ? Math.max(14, Math.min(height - 18, rawBaselineY)) : null;
+            const baselineY = rawBaselineY ? Math.max(12, Math.min(height - 16, rawBaselineY)) : null;
 
             let dotsSvg = points.map((p, i) => `
-                <circle cx="${p[0]}" cy="${p[1]}" r="${i === points.length - 1 ? 5 : 3.5}" fill="${i === points.length - 1 ? lineColor : '#fff'}" stroke="${lineColor}" stroke-width="2">
-                    <title>${history[i].date}: €${history[i].price}</title>
-                </circle>
+                <g class="chart-point-node" data-idx="${i}">
+                    <circle cx="${p[0]}" cy="${p[1]}" r="10" fill="transparent" style="cursor: pointer;" />
+                    <circle cx="${p[0]}" cy="${p[1]}" r="${i === points.length - 1 ? 4.5 : 3}" fill="${i === points.length - 1 ? lineColor : '#fff'}" stroke="${lineColor}" stroke-width="2" style="cursor: pointer;">
+                        <title>${history[i].date}: €${history[i].price}</title>
+                    </circle>
+                </g>
             `).join('');
 
             container.innerHTML = `
-                <svg width="100%" height="100%" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" style="overflow: visible;">
-                    <defs>
-                        <linearGradient id="${gradId}" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stop-color="${lineColor}" stop-opacity="0.4"/>
-                            <stop offset="100%" stop-color="${lineColor}" stop-opacity="0.0"/>
-                        </linearGradient>
-                    </defs>
-                    ${baselineY ? `<line x1="${padX}" y1="${baselineY}" x2="${width - padX}" y2="${baselineY}" stroke="rgba(255,255,255,0.3)" stroke-dasharray="4 4" stroke-width="1.5"/>
-                    <text x="${width - padX}" y="${Math.max(12, baselineY - 4)}" fill="#8a8a9e" font-size="9" font-weight="600" text-anchor="end">Market Base €${baseline}</text>` : ''}
-                    <path d="${areaPath}" fill="url(#${gradId})" />
-                    <path d="${dPath}" fill="none" stroke="${lineColor}" stroke-width="2.5" stroke-linecap="round" />
-                    ${dotsSvg}
-                    <text x="${firstPoint[0]}" y="${height - 2}" fill="#8a8a9e" font-size="9">${history[0].date.slice(5)}</text>
-                    <text x="${lastPoint[0]}" y="${height - 2}" fill="${lineColor}" font-size="9" font-weight="700" text-anchor="end">Today €${currentPrice}</text>
-                </svg>
+                <div style="position: relative; width: 100%; height: 100%;">
+                    <svg id="d-chart-svg" width="100%" height="100%" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" style="overflow: visible; cursor: crosshair;" role="img" aria-label="Price history trend chart">
+                        <defs>
+                            <linearGradient id="${gradId}" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="${lineColor}" stop-opacity="0.35"/>
+                                <stop offset="100%" stop-color="${lineColor}" stop-opacity="0.0"/>
+                            </linearGradient>
+                        </defs>
+                        ${baselineY ? `<line x1="${padX}" y1="${baselineY}" x2="${width - padX}" y2="${baselineY}" stroke="rgba(255,255,255,0.3)" stroke-dasharray="3 3" stroke-width="1.2"/>
+                        <text x="${width - padX}" y="${Math.max(10, baselineY - 4)}" fill="#94a3b8" font-size="8.5" font-weight="600" text-anchor="end">Market Base €${baseline}</text>` : ''}
+                        <path d="${areaPath}" fill="url(#${gradId})" />
+                        <path d="${dPath}" fill="none" stroke="${lineColor}" stroke-width="2.2" stroke-linecap="round" />
+                        <line id="chart-crosshair" x1="0" y1="8" x2="0" y2="${height - 16}" stroke="rgba(255,255,255,0.3)" stroke-dasharray="2 2" stroke-width="1.2" style="display: none; pointer-events: none;" />
+                        <circle id="chart-hover-dot" r="5" fill="${lineColor}" stroke="#ffffff" stroke-width="2" style="display: none; pointer-events: none;" />
+                        ${dotsSvg}
+                        <text x="${firstPoint[0]}" y="${height - 2}" fill="#94a3b8" font-size="8.5">${history[0].date.slice(5)}</text>
+                        <text x="${lastPoint[0]}" y="${height - 2}" fill="${lineColor}" font-size="8.5" font-weight="700" text-anchor="end">Today €${currentPrice}</text>
+                    </svg>
+                    <div id="chart-tooltip" style="position: absolute; transform: translate(-50%, -100%); display: none; pointer-events: none; background: rgba(10, 14, 24, 0.95); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 6px; font-size: 10px; box-shadow: 0 6px 20px rgba(0,0,0,0.7); z-index: 30; text-align: center; white-space: nowrap;"></div>
+                </div>
             `;
+
+            const svg = container.querySelector('#d-chart-svg');
+            const crosshair = container.querySelector('#chart-crosshair');
+            const hoverDot = container.querySelector('#chart-hover-dot');
+            const tooltip = container.querySelector('#chart-tooltip');
+
+            function showTooltip(i) {
+                if (i < 0 || i >= points.length) return;
+                const pt = points[i];
+                const item = history[i];
+
+                if (crosshair) {
+                    crosshair.setAttribute('x1', pt[0]);
+                    crosshair.setAttribute('x2', pt[0]);
+                    crosshair.style.display = 'block';
+                }
+                if (hoverDot) {
+                    hoverDot.setAttribute('cx', pt[0]);
+                    hoverDot.setAttribute('cy', pt[1]);
+                    hoverDot.style.display = 'block';
+                }
+                if (tooltip) {
+                    const rect = svg.getBoundingClientRect();
+                    const scaleX = rect.width / width;
+                    const scaleY = rect.height / height;
+                    const tooltipX = pt[0] * scaleX;
+                    const tooltipY = pt[1] * scaleY - 8;
+
+                    let diffStr = '';
+                    if (baseline) {
+                        const diff = item.price - baseline;
+                        const pct = Math.round((diff / baseline) * 100);
+                        if (diff < 0) diffStr = `<span style="color:#4ecdc4; font-weight:700;"> (${pct}%)</span>`;
+                        else if (diff > 0) diffStr = `<span style="color:#ff3b5c; font-weight:700;"> (+${pct}%)</span>`;
+                    }
+
+                    tooltip.innerHTML = `<div style="font-weight:800; color:${lineColor}; font-size:12px;">€${item.price}${diffStr}</div><div style="font-size:9px; color:#94a3b8;">📅 ${item.date}</div>`;
+                    tooltip.style.left = `${tooltipX}px`;
+                    tooltip.style.top = `${tooltipY}px`;
+                    tooltip.style.display = 'block';
+                }
+            }
+
+            function hideTooltip() {
+                if (crosshair) crosshair.style.display = 'none';
+                if (hoverDot) hoverDot.style.display = 'none';
+                if (tooltip) tooltip.style.display = 'none';
+            }
+
+            if (svg) {
+                svg.addEventListener('mousemove', (e) => {
+                    const rect = svg.getBoundingClientRect();
+                    const mouseX = ((e.clientX - rect.left) / rect.width) * width;
+                    let closestIdx = 0, minDiff = Infinity;
+                    points.forEach((p, i) => {
+                        const diff = Math.abs(p[0] - mouseX);
+                        if (diff < minDiff) { minDiff = diff; closestIdx = i; }
+                    });
+                    showTooltip(closestIdx);
+                });
+                svg.addEventListener('mouseleave', hideTooltip);
+            }
         }
 
         function updateSmartInsights(filtered) {
@@ -1540,9 +1716,9 @@
             const priceCrashes = filtered.filter(d => d.priceCrash);
             const topDeal = errorFares.length ? errorFares[0] : filtered[0];
 
-            let text = `<strong>💡 Smart Insights:</strong> ${filtered.length} flight deals active. `;
+            let text = `<strong>💡 Smart Insights:</strong> ${filtered.length} direct flight options active. `;
             if (errorFares.length > 0) {
-                text += `<span style="color:#ff4444; font-weight:700;">🔥 ${errorFares.length} Error Fares</span> spotted! `;
+                text += `<span style="color:#ff3b5c; font-weight:700;">🔥 ${errorFares.length} Error Fares</span> detected! `;
             }
             if (topDeal) {
                 text += `Top deal: <strong>${topDeal.origin} → ${topDeal.destName} €${topDeal.price}</strong> (${topDeal.score?.discount || 0}% off). `;
@@ -1554,275 +1730,13 @@
             banner.innerHTML = text;
         }
 
-        let selectedDealIdx = null;
-
-        function highlightDeal(idx) {
-            document.querySelectorAll('.deal-card').forEach(c => {
-                c.classList.toggle('hover-highlight', String(c.dataset.idx) === String(idx));
-            });
-            if (idx !== -1 && map && map.isStyleLoaded()) {
-                if (map.getLayer('route-lines')) map.setFilter('route-lines', ['==', ['get', 'idx'], Number(idx)]);
-                if (map.getLayer('dest-circles')) map.setFilter('dest-circles', ['==', ['get', 'idx'], Number(idx)]);
-            }
-        }
-
-        function unhighlightDeal() {
-            if (selectedDealIdx !== null) {
-                highlightDeal(selectedDealIdx);
-            } else {
-                document.querySelectorAll('.deal-card').forEach(c => c.classList.remove('hover-highlight'));
-                if (typeof applyFilters === 'function') applyFilters();
-            }
-        }
-
-        let allRouteGroups = [];
-        let selectedRouteKey = null;
-
-        function groupDealsByRoute(dealsList) {
-            if (!dealsList || !dealsList.length) return [];
-            const routeMap = new Map();
-
-            for (const d of dealsList) {
-                const key = `${d.origin}→${d.dest}`;
-                if (!routeMap.has(key)) {
-                    routeMap.set(key, {
-                        key,
-                        origin: d.origin,
-                        dest: d.dest,
-                        destName: d.destName,
-                        country: d.country,
-                        offers: [],
-                    });
-                }
-                routeMap.get(key).offers.push(d);
-            }
-
-            const groups = [];
-            for (const group of routeMap.values()) {
-                group.offers.sort((a, b) => a.price - b.price);
-                group.minPrice = group.offers[0].price;
-                group.maxPrice = Math.max(...group.offers.map(o => o.price));
-                group.priceRangeStr = group.minPrice === group.maxPrice 
-                    ? `€${group.minPrice}` 
-                    : `€${group.minPrice} – €${group.maxPrice}`;
-                
-                const tagPriority = { 'ERROR FARE': 0, 'GREAT DEAL': 1, 'GOOD DEAL': 2, 'NORMAL': 3 };
-                const sortedByTag = [...group.offers].sort((a, b) => (tagPriority[a.score?.tag] ?? 3) - (tagPriority[b.score?.tag] ?? 3) || a.price - b.price);
-                
-                group.bestDeal = sortedByTag[0];
-                group.score = group.bestDeal.score;
-                group.isAllTimeLow = group.offers.some(o => o.isAllTimeLow);
-                group.priceCrash = group.offers.find(o => o.priceCrash)?.priceCrash || null;
-                group.airlines = [...new Set(group.offers.map(o => o.airline).filter(Boolean))].join(', ');
-                
-                groups.push(group);
-            }
-            return groups;
-        }
-
-        function highlightRouteGroup(routeKey) {
-            document.querySelectorAll('.deal-card').forEach(c => {
-                c.classList.toggle('hover-highlight', c.dataset.routeKey === routeKey);
-            });
-            if (routeKey && map && map.isStyleLoaded()) {
-                if (map.getLayer('route-lines')) map.setFilter('route-lines', ['==', ['get', 'routeKey'], routeKey]);
-                if (map.getLayer('dest-circles')) map.setFilter('dest-circles', ['==', ['get', 'routeKey'], routeKey]);
-            }
-        }
-
-        function openRouteGroupDrawer(group) {
-            const drawer = document.getElementById('drawer');
-            const drawerOverlay = document.getElementById('drawer-overlay');
-            if (!group || !drawer) return;
-
-            selectedRouteKey = group.key;
-            highlightRouteGroup(selectedRouteKey);
-            fitMapToRoute(group.origin, group.dest);
-
-            document.getElementById('d-route').textContent = `${group.origin} → ${group.destName}`;
-            document.getElementById('d-dates').textContent = `${group.offers.length} available flight dates · Lowest: €${group.minPrice}`;
-            document.getElementById('d-price').textContent = group.priceRangeStr;
-            document.getElementById('d-baseline').textContent = `Market Baseline: €${group.score?.baseline || '—'}`;
-
-            function selectOffer(offer, cardEl) {
-                if (cardEl) {
-                    document.querySelectorAll('.offer-card-item').forEach(c => c.style.borderColor = 'rgba(255,255,255,0.08)');
-                    cardEl.style.borderColor = 'var(--accent-cyan)';
-                }
-
-                const baseline = offer.score?.baseline || group.minPrice;
-                const diff = baseline - offer.price;
-                const discount = offer.score?.discount || 0;
-
-                if (discount > 0) {
-                    document.getElementById('d-discount').textContent = `${discount}% Below Market Baseline`;
-                    document.getElementById('d-savings').textContent = `Estimated Savings: €${diff}`;
-                    document.getElementById('d-bar-fill').style.width = `${Math.min(100, Math.max(10, discount))}%`;
-                    document.getElementById('d-bar-fill').style.background = 'linear-gradient(90deg, #ff4444, #4ecdc4)';
-                } else {
-                    document.getElementById('d-discount').textContent = `At Market Baseline`;
-                    document.getElementById('d-savings').textContent = `Standard Fare`;
-                    document.getElementById('d-bar-fill').style.width = '50%';
-                    document.getElementById('d-bar-fill').style.background = '#8a8a9e';
-                }
-
-                document.getElementById('d-leg-outbound').innerHTML = `<strong>Outbound:</strong> ${offer.origin} → ${offer.dest} (${offer.airline})<br>Date: ${offer.date} · Stops: ${offer.stops > 0 ? offer.stops : 'Non-stop'}`;
-                document.getElementById('d-leg-return').innerHTML = `<strong>Return:</strong> ${offer.dest} → ${offer.origin} (${offer.airline})<br>Date: ${offer.returnDate}`;
-
-                const dufEl = document.getElementById('d-duffel-verify');
-                if (offer.crossCheck) {
-                    dufEl.textContent = `🔍 Live Verification (Duffel): €${offer.crossCheck.duffelPrice || '—'} · Status: ${offer.crossCheck.status}`;
-                } else { dufEl.textContent = ''; }
-
-                const airlineUrl = offer.bookingLinks?.airline?.url || offer.deepLink || '#';
-                const skyUrl = offer.bookingLinks?.skyscanner || '#';
-                const googleUrl = offer.bookingLinks?.googleFlights || '#';
-                const kiwiUrl = offer.deepLink || '#';
-                const isDupSky = airlineUrl === skyUrl || (offer.bookingLinks?.airline?.name || '').includes('Skyscanner');
-
-                const linksEl = document.getElementById('d-links');
-                linksEl.innerHTML = `
-                    <a class="btn-link" href="${airlineUrl}" target="_blank">🔗 ${offer.bookingLinks?.airline?.name || offer.airline || 'Airline Direct'}</a>
-                    ${!isDupSky ? `<a class="btn-link" href="${skyUrl}" target="_blank">✈️ Skyscanner</a>` : ''}
-                    <a class="btn-link" href="${googleUrl}" target="_blank">🌍 Google Flights</a>
-                    ${kiwiUrl && kiwiUrl !== '#' ? `<a class="btn-link" href="${kiwiUrl}" target="_blank">🥝 Kiwi.com</a>` : ''}
-                `;
-
-                setTimeout(() => renderPriceChart(offer.priceHistory || group.bestDeal.priceHistory, offer.score?.baseline || group.score?.baseline, offer.price), 50);
-            }
-
-            // Render scrollable offers list with ALL 4 booking options per flight card
-            const offersContainer = document.getElementById('d-offers-list');
-            const offersCountEl = document.getElementById('d-offers-count');
-            if (offersCountEl) offersCountEl.textContent = group.offers.length;
-
-            if (offersContainer) {
-                offersContainer.innerHTML = group.offers.map((o, idx) => {
-                    const aName = o.bookingLinks?.airline?.name || o.airline || 'Airline Direct';
-                    const aUrl = o.bookingLinks?.airline?.url || o.deepLink || '#';
-                    const skyUrl = o.bookingLinks?.skyscanner || '#';
-                    const googleUrl = o.bookingLinks?.googleFlights || '#';
-                    const kiwiUrl = o.deepLink || '#';
-
-                    return `
-                        <div class="glass-panel offer-card-item" data-offer-idx="${idx}" style="padding: 10px 12px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid ${idx === 0 ? 'var(--accent-cyan)' : 'rgba(255,255,255,0.08)'}; margin-bottom: 8px; cursor: pointer; transition: all 0.2s ease;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                                <div>
-                                    <div style="font-weight: 700; font-size: 13px; color: #f0f0f5;">📅 ${o.date} → ${o.returnDate} (${o.tripDays}d)</div>
-                                    <div style="font-size: 11px; color: #8a8a9e;">🛩️ ${o.airline} ${o.stops > 0 ? `(${o.stops} stop)` : '(Direct)'} ${o.score?.discount > 0 ? `<span style="color:#4ecdc4; font-weight:700;">-${o.score.discount}%</span>` : ''}</div>
-                                </div>
-                                <div style="text-align: right;">
-                                    <div style="font-size: 15px; font-weight: 800; color: var(--accent-cyan);">€${o.price}</div>
-                                </div>
-                            </div>
-                            <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
-                                <a class="btn-link" href="${aUrl}" target="_blank" onclick="event.stopPropagation();" style="padding: 3px 8px; font-size: 11px;">🔗 ${aName}</a>
-                                <a class="btn-link" href="${skyUrl}" target="_blank" onclick="event.stopPropagation();" style="padding: 3px 8px; font-size: 11px;">✈️ Skyscanner</a>
-                                <a class="btn-link" href="${googleUrl}" target="_blank" onclick="event.stopPropagation();" style="padding: 3px 8px; font-size: 11px;">🌍 Google Flights</a>
-                                ${kiwiUrl && kiwiUrl !== '#' ? `<a class="btn-link" href="${kiwiUrl}" target="_blank" onclick="event.stopPropagation();" style="padding: 3px 8px; font-size: 11px;">🥝 Kiwi.com</a>` : ''}
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-
-                offersContainer.querySelectorAll('.offer-card-item').forEach((item) => {
-                    item.addEventListener('click', () => {
-                        const idx = Number(item.dataset.offerIdx);
-                        if (group.offers[idx]) selectOffer(group.offers[idx], item);
-                    });
-                });
-            }
-
-            selectOffer(group.bestDeal, offersContainer?.querySelector('.offer-card-item'));
-
-            drawer.classList.add('open');
-            if (drawerOverlay) drawerOverlay.classList.add('open');
-        }
-
-        function closeDrawer() {
-            const drawer = document.getElementById('drawer');
-            const drawerOverlay = document.getElementById('drawer-overlay');
-            selectedRouteKey = null;
-            if (drawer) drawer.classList.remove('open');
-            if (drawerOverlay) drawerOverlay.classList.remove('open');
-            document.querySelectorAll('.deal-card').forEach(c => c.classList.remove('hover-highlight'));
-            applyFilters();
-        }
-
-        let hoveredRouteKey = null;
-
-        function highlightRouteGroup(key) {
-            hoveredRouteKey = key;
-            const cards = document.querySelectorAll('.deal-card');
-            cards.forEach(c => {
-                if (c.dataset.routeKey === key) {
-                    c.classList.add('hover-highlight');
-                } else {
-                    c.classList.remove('hover-highlight');
-                }
-            });
-            if (map && map.isStyleLoaded() && map.getSource('routes') && map.getSource('destinations')) {
-                const visGroups = (allRouteGroups || []).filter(g => g.key === key);
-                if (visGroups.length > 0) {
-                    const highlightDests = {
-                        type: 'FeatureCollection',
-                        features: visGroups.map((g, i) => {
-                            const coords = getCoords(g.dest);
-                            if (!coords) return null;
-                            return {
-                                type: 'Feature',
-                                geometry: { type: 'Point', coordinates: coords },
-                                properties: {
-                                    routeKey: g.key, dest: g.dest, destName: g.destName, idx: i,
-                                    tag: g.score?.tag || 'NORMAL', color: TAG_COLORS[g.score?.tag] || '#555',
-                                    priceRangeStr: g.priceRangeStr, offerCount: g.offers.length,
-                                }
-                            };
-                        }).filter(Boolean)
-                    };
-                    const highlightLines = {
-                        type: 'FeatureCollection',
-                        features: visGroups.map((g, i) => {
-                            const from = getCoords(g.origin), to = getCoords(g.dest);
-                            if (!from || !to) return null;
-                            return {
-                                type: 'Feature',
-                                geometry: { type: 'LineString', coordinates: makeArc(from, to) },
-                                properties: {
-                                    routeKey: g.key, idx: i, tag: g.score?.tag || 'NORMAL',
-                                    color: TAG_COLORS[g.score?.tag] || '#555',
-                                    priceRangeStr: g.priceRangeStr, offerCount: g.offers.length,
-                                }
-                            };
-                        }).filter(Boolean)
-                    };
-                    map.getSource('routes').setData(highlightLines);
-                    map.getSource('destinations').setData(highlightDests);
-                }
-            }
-        }
-
-        function unhighlightRouteGroup() {
-            if (hoveredRouteKey !== null) {
-                hoveredRouteKey = null;
-                document.querySelectorAll('.deal-card').forEach(c => c.classList.remove('hover-highlight'));
-                applyFilters();
-            }
-        }
-
         function renderCards(filtered) {
             const sidebar = document.getElementById('sidebar');
             if (!sidebar) return;
 
             let banner = document.getElementById('smart-banner');
-            if (!banner) {
-                banner = document.createElement('div');
-                banner.id = 'smart-banner';
-                banner.className = 'smart-banner';
-                sidebar.appendChild(banner);
-            }
             sidebar.innerHTML = '';
-            sidebar.appendChild(banner);
+            if (banner) sidebar.appendChild(banner);
 
             const groups = groupDealsByRoute(filtered);
 
@@ -1830,6 +1744,7 @@
                 if (state.sort === 'price-asc') return a.minPrice - b.minPrice;
                 if (state.sort === 'price-desc') return b.minPrice - a.minPrice;
                 if (state.sort === 'discount') return (b.score?.discount || 0) - (a.score?.discount || 0);
+                if (state.sort === 'date') return new Date(a.bestDeal?.date || 0) - new Date(b.bestDeal?.date || 0);
                 const tagOrder = { 'ERROR FARE': 0, 'GREAT DEAL': 1, 'GOOD DEAL': 2, 'NORMAL': 3 };
                 return (tagOrder[a.score?.tag] ?? 3) - (tagOrder[b.score?.tag] ?? 3) || a.minPrice - b.minPrice;
             });
@@ -1844,6 +1759,9 @@
                 const card = document.createElement('div');
                 card.className = `deal-card glass-panel ${tagCss}`;
                 card.dataset.routeKey = group.key;
+                card.setAttribute('role', 'button');
+                card.setAttribute('tabindex', '0');
+
                 card.innerHTML = `
                     <div class="card-header">
                         <span class="card-route">${group.origin} → ${group.destName}</span>
@@ -1851,39 +1769,55 @@
                     </div>
                     <div class="card-tags">
                         <span class="tag-pill ${tagCss}">${group.score?.emoji || ''} ${group.score?.tag || 'NORMAL'} ${discTagStr}</span>
-                        <span class="badge-stops" style="background:rgba(255,255,255,0.08); color:#f0f0f5; border:1px solid rgba(255,255,255,0.15);">📅 ${group.offers.length} Date${group.offers.length > 1 ? 's' : ''}</span>
-                        ${group.isAllTimeLow ? `<span class="badge-stops" style="background:rgba(255,215,0,0.2); color:#ffd700; border:1px solid rgba(255,215,0,0.4); font-weight:700;">🏆 All-Time Low</span>` : ''}
-                        ${isWknd ? `<span class="badge-stops" style="background:rgba(78,205,196,0.15); color:#4ecdc4; border:1px solid rgba(78,205,196,0.3);">✈️ Weekend</span>` : ''}
-                        ${group.priceCrash ? `<span class="badge-stops" style="background:rgba(255,68,68,0.2); color:#ff4444; border-color:rgba(255,68,68,0.4);">📉 -€${group.priceCrash.dropEur} Drop</span>` : ''}
+                        <span class="badge-stops">📅 ${group.offers.length} Date${group.offers.length > 1 ? 's' : ''}</span>
+                        <span class="badge-stops" style="background:rgba(78,205,196,0.12); color:#4ecdc4; border-color:rgba(78,205,196,0.3);">✈️ Direct</span>
+                        ${group.isAllTimeLow ? `<span class="badge-stops" style="background:rgba(255,215,0,0.18); color:#ffd700; border-color:rgba(255,215,0,0.4); font-weight:700;">🏆 All-Time Low</span>` : ''}
+                        ${isWknd ? `<span class="badge-stops" style="background:rgba(78,205,196,0.15); color:#4ecdc4; border-color:rgba(78,205,196,0.3);">🏖️ Weekend</span>` : ''}
+                        ${group.priceCrash ? `<span class="badge-stops" style="background:rgba(255,59,92,0.18); color:#ff3b5c; border-color:rgba(255,59,92,0.4);">📉 -€${group.priceCrash.dropEur} Drop</span>` : ''}
                     </div>
                     <div class="card-details">
-                        Cheapest: €${group.minPrice} (${best.date}) · ${group.airlines}
+                        Lowest: €${group.minPrice} (${best.date}) · ${group.airlines}
                     </div>
                 `;
-                card.addEventListener('mouseenter', () => {
-                    highlightRouteGroup(group.key);
-                });
-                card.addEventListener('mouseleave', () => {
-                    unhighlightRouteGroup();
-                });
-                card.addEventListener('click', () => {
-                    openRouteGroupDrawer(group);
+                card.addEventListener('mouseenter', () => highlightRouteGroup(group.key));
+                card.addEventListener('mouseleave', () => unhighlightRouteGroup());
+                card.addEventListener('click', () => openRouteGroupDrawer(group));
+                card.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        openRouteGroupDrawer(group);
+                    }
                 });
                 sidebar.appendChild(card);
             }
         }
 
+        function populateAirlineDropdown(allDeals) {
+            const select = document.getElementById('airline-select');
+            if (!select) return;
+            const currentVal = state.airline;
+            const airlinesSet = new Set();
+            for (const d of allDeals) {
+                if (d.airline) {
+                    d.airline.split(',').map(s => s.trim()).forEach(a => { if (a) airlinesSet.add(a); });
+                }
+            }
+            const sortedAirlines = [...airlinesSet].sort();
+            select.innerHTML = '<option value="all">All Airlines</option>' +
+                sortedAirlines.map(a => `<option value="${a}" ${currentVal === a ? 'selected' : ''}>${a}</option>`).join('');
+        }
+
         function applyFilters() {
-            if (!deals) return;
-            const searchLower = state.search.toLowerCase();
-            const filtered = deals.filter(d => {
-                if (!state.origins.has(d.origin)) return false;
-                if (!state.tags.has(d.score?.tag || 'NORMAL')) return false;
+            if (!deals || !deals.length) return;
+
+            const searchLower = state.search.toLowerCase().trim();
+
+            // 1. Base Matches: search, price, airline, horizon, weekend, atl constraints
+            const baseMatches = deals.filter(d => {
                 if (d.price > state.maxPrice) return false;
-                if (state.stops === '0' && d.stops !== 0) return false;
-                if (state.stops === '1' && d.stops > 1) return false;
-                if (state.airline && state.airline !== 'all' && d.airline !== state.airline) return false;
+                if (state.airline && state.airline !== 'all' && !(d.airline || '').includes(state.airline)) return false;
                 if (state.weekendOnly && !isWeekendGetaway(d)) return false;
+                if (state.atlOnly && !d.isAllTimeLow) return false;
                 if (state.days && d.date) {
                     const flightDate = new Date(d.date);
                     const maxDate = new Date();
@@ -1894,39 +1828,80 @@
                     const matchDest = (d.destName || '').toLowerCase().includes(searchLower);
                     const matchCountry = (d.country || '').toLowerCase().includes(searchLower);
                     const matchCode = (d.dest || '').toLowerCase().includes(searchLower);
+                    const matchOrigin = (d.origin || '').toLowerCase().includes(searchLower);
                     const matchAirline = (d.airline || '').toLowerCase().includes(searchLower);
-                    if (!matchDest && !matchCountry && !matchCode && !matchAirline) return false;
+                    if (!matchDest && !matchCountry && !matchCode && !matchOrigin && !matchAirline) return false;
                 }
+                return true;
+            });
+
+            // 2. Origin airport counts (always shows available flights for that hub under current filters)
+            const originCounts = { PRG: 0, VIE: 0, BTS: 0, KTW: 0, OSR: 0 };
+            for (const d of baseMatches) {
+                if (originCounts[d.origin] !== undefined) {
+                    originCounts[d.origin]++;
+                }
+            }
+            for (const [orig, count] of Object.entries(originCounts)) {
+                const el = document.getElementById(`cnt-orig-${orig}`);
+                if (el) el.textContent = count;
+            }
+
+            // 3. Deal Tag counts (across active origins, or all hubs if none selected)
+            const activeOriginsForTags = state.origins.size > 0 ? state.origins : new Set(Object.keys(originCounts));
+            const tagCounts = { 'ERROR FARE': 0, 'GREAT DEAL': 0, 'GOOD DEAL': 0, 'NORMAL': 0 };
+            for (const d of baseMatches) {
+                if (activeOriginsForTags.has(d.origin)) {
+                    const tag = d.score?.tag || 'NORMAL';
+                    if (tagCounts[tag] !== undefined) tagCounts[tag]++;
+                }
+            }
+            const errCnt = document.getElementById('stat-error-cnt');
+            const grtCnt = document.getElementById('stat-great-cnt');
+            const gooCnt = document.getElementById('stat-good-cnt');
+            const norCnt = document.getElementById('stat-normal-cnt');
+            if (errCnt) errCnt.textContent = tagCounts['ERROR FARE'];
+            if (grtCnt) grtCnt.textContent = tagCounts['GREAT DEAL'];
+            if (gooCnt) gooCnt.textContent = tagCounts['GOOD DEAL'];
+            if (norCnt) norCnt.textContent = tagCounts['NORMAL'];
+
+            // 4. Trip style counts (Weekend and ATL)
+            const weekendCntEl = document.getElementById('cnt-weekend');
+            const atlCntEl = document.getElementById('cnt-atl');
+            if (weekendCntEl) {
+                weekendCntEl.textContent = baseMatches.filter(d => activeOriginsForTags.has(d.origin) && isWeekendGetaway(d)).length;
+            }
+            if (atlCntEl) {
+                atlCntEl.textContent = baseMatches.filter(d => activeOriginsForTags.has(d.origin) && d.isAllTimeLow).length;
+            }
+
+            // 5. Final Filtered Deals matching selected origins and selected tags
+            const filtered = baseMatches.filter(d => {
+                if (!state.origins.has(d.origin)) return false;
+                if (!state.tags.has(d.score?.tag || 'NORMAL')) return false;
                 return true;
             });
 
             const routeGroups = groupDealsByRoute(filtered);
 
-            const numErr = filtered.filter(d => d.score?.tag === 'ERROR FARE').length;
-            const numGrt = filtered.filter(d => d.score?.tag === 'GREAT DEAL').length;
-            const numGoo = filtered.filter(d => d.score?.tag === 'GOOD DEAL').length;
-            const numNor = filtered.filter(d => d.score?.tag === 'NORMAL').length;
-
-            const errCnt = document.getElementById('stat-error-cnt');
-            const grtCnt = document.getElementById('stat-great-cnt');
-            const gooCnt = document.getElementById('stat-good-cnt');
-            const norCnt = document.getElementById('stat-normal-cnt');
+            // 6. Header counters & stats
+            const hdrErr = document.getElementById('hdr-error-cnt');
+            const hdrGrt = document.getElementById('hdr-great-cnt');
+            const hdrRoutes = document.getElementById('hdr-routes-cnt');
             const totCnt = document.getElementById('stat-total-cnt');
 
-            if (errCnt) errCnt.textContent = numErr;
-            if (grtCnt) grtCnt.textContent = numGrt;
-            if (gooCnt) gooCnt.textContent = numGoo;
-            if (norCnt) norCnt.textContent = numNor;
+            if (hdrErr) hdrErr.textContent = tagCounts['ERROR FARE'];
+            if (hdrGrt) hdrGrt.textContent = tagCounts['GREAT DEAL'];
+            if (hdrRoutes) hdrRoutes.textContent = routeGroups.length;
             if (totCnt) totCnt.textContent = `${routeGroups.length} routes (${filtered.length} dates)`;
 
+            // 7. Update Map GeoJSON
             if (map && map.isStyleLoaded() && map.getSource('routes') && map.getSource('destinations')) {
-                const visGroups = (selectedRouteKey !== null && selectedRouteKey !== undefined)
-                    ? routeGroups.filter(g => g.key === selectedRouteKey)
-                    : routeGroups;
+                const visGroups = routeGroups;
 
                 const visDests = {
                     type: 'FeatureCollection',
-                    features: visGroups.map((g, i) => {
+                    features: visGroups.map((g) => {
                         const coords = getCoords(g.dest);
                         if (!coords) return null;
                         return {
@@ -1936,7 +1911,6 @@
                                 routeKey: g.key,
                                 dest: g.dest,
                                 destName: g.destName,
-                                idx: i,
                                 tag: g.score?.tag || 'NORMAL',
                                 color: TAG_COLORS[g.score?.tag] || '#555',
                                 priceRangeStr: g.priceRangeStr,
@@ -1948,7 +1922,7 @@
 
                 const visLines = {
                     type: 'FeatureCollection',
-                    features: visGroups.map((g, i) => {
+                    features: visGroups.map((g) => {
                         const from = getCoords(g.origin), to = getCoords(g.dest);
                         if (!from || !to) return null;
                         return {
@@ -1956,7 +1930,6 @@
                             geometry: { type: 'LineString', coordinates: makeArc(from, to) },
                             properties: {
                                 routeKey: g.key,
-                                idx: i,
                                 tag: g.score?.tag || 'NORMAL',
                                 color: TAG_COLORS[g.score?.tag] || '#555',
                                 priceRangeStr: g.priceRangeStr,
@@ -1979,20 +1952,21 @@
             if (!deals.length) return;
 
             allRouteGroups = groupDealsByRoute(deals);
+            populateAirlineDropdown(deals);
 
             await geocodeAllDeals(deals);
 
             const originCodes = [...new Set(deals.map(d => d.origin))];
-            originPoints = {
+            originPointsData = {
                 type: 'FeatureCollection',
                 features: originCodes.filter(c => getCoords(c)).map(code => ({
                     type: 'Feature', geometry: { type: 'Point', coordinates: getCoords(code) }, properties: { code }
                 }))
             };
 
-            destPoints = {
+            destPointsData = {
                 type: 'FeatureCollection',
-                features: allRouteGroups.map((g, i) => {
+                features: allRouteGroups.map((g) => {
                     const coords = getCoords(g.dest);
                     if (!coords) return null;
                     return {
@@ -2002,7 +1976,6 @@
                             routeKey: g.key,
                             dest: g.dest,
                             destName: g.destName,
-                            idx: i,
                             tag: g.score?.tag || 'NORMAL',
                             color: TAG_COLORS[g.score?.tag] || '#555',
                             priceRangeStr: g.priceRangeStr,
@@ -2012,9 +1985,9 @@
                 }).filter(Boolean)
             };
 
-            routeLines = {
+            routeLinesData = {
                 type: 'FeatureCollection',
-                features: allRouteGroups.map((g, i) => {
+                features: allRouteGroups.map((g) => {
                     const from = getCoords(g.origin), to = getCoords(g.dest);
                     if (!from || !to) return null;
                     return {
@@ -2022,7 +1995,6 @@
                         geometry: { type: 'LineString', coordinates: makeArc(from, to) },
                         properties: {
                             routeKey: g.key,
-                            idx: i,
                             tag: g.score?.tag || 'NORMAL',
                             color: TAG_COLORS[g.score?.tag] || '#555',
                             priceRangeStr: g.priceRangeStr,
@@ -2032,25 +2004,27 @@
                 }).filter(Boolean)
             };
 
-            if (map.getSource('routes')) map.getSource('routes').setData(routeLines);
-            if (map.getSource('destinations')) map.getSource('destinations').setData(destPoints);
-            if (map.getSource('origins')) map.getSource('origins').setData(originPoints);
+            if (map && map.getSource('routes')) map.getSource('routes').setData(routeLinesData);
+            if (map && map.getSource('destinations')) map.getSource('destinations').setData(destPointsData);
+            if (map && map.getSource('origins')) map.getSource('origins').setData(originPointsData);
 
             if (typeof window.reAttachLayers === 'function') window.reAttachLayers();
             applyFilters();
         }
 
         map.on('style.load', () => {
-            map.setFog({ color: 'rgba(10, 10, 30, 1)', 'high-color': 'rgba(20, 20, 60, 1)', 'space-color': 'rgba(5, 5, 15, 1)', 'star-intensity': 0.6 });
+            try {
+                map.setFog({ color: 'rgba(10, 10, 30, 1)', 'high-color': 'rgba(20, 20, 60, 1)', 'space-color': 'rgba(5, 5, 15, 1)', 'star-intensity': 0.6 });
+            } catch { }
             if (window.reAttachLayers) window.reAttachLayers();
         });
 
         map.on('load', async () => {
             window.reAttachLayers = function () {
-                if (!map.isStyleLoaded()) return;
-                if (!map.getSource('routes') && routeLines) map.addSource('routes', { type: 'geojson', data: routeLines });
-                if (!map.getSource('destinations') && destPoints) map.addSource('destinations', { type: 'geojson', data: destPoints });
-                if (!map.getSource('origins') && originPoints) map.addSource('origins', { type: 'geojson', data: originPoints });
+                if (!map || !map.isStyleLoaded()) return;
+                if (!map.getSource('routes') && routeLinesData) map.addSource('routes', { type: 'geojson', data: routeLinesData });
+                if (!map.getSource('destinations') && destPointsData) map.addSource('destinations', { type: 'geojson', data: destPointsData });
+                if (!map.getSource('origins') && originPointsData) map.addSource('origins', { type: 'geojson', data: originPointsData });
 
                 if (!map.getLayer('route-lines') && map.getSource('routes')) {
                     map.addLayer({
@@ -2070,43 +2044,19 @@
                         paint: { 'circle-radius': 6, 'circle-color': '#ff6b6b', 'circle-stroke-width': 2, 'circle-stroke-color': '#fff' }
                     });
                 }
-                if (typeof state !== 'undefined' && state && typeof applyFilters === 'function') applyFilters();
             };
 
-            let report;
-            const isStaticHost = window.location.hostname.endsWith('github.io') || window.location.protocol === 'https:';
-            if (isStaticHost) {
-                try {
-                    const res = await fetch('error_fares_report.json');
-                    if (res.ok) report = await res.json();
-                } catch { }
-            }
-            if (!report && API_BASE && window.location.port === '3000') {
-                try {
-                    const res = await fetch(`${API_BASE}/api/report`);
-                    if (res.ok) report = await res.json();
-                } catch { }
-            }
-            if (!report) {
-                try {
-                    const res = await fetch('error_fares_report.json');
-                    if (res.ok) report = await res.json();
-                } catch { return; }
+            if (deals.length > 0) {
+                await updateMapSourcesAndFilters(deals);
             }
 
-            if (report?.allResults) {
-                await updateMapSourcesAndFilters(report.allResults);
-            }
-
-            window.reAttachLayers();
-
-            // Interactive Hover Popups
+            // Interactive Map Hover Popups
             const hoverPopup = new maptilersdk.Popup({ closeButton: false, closeOnClick: false, offset: 12 });
 
             map.on('mouseenter', 'dest-circles', (e) => {
                 map.getCanvas().style.cursor = 'pointer';
                 const props = e.features[0].properties;
-                const group = allRouteGroups[props.idx];
+                const group = getRouteGroupByKey(props.routeKey);
                 if (group) {
                     highlightRouteGroup(group.key);
                     const coords = e.features[0].geometry.coordinates.slice();
@@ -2114,7 +2064,7 @@
                         <div style="font-family: Inter, sans-serif; font-size: 12px; line-height: 1.4; color: #f0f0f5; padding: 2px;">
                             <div style="font-weight: 800;">${group.origin} → ${group.destName} (${group.country})</div>
                             <div style="font-weight: 800; color: ${props.color};">${group.priceRangeStr} · ${group.score?.tag || 'DEAL'}</div>
-                            <div style="font-size: 10px; color: #8a8a9e;">📅 ${group.offers.length} available flight dates · ${group.airlines}</div>
+                            <div style="font-size: 10px; color: #94a3b8;">📅 ${group.offers.length} available flight dates · ${group.airlines}</div>
                         </div>
                     `).addTo(map);
                 }
@@ -2129,14 +2079,14 @@
             map.on('mouseenter', 'route-lines', (e) => {
                 map.getCanvas().style.cursor = 'pointer';
                 const props = e.features[0].properties;
-                const group = allRouteGroups[props.idx];
+                const group = getRouteGroupByKey(props.routeKey);
                 if (group) {
                     highlightRouteGroup(group.key);
                     hoverPopup.setLngLat(e.lngLat).setHTML(`
                         <div style="font-family: Inter, sans-serif; font-size: 12px; line-height: 1.4; color: #f0f0f5; padding: 2px;">
                             <div style="font-weight: 800;">${group.origin} → ${group.destName} (${group.country})</div>
                             <div style="font-weight: 800; color: ${props.color};">${group.priceRangeStr} · ${group.score?.tag || 'DEAL'}</div>
-                            <div style="font-size: 10px; color: #8a8a9e;">📅 ${group.offers.length} available flight dates · ${group.airlines}</div>
+                            <div style="font-size: 10px; color: #94a3b8;">📅 ${group.offers.length} flight dates · ${group.airlines}</div>
                         </div>
                     `).addTo(map);
                 }
@@ -2154,7 +2104,7 @@
                 const coords = e.features[0].geometry.coordinates.slice();
                 hoverPopup.setLngLat(coords).setHTML(`
                     <div style="font-family: Inter, sans-serif; font-weight: 700; font-size: 12px; color: #f0f0f5; padding: 2px;">
-                        ✈️ Airport: ${props.code}
+                        ✈️ Origin Hub: ${props.code}
                     </div>
                 `).addTo(map);
             });
@@ -2164,241 +2114,17 @@
                 hoverPopup.remove();
             });
 
-            // Map Click Handlers (Destination Circles & Flight Paths)
+            // Map Click Handlers
             map.on('click', 'dest-circles', (e) => {
                 const props = e.features[0].properties;
-                const group = allRouteGroups[props.idx];
+                const group = getRouteGroupByKey(props.routeKey);
                 if (group) openRouteGroupDrawer(group);
             });
 
             map.on('click', 'route-lines', (e) => {
                 const props = e.features[0].properties;
-                const group = allRouteGroups[props.idx];
+                const group = getRouteGroupByKey(props.routeKey);
                 if (group) openRouteGroupDrawer(group);
-            });
-
-            const dCloseEl = document.getElementById('d-close');
-            const drawerOverlayEl = document.getElementById('drawer-overlay');
-            if (dCloseEl) dCloseEl.addEventListener('click', closeDrawer);
-            if (drawerOverlayEl) drawerOverlayEl.addEventListener('click', closeDrawer);
-            window.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') closeDrawer();
-            });
-
-            // Events
-            const searchEl = document.getElementById('search-input');
-            if (searchEl) {
-                searchEl.addEventListener('input', (e) => {
-                    state.search = e.target.value;
-                    applyFilters();
-                });
-            }
-
-            document.querySelectorAll('.chip[data-filter="origin"]').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    btn.classList.toggle('active');
-                    const val = btn.dataset.value;
-                    if (state.origins.has(val)) state.origins.delete(val); else state.origins.add(val);
-                    applyFilters();
-                });
-            });
-
-            document.querySelectorAll('.chip[data-filter="tag"]').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    btn.classList.toggle('active');
-                    const val = btn.dataset.value;
-                    if (state.tags.has(val)) state.tags.delete(val); else state.tags.add(val);
-                    applyFilters();
-                });
-            });
-
-            document.querySelectorAll('.chip[data-filter="stops"]').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('.chip[data-filter="stops"]').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    state.stops = btn.dataset.value;
-                    applyFilters();
-                });
-            });
-
-            document.querySelectorAll('.chip[data-filter="weekend"]').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    state.weekendOnly = !state.weekendOnly;
-                    btn.classList.toggle('active', state.weekendOnly);
-                    applyFilters();
-                });
-            });
-
-            const sortEl = document.getElementById('sort-select');
-            if (sortEl) {
-                sortEl.addEventListener('change', (e) => {
-                    state.sort = e.target.value;
-                    applyFilters();
-                });
-            }
-
-            const airlineSelect = document.getElementById('airline-select');
-            if (airlineSelect) {
-                airlineSelect.addEventListener('change', (e) => {
-                    state.airline = e.target.value;
-                    applyFilters();
-                });
-            }
-
-            document.querySelectorAll('.sug-chip').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const searchVal = btn.dataset.search || '';
-                    const searchEl = document.getElementById('search-input');
-                    if (searchEl) searchEl.value = searchVal;
-                    state.search = searchVal;
-                    applyFilters();
-                });
-            });
-
-            const priceSlider = document.getElementById('price-slider');
-            if (priceSlider) {
-                priceSlider.addEventListener('input', (e) => {
-                    state.maxPrice = Number(e.target.value);
-                    const valBadge = document.getElementById('price-val');
-                    if (valBadge) valBadge.textContent = `€${state.maxPrice}`;
-                    applyFilters();
-                });
-            }
-
-            // Mobile Nav
-            const btnMap = document.getElementById('btn-view-map');
-            const btnList = document.getElementById('btn-view-list');
-            const sidebar = document.getElementById('sidebar');
-
-            if (btnMap && sidebar) {
-                btnMap.addEventListener('click', () => {
-                    btnMap.classList.add('active');
-                    if (btnList) btnList.classList.remove('active');
-                    sidebar.classList.remove('mobile-show');
-                });
-            }
-            if (btnList && sidebar) {
-                btnList.addEventListener('click', () => {
-                    btnList.classList.add('active');
-                    if (btnMap) btnMap.classList.remove('active');
-                    sidebar.classList.add('mobile-show');
-                });
-            }
-
-            // Toggle Filter Popover Drawer
-            const btnToggleFilters = document.getElementById('btn-toggle-filters');
-            const filterPopover = document.getElementById('filter-popover');
-            if (btnToggleFilters && filterPopover) {
-                btnToggleFilters.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    filterPopover.classList.toggle('open');
-                    btnToggleFilters.classList.toggle('active', filterPopover.classList.contains('open'));
-                });
-                document.addEventListener('click', (e) => {
-                    if (filterPopover.classList.contains('open') && !filterPopover.contains(e.target) && e.target !== btnToggleFilters) {
-                        filterPopover.classList.remove('open');
-                        btnToggleFilters.classList.remove('active');
-                    }
-                });
-            }
-
-            // Quick Preset Bar Handlers
-            const pUnder50 = document.getElementById('preset-under50');
-            const pTopDeals = document.getElementById('preset-topdeals');
-            const pDirect = document.getElementById('preset-direct');
-            const pWeekend = document.getElementById('preset-weekend');
-            const pReset = document.getElementById('preset-reset');
-
-            function syncPresetUI() {
-                if (pUnder50) pUnder50.classList.toggle('active', state.maxPrice === 50);
-                if (pTopDeals) pTopDeals.classList.toggle('active', state.tags.size === 2 && state.tags.has('ERROR FARE') && state.tags.has('GREAT DEAL'));
-                if (pDirect) pDirect.classList.toggle('active', state.stops === '0');
-                if (pWeekend) pWeekend.classList.toggle('active', state.weekendOnly);
-            }
-
-            if (pUnder50) {
-                pUnder50.addEventListener('click', () => {
-                    state.maxPrice = state.maxPrice === 50 ? 2000 : 50;
-                    const priceSlider = document.getElementById('price-slider');
-                    const valBadge = document.getElementById('price-val');
-                    if (priceSlider) priceSlider.value = state.maxPrice;
-                    if (valBadge) valBadge.textContent = `€${state.maxPrice}`;
-                    syncPresetUI();
-                    applyFilters();
-                });
-            }
-
-            if (pTopDeals) {
-                pTopDeals.addEventListener('click', () => {
-                    if (state.tags.size === 2 && state.tags.has('ERROR FARE') && state.tags.has('GREAT DEAL')) {
-                        state.tags = new Set(['ERROR FARE', 'GREAT DEAL', 'GOOD DEAL', 'NORMAL']);
-                    } else {
-                        state.tags = new Set(['ERROR FARE', 'GREAT DEAL']);
-                    }
-                    document.querySelectorAll('.chip[data-filter="tag"]').forEach(b => {
-                        b.classList.toggle('active', state.tags.has(b.dataset.value));
-                    });
-                    syncPresetUI();
-                    applyFilters();
-                });
-            }
-
-            if (pDirect) {
-                pDirect.addEventListener('click', () => {
-                    state.stops = state.stops === '0' ? 'all' : '0';
-                    document.querySelectorAll('.chip[data-filter="stops"]').forEach(b => {
-                        b.classList.toggle('active', b.dataset.value === state.stops);
-                    });
-                    syncPresetUI();
-                    applyFilters();
-                });
-            }
-
-            if (pWeekend) {
-                pWeekend.addEventListener('click', () => {
-                    state.weekendOnly = !state.weekendOnly;
-                    document.querySelectorAll('.chip[data-filter="weekend"]').forEach(b => {
-                        b.classList.toggle('active', state.weekendOnly);
-                    });
-                    syncPresetUI();
-                    applyFilters();
-                });
-            }
-
-            if (pReset) {
-                pReset.addEventListener('click', () => {
-                    state.origins = new Set(['PRG', 'VIE', 'BTS', 'KTW', 'OSR']);
-                    state.tags = new Set(['ERROR FARE', 'GREAT DEAL', 'GOOD DEAL', 'NORMAL']);
-                    state.stops = 'all';
-                    state.search = '';
-                    state.maxPrice = 2000;
-                    state.sort = 'score';
-                    state.days = 365;
-                    state.weekendOnly = false;
-
-                    const searchEl = document.getElementById('search-input');
-                    const priceSlider = document.getElementById('price-slider');
-                    const valBadge = document.getElementById('price-val');
-                    if (searchEl) searchEl.value = '';
-                    if (priceSlider) priceSlider.value = 2000;
-                    if (valBadge) valBadge.textContent = '€2000';
-
-                    document.querySelectorAll('.chip[data-filter="origin"]').forEach(b => b.classList.add('active'));
-                    document.querySelectorAll('.chip[data-filter="tag"]').forEach(b => b.classList.add('active'));
-                    document.querySelectorAll('.chip[data-filter="stops"]').forEach(b => b.classList.toggle('active', b.dataset.value === 'all'));
-                    document.querySelectorAll('.chip[data-filter="weekend"]').forEach(b => b.classList.remove('active'));
-                    document.querySelectorAll('.chip[data-filter="days"]').forEach(b => b.classList.toggle('active', b.dataset.value === '365'));
-
-                    syncPresetUI();
-                    showToast('↺ Filters Reset');
-                    applyFilters();
-                });
-            }
-
-            map.on('click', 'dest-circles', (e) => {
-                const props = e.features[0].properties;
-                const deal = deals[props.idx];
-                if (deal) openDrawer(deal);
             });
 
             map.on('click', 'origin-dots', (e) => {
@@ -2416,7 +2142,122 @@
                 showToast(`Filter Origin: ${code}`);
                 applyFilters();
             });
+        });
 
+        // Fast Asynchronous Data Loader (independent of map load time)
+        async function loadDealsData() {
+            let report = null;
+            const isStaticHost = window.location.hostname.endsWith('github.io') || window.location.protocol === 'https:';
+            if (isStaticHost) {
+                try {
+                    const res = await fetch('error_fares_report.json');
+                    if (res.ok) report = await res.json();
+                } catch { }
+            }
+            if (!report && API_BASE) {
+                try {
+                    const res = await fetch(`${API_BASE}/api/report`);
+                    if (res.ok) report = await res.json();
+                } catch { }
+            }
+            if (!report) {
+                try {
+                    const res = await fetch('error_fares_report.json');
+                    if (res.ok) report = await res.json();
+                } catch { }
+            }
+
+            if (report?.allResults) {
+                deals = report.allResults;
+                allRouteGroups = groupDealsByRoute(deals);
+                populateAirlineDropdown(deals);
+                applyFilters();
+
+                // Process geocoding and map updates
+                geocodeAllDeals(deals).then(() => {
+                    if (map && map.isStyleLoaded()) {
+                        updateMapSourcesAndFilters(deals);
+                    }
+                });
+            }
+        }
+
+        // Global DOM Initialization
+        window.addEventListener('DOMContentLoaded', () => {
+            // Immediately start loading deals data
+            loadDealsData();
+
+            // Drawer Close
+            const dCloseEl = document.getElementById('d-close');
+            const drawerOverlayEl = document.getElementById('drawer-overlay');
+            if (dCloseEl) dCloseEl.addEventListener('click', closeDrawer);
+            if (drawerOverlayEl) drawerOverlayEl.addEventListener('click', closeDrawer);
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeDrawer();
+            });
+
+            // Search Filter
+            const searchEl = document.getElementById('search-input');
+            if (searchEl) {
+                searchEl.addEventListener('input', (e) => {
+                    state.search = e.target.value;
+                    applyFilters();
+                });
+            }
+
+            // Origin Airport Chips
+            document.querySelectorAll('.chip[data-filter="origin"]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const val = btn.dataset.value;
+                    if (state.origins.has(val)) {
+                        if (state.origins.size > 1) state.origins.delete(val);
+                    } else {
+                        state.origins.add(val);
+                    }
+                    btn.classList.toggle('active', state.origins.has(val));
+                    applyFilters();
+                });
+            });
+
+            // Deal Tag Chips
+            document.querySelectorAll('.chip[data-filter="tag"]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const val = btn.dataset.value;
+                    if (state.tags.has(val)) {
+                        if (state.tags.size > 1) state.tags.delete(val);
+                    } else {
+                        state.tags.add(val);
+                    }
+                    btn.classList.toggle('active', state.tags.has(val));
+                    const pTopDeals = document.getElementById('preset-topdeals');
+                    if (pTopDeals) pTopDeals.classList.toggle('active', state.tags.size === 1 && state.tags.has('ERROR FARE'));
+                    applyFilters();
+                });
+            });
+
+            // Weekend Toggle Chip
+            document.querySelectorAll('.chip[data-filter="weekend"]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    state.weekendOnly = !state.weekendOnly;
+                    btn.classList.toggle('active', state.weekendOnly);
+                    const pWeekend = document.getElementById('preset-weekend');
+                    if (pWeekend) pWeekend.classList.toggle('active', state.weekendOnly);
+                    applyFilters();
+                });
+            });
+
+            // All-Time Low Toggle Chip
+            document.querySelectorAll('.chip[data-filter="atl"]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    state.atlOnly = !state.atlOnly;
+                    btn.classList.toggle('active', state.atlOnly);
+                    const pAtl = document.getElementById('preset-atl');
+                    if (pAtl) pAtl.classList.toggle('active', state.atlOnly);
+                    applyFilters();
+                });
+            });
+
+            // Booking Horizon Chips
             document.querySelectorAll('.chip[data-filter="days"]').forEach(btn => {
                 btn.addEventListener('click', () => {
                     document.querySelectorAll('.chip[data-filter="days"]').forEach(b => b.classList.remove('active'));
@@ -2426,7 +2267,167 @@
                 });
             });
 
-            applyFilters();
+            // Sort & Airline Selectors
+            const sortEl = document.getElementById('sort-select');
+            if (sortEl) {
+                sortEl.addEventListener('change', (e) => {
+                    state.sort = e.target.value;
+                    applyFilters();
+                });
+            }
+
+            const airlineSelect = document.getElementById('airline-select');
+            if (airlineSelect) {
+                airlineSelect.addEventListener('change', (e) => {
+                    state.airline = e.target.value;
+                    applyFilters();
+                });
+            }
+
+            // Price Slider
+            const priceSlider = document.getElementById('price-slider');
+            if (priceSlider) {
+                priceSlider.addEventListener('input', (e) => {
+                    state.maxPrice = Number(e.target.value);
+                    priceSlider.setAttribute('aria-valuenow', state.maxPrice);
+                    const valBadge = document.getElementById('price-val');
+                    if (valBadge) valBadge.textContent = `€${state.maxPrice}`;
+                    const pUnder50 = document.getElementById('preset-under50');
+                    if (pUnder50) pUnder50.classList.toggle('active', state.maxPrice === 50);
+                    applyFilters();
+                });
+            }
+
+            // Topbar Preset Buttons Handlers
+            const pUnder50 = document.getElementById('preset-under50');
+            const pTopDeals = document.getElementById('preset-topdeals');
+            const pWeekend = document.getElementById('preset-weekend');
+            const pAtl = document.getElementById('preset-atl');
+            const pReset = document.getElementById('preset-reset');
+
+            if (pUnder50) {
+                pUnder50.addEventListener('click', () => {
+                    state.maxPrice = state.maxPrice === 50 ? 2000 : 50;
+                    if (priceSlider) {
+                        priceSlider.value = state.maxPrice;
+                        priceSlider.setAttribute('aria-valuenow', state.maxPrice);
+                    }
+                    const valBadge = document.getElementById('price-val');
+                    if (valBadge) valBadge.textContent = `€${state.maxPrice}`;
+                    pUnder50.classList.toggle('active', state.maxPrice === 50);
+                    applyFilters();
+                });
+            }
+
+            if (pTopDeals) {
+                pTopDeals.addEventListener('click', () => {
+                    if (state.tags.size === 1 && state.tags.has('ERROR FARE')) {
+                        state.tags = new Set(['ERROR FARE', 'GREAT DEAL', 'GOOD DEAL', 'NORMAL']);
+                    } else {
+                        state.tags = new Set(['ERROR FARE']);
+                    }
+                    document.querySelectorAll('.chip[data-filter="tag"]').forEach(b => {
+                        b.classList.toggle('active', state.tags.has(b.dataset.value));
+                    });
+                    pTopDeals.classList.toggle('active', state.tags.size === 1 && state.tags.has('ERROR FARE'));
+                    applyFilters();
+                });
+            }
+
+            if (pWeekend) {
+                pWeekend.addEventListener('click', () => {
+                    state.weekendOnly = !state.weekendOnly;
+                    document.querySelectorAll('.chip[data-filter="weekend"]').forEach(b => {
+                        b.classList.toggle('active', state.weekendOnly);
+                    });
+                    pWeekend.classList.toggle('active', state.weekendOnly);
+                    applyFilters();
+                });
+            }
+
+            if (pAtl) {
+                pAtl.addEventListener('click', () => {
+                    state.atlOnly = !state.atlOnly;
+                    document.querySelectorAll('.chip[data-filter="atl"]').forEach(b => {
+                        b.classList.toggle('active', state.atlOnly);
+                    });
+                    pAtl.classList.toggle('active', state.atlOnly);
+                    applyFilters();
+                });
+            }
+
+            if (pReset) {
+                pReset.addEventListener('click', () => {
+                    state.origins = new Set(['PRG', 'VIE', 'BTS', 'KTW', 'OSR']);
+                    state.tags = new Set(['ERROR FARE', 'GREAT DEAL', 'GOOD DEAL', 'NORMAL']);
+                    state.airline = 'all';
+                    state.search = '';
+                    state.maxPrice = 2000;
+                    state.sort = 'score';
+                    state.days = 90;
+                    state.weekendOnly = false;
+                    state.atlOnly = false;
+
+                    if (searchEl) searchEl.value = '';
+                    if (priceSlider) {
+                        priceSlider.value = 2000;
+                        priceSlider.setAttribute('aria-valuenow', 2000);
+                    }
+                    const valBadge = document.getElementById('price-val');
+                    if (valBadge) valBadge.textContent = '€2000';
+                    if (airlineSelect) airlineSelect.value = 'all';
+                    if (sortEl) sortEl.value = 'score';
+
+                    document.querySelectorAll('.chip[data-filter="origin"]').forEach(b => b.classList.add('active'));
+                    document.querySelectorAll('.chip[data-filter="tag"]').forEach(b => b.classList.add('active'));
+                    document.querySelectorAll('.chip[data-filter="weekend"]').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.chip[data-filter="atl"]').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.chip[data-filter="days"]').forEach(b => b.classList.toggle('active', b.dataset.value === '90'));
+
+                    if (pUnder50) pUnder50.classList.remove('active');
+                    if (pTopDeals) pTopDeals.classList.remove('active');
+                    if (pWeekend) pWeekend.classList.remove('active');
+                    if (pAtl) pAtl.classList.remove('active');
+
+                    showToast('↺ Filters Reset');
+                    applyFilters();
+                });
+            }
+
+            // Mobile Navigation Buttons
+            const btnMap = document.getElementById('btn-view-map');
+            const btnList = document.getElementById('btn-view-list');
+            const btnFilters = document.getElementById('btn-view-filters');
+            const sidebar = document.getElementById('sidebar');
+            const leftSidebar = document.getElementById('left-sidebar');
+
+            if (btnMap) {
+                btnMap.addEventListener('click', () => {
+                    btnMap.classList.add('active');
+                    if (btnList) btnList.classList.remove('active');
+                    if (btnFilters) btnFilters.classList.remove('active');
+                    if (sidebar) sidebar.classList.remove('mobile-show');
+                    if (leftSidebar) leftSidebar.classList.remove('mobile-show');
+                });
+            }
+            if (btnList) {
+                btnList.addEventListener('click', () => {
+                    btnList.classList.add('active');
+                    if (btnMap) btnMap.classList.remove('active');
+                    if (btnFilters) btnFilters.classList.remove('active');
+                    if (sidebar) sidebar.classList.add('mobile-show');
+                    if (leftSidebar) leftSidebar.classList.remove('mobile-show');
+                });
+            }
+            if (btnFilters) {
+                btnFilters.addEventListener('click', () => {
+                    btnFilters.classList.add('active');
+                    if (btnMap) btnMap.classList.remove('active');
+                    if (btnList) btnList.classList.remove('active');
+                    if (leftSidebar) leftSidebar.classList.add('mobile-show');
+                    if (sidebar) sidebar.classList.remove('mobile-show');
+                });
+            }
         });
     </script>
 </body>

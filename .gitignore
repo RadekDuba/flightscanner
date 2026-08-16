@@ -1,6 +1,7 @@
 # Secrets & local env
 .env
 active_keys.json
+last_results.json
 
 # Dependencies
 node_modules/

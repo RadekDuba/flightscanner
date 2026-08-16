@@ -1,13 +1,21 @@
 {
-  "name": "FlightScanner v3.5 — Flight Error Fares & Deals",
+  "name": "FlightScanner v3.6 — Real-Time Flight Intelligence & Error Fare Hunter",
   "short_name": "FlightScanner",
-  "description": "Real-time 3D flight error fare & deal map tracker",
+  "description": "Real-time 3D flight error fare hunter and market price intelligence platform across Central European hubs.",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#0d0f17",
-  "theme_color": "#0d0f17",
+  "background_color": "#06070b",
+  "theme_color": "#06070b",
   "orientation": "any",
+  "categories": ["travel", "utilities", "finance"],
   "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔥</text></svg>",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
     {
       "src": "https://cdn-icons-png.flaticon.com/512/7893/7893979.png",
       "sizes": "192x192",

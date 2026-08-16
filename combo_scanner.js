@@ -54,6 +54,20 @@ export function buildHubSpokeCombos(leg1Flights, leg2Flights) {
 
             const totalPrice = Math.round((l1.price + l2.price) * 100) / 100;
             const hubName = l1.destName || l1.dest;
+            let layoverHours = 4;
+            if (l1.arrival && l2.departure) {
+                const arr = new Date(l1.arrival).getTime();
+                const dep = new Date(l2.departure).getTime();
+                if (!isNaN(arr) && !isNaN(dep) && dep > arr) {
+                    layoverHours = Math.round(((dep - arr) / (1000 * 60 * 60)) * 10) / 10;
+                }
+            }
+
+            const retDate = l2.returnDate || l1.returnDate;
+            const [yyyy, mm, dd] = l1.date.split('-');
+            const [ryyyy, rmm, rdd] = (retDate || l1.date).split('-');
+            const skyscannerUrl = `https://www.skyscanner.net/transport/flights/${l1.origin.toLowerCase()}/${l2.dest.toLowerCase()}/${yyyy.substring(2)}${mm}${dd}/${ryyyy.substring(2)}${rmm}${rdd}/`;
+            const googleFlightsUrl = `https://www.google.com/travel/flights?q=flights+from+${l1.origin}+to+${l2.dest}+on+${l1.date}+through+${retDate}`;
 
             combos.push({
                 origin: l1.origin,
@@ -63,7 +77,7 @@ export function buildHubSpokeCombos(leg1Flights, leg2Flights) {
                 destName: l2.destName,
                 country: l2.country,
                 date: l1.date,
-                returnDate: l2.returnDate || l1.returnDate,
+                returnDate: retDate,
                 tripDays: l1.tripDays || 7,
                 price: totalPrice,
                 currency: 'EUR',
@@ -71,7 +85,7 @@ export function buildHubSpokeCombos(leg1Flights, leg2Flights) {
                 stops: 1,
                 isSelfTransfer: true,
                 layovers: {
-                    outbound: [{ code: l1.dest, city: hubName, hours: 4 }],
+                    outbound: [{ code: l1.dest, city: hubName, hours: layoverHours }],
                     return: []
                 },
                 bookingLinks: {
@@ -81,7 +95,8 @@ export function buildHubSpokeCombos(leg1Flights, leg2Flights) {
                     },
                     leg1: l1.bookingLinks?.airline || null,
                     leg2: l2.bookingLinks?.airline || null,
-                    skyscanner: l1.bookingLinks?.skyscanner || null,
+                    skyscanner: skyscannerUrl,
+                    googleFlights: googleFlightsUrl,
                 },
                 source: 'self_transfer_combo',
             });

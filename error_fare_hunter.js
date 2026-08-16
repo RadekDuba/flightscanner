@@ -351,6 +351,8 @@ async function kiwiAnywhereSearch(origin, dateFrom, dateTo, nightsMin, nightsMax
                     country: f.countryTo?.name || '',
                     date: departDate,
                     returnDate,
+                    departure: f.local_departure || (f.dTime ? new Date(f.dTime * 1000).toISOString() : ''),
+                    arrival: lastOutbound?.local_arrival || f.local_arrival || '',
                     tripDays,
                     price: f.price,
                     currency: 'EUR',
@@ -893,4 +895,11 @@ ${c.magenta}${c.bold}  ╔══════════════════
     console.log('');
 }
 
-main().catch(err => { log('warn', `Fatal: ${err.message}`); process.exit(1); });
+const isDirectRun = process.argv[1] && (
+    process.argv[1].endsWith('error_fare_hunter.js') ||
+    process.argv[1].replace(/\\/g, '/').endsWith('error_fare_hunter.js')
+);
+
+if (isDirectRun) {
+    main().catch(err => { log('warn', `Fatal: ${err.message}`); process.exit(1); });
+}

@@ -40108,10 +40108,10 @@
       "origin": "PRG",
       "dest": "BCN",
       "destName": "Barcelona",
-      "allTimeLow": 78,
-      "allTimeLowDate": "2026-11-04",
+      "allTimeLow": 45,
+      "allTimeLowDate": "2026-09-01",
       "allTimeHigh": 147,
-      "scansCount": 47,
+      "scansCount": 48,
       "history": [
         {
           "ts": "2026-07-29T21:43:44.741Z",
@@ -40438,9 +40438,17 @@
           "returnDate": "2026-09-16",
           "airline": "VY",
           "tripDays": 12
+        },
+        {
+          "ts": "2026-08-16T09:11:06.961Z",
+          "price": 45,
+          "date": "2026-09-01",
+          "returnDate": "2026-09-08",
+          "airline": "Ryanair",
+          "tripDays": 7
         }
       ],
-      "avgPrice": 105
+      "avgPrice": 103
     },
     "KTW→HER": {
       "origin": "KTW",
@@ -80901,6 +80909,6 @@
       "avgPrice": 562
     }
   },
-  "lastScan": "2026-08-08T18:38:11.215Z",
-  "totalScans": 16
+  "lastScan": "2026-08-16T09:11:06.961Z",
+  "totalScans": 17
 }

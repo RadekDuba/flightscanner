@@ -47,11 +47,19 @@ async function safeFetch(url, opts = {}) {
 }
 
 function isPlaceholder(val) {
-    const lower = val.toLowerCase();
-    const bad = ['your_', 'placeholder', 'xxx', 'INSERT', 'REPLACE', 'TODO', 'CHANGEME',
+    if (!val || typeof val !== 'string') return true;
+    const lower = val.toLowerCase().trim();
+    if (lower.startsWith('$') || lower.startsWith('process.env') || lower.includes('${')) return true;
+    const bad = [
+        'your_', 'placeholder', 'xxx', 'insert', 'replace', 'todo', 'changeme',
         'example', 'test_key', 'dummy', 'fake', 'sample', 'demo', '<', '>', '{', '}',
-        'put_your', 'enter_your', 'undefined', 'null', 'none'];
-    return bad.some(p => lower.includes(p));
+        'put_your', 'enter_your', 'undefined', 'null', 'none', 'react_app', 'sheety',
+        'derivation', 'secure-value', 'api_key', 'secret_key', 'my_token', '1234567890abcdef'
+    ];
+    if (bad.some(p => lower.includes(p))) return true;
+    // Check if key is just an identifier like MY_API_KEY
+    if (/^[A-Z0-9_]{10,}$/.test(val) && val.includes('_')) return true;
+    return false;
 }
 
 // ─── Flight API Patterns ────────────────────────────────────
@@ -411,4 +419,11 @@ ${c.cyan}${c.bold}  ╔═══════════════════
     console.log('');
 }
 
-main().catch(err => { log('err', `Fatal: ${err.message}`); process.exit(1); });
+const isDirectRun = process.argv[1] && (
+    process.argv[1].endsWith('scan_keys.js') ||
+    process.argv[1].replace(/\\/g, '/').endsWith('scan_keys.js')
+);
+
+if (isDirectRun) {
+    main().catch(err => { log('err', `Fatal: ${err.message}`); process.exit(1); });
+}

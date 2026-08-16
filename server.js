@@ -1,23 +1,49 @@
 #!/usr/bin/env node
-// Simple static file server for the deal map
+// ═══════════════════════════════════════════════════════════
+//  FLIGHTSCANNER — High-Performance Local & API Server
+//  Serves the Tactical Glassmorphism dashboard & live API endpoints
+// ═══════════════════════════════════════════════════════════
+
 import { createServer } from 'http';
 import { readFileSync, existsSync } from 'fs';
-import { resolve, extname } from 'path';
+import { resolve, extname, normalize } from 'path';
 import { spawn } from 'child_process';
 import { getRoutePriceHistory } from './history_db.js';
 
-const PORT = 3000;
+const PORT = parseInt(process.env.PORT || '3000', 10);
+const ROOT_DIR = resolve('.');
+
 const MIME = {
-    '.html': 'text/html', '.js': 'application/javascript',
-    '.json': 'application/json', '.css': 'text/css',
-    '.png': 'image/png', '.svg': 'image/svg+xml',
+    '.html': 'text/html; charset=utf-8',
+    '.js': 'application/javascript; charset=utf-8',
+    '.json': 'application/json; charset=utf-8',
+    '.css': 'text/css; charset=utf-8',
+    '.png': 'image/png',
+    '.jpg': 'image/jpeg',
+    '.jpeg': 'image/jpeg',
+    '.svg': 'image/svg+xml',
+    '.webp': 'image/webp',
+    '.ico': 'image/x-icon',
+    '.webmanifest': 'application/manifest+json',
+    '.map': 'application/json',
+    '.txt': 'text/plain; charset=utf-8',
 };
+
+// Files that should never be served directly via HTTP
+const BLOCKED_PATTERNS = [
+    /\.env($|\.)/i,
+    /^\.git/i,
+    /\.key$/i,
+    /\.pem$/i,
+    /node_modules/i,
+    /package(-lock)?\.json$/i,
+];
 
 let activeHuntProcess = null;
 let activeHuntStartTime = null;
 
-createServer((req, res) => {
-    // Global CORS headers & OPTIONS preflight handler
+const server = createServer((req, res) => {
+    // Global CORS headers
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
@@ -28,19 +54,23 @@ createServer((req, res) => {
         return;
     }
 
-    // API Endpoints
-    if (req.url.startsWith('/api/trigger-hunt')) {
+    const parsedUrl = new URL(req.url || '/', `http://localhost:${PORT}`);
+    const pathname = parsedUrl.pathname;
+
+    // ─── API Endpoints ──────────────────────────────────────────
+
+    // POST / GET /api/trigger-hunt
+    if (pathname === '/api/trigger-hunt') {
         if (activeHuntProcess) {
             res.writeHead(409, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ status: 'running', message: 'Hunt already in progress', startedAt: activeHuntStartTime }));
             return;
         }
-        const u = new URL(req.url, 'http://localhost:3000');
-        const daysParam = parseInt(u.searchParams.get('days') || '30', 10);
-        const days = isNaN(daysParam) ? 30 : Math.min(365, Math.max(1, daysParam));
+        const daysParam = parseInt(parsedUrl.searchParams.get('days') || '90', 10);
+        const days = isNaN(daysParam) ? 90 : Math.min(365, Math.max(1, daysParam));
 
         activeHuntStartTime = new Date().toISOString();
-        activeHuntProcess = spawn('node', ['error_fare_hunter.js', '--days', String(days)], { cwd: resolve('.') });
+        activeHuntProcess = spawn('node', ['error_fare_hunter.js', '--days', String(days)], { cwd: ROOT_DIR });
 
         activeHuntProcess.on('exit', () => {
             activeHuntProcess = null;
@@ -52,57 +82,67 @@ createServer((req, res) => {
         return;
     }
 
-    if (req.url.startsWith('/api/history')) {
-        const u = new URL(req.url, 'http://localhost:3000');
-        const origin = u.searchParams.get('origin') || '';
-        const dest = u.searchParams.get('dest') || '';
+    // GET /api/history?origin=PRG&dest=BCN
+    if (pathname === '/api/history') {
+        const origin = (parsedUrl.searchParams.get('origin') || '').toUpperCase();
+        const dest = (parsedUrl.searchParams.get('dest') || '').toUpperCase();
         const history = getRoutePriceHistory(origin, dest);
-        res.writeHead(200, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
+        res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ origin, dest, history }));
         return;
     }
 
-    if (req.url === '/api/crashes') {
-        const reportPath = resolve('./error_fares_report.json');
+    // GET /api/crashes
+    if (pathname === '/api/crashes') {
+        const reportPath = resolve(ROOT_DIR, 'error_fares_report.json');
         let crashes = [];
         if (existsSync(reportPath)) {
             try {
                 const rep = JSON.parse(readFileSync(reportPath, 'utf-8'));
                 crashes = (rep.allResults || []).filter(r => !!r.priceCrash);
-            } catch {}
+            } catch { /* parse error */ }
         }
-        res.writeHead(200, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
+        res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ count: crashes.length, crashes }));
         return;
     }
 
-    if (req.url === '/api/report') {
-        const reportPath = resolve('./error_fares_report.json');
+    // GET /api/report
+    if (pathname === '/api/report') {
+        const reportPath = resolve(ROOT_DIR, 'error_fares_report.json');
         if (!existsSync(reportPath)) {
-            res.writeHead(404, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
-            res.end(JSON.stringify({ error: 'Report not generated yet' }));
+            res.writeHead(404, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'Report not generated yet. Run: npm run hunt' }));
             return;
         }
-        res.writeHead(200, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
-        res.end(readFileSync(reportPath));
+        try {
+            const data = readFileSync(reportPath);
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(data);
+        } catch (err) {
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'Failed to read report', details: err.message }));
+        }
         return;
     }
 
-    if (req.url === '/api/status') {
-        const keysExist = existsSync('./active_keys.json');
-        const reportExist = existsSync('./error_fares_report.json');
+    // GET /api/status
+    if (pathname === '/api/status') {
+        const keysExist = existsSync(resolve(ROOT_DIR, 'active_keys.json'));
+        const reportPath = resolve(ROOT_DIR, 'error_fares_report.json');
         let reportMeta = null;
-        if (reportExist) {
+        if (existsSync(reportPath)) {
             try {
-                const rep = JSON.parse(readFileSync('./error_fares_report.json', 'utf-8'));
+                const rep = JSON.parse(readFileSync(reportPath, 'utf-8'));
                 reportMeta = {
-                    scannedAt: rep.scannedAt,
+                    scannedAt: rep.scanDate || rep.scannedAt,
                     totalRoutes: rep.allResults?.length || 0,
                     errorFares: rep.allResults?.filter(r => r.score?.tag === 'ERROR FARE').length || 0,
+                    greatDeals: rep.allResults?.filter(r => r.score?.tag === 'GREAT DEAL').length || 0,
                 };
-            } catch {}
+            } catch { /* parse error */ }
         }
-        res.writeHead(200, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
+        res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({
             status: 'online',
             isHunting: !!activeHuntProcess,
@@ -113,12 +153,57 @@ createServer((req, res) => {
         return;
     }
 
-    let file = (req.url === '/' || req.url === '/map.html') ? '/index.html' : req.url.split('?')[0];
-    const path = resolve('.' + file);
-    if (!existsSync(path)) { res.writeHead(404); res.end('Not found'); return; }
-    const ext = extname(path);
-    res.writeHead(200, { 'Content-Type': MIME[ext] || 'text/plain', 'Access-Control-Allow-Origin': '*' });
-    res.end(readFileSync(path));
-}).listen(PORT, () => {
-    console.log(`\n  🗺️  Deal Map → http://localhost:${PORT}\n`);
+    // ─── Static File Serving with Path Traversal Protection ──────
+    let reqFile = (pathname === '/' || pathname === '/map.html') ? '/index.html' : pathname;
+    // Decode URI components safely
+    try { reqFile = decodeURIComponent(reqFile); } catch { /* keep raw */ }
+
+    // Normalize and prevent directory traversal
+    const safePath = resolve(ROOT_DIR, '.' + normalize(reqFile));
+
+    // Security check: Must reside within ROOT_DIR
+    if (!safePath.startsWith(ROOT_DIR)) {
+        res.writeHead(403, { 'Content-Type': 'text/plain' });
+        res.end('Access denied');
+        return;
+    }
+
+    // Block sensitive files
+    const relFile = reqFile.replace(/^\/+/, '');
+    if (BLOCKED_PATTERNS.some(re => re.test(relFile))) {
+        res.writeHead(403, { 'Content-Type': 'text/plain' });
+        res.end('Access denied');
+        return;
+    }
+
+    if (!existsSync(safePath)) {
+        res.writeHead(404, { 'Content-Type': 'text/plain' });
+        res.end('Not found');
+        return;
+    }
+
+    try {
+        const ext = extname(safePath).toLowerCase();
+        const contentType = MIME[ext] || 'application/octet-stream';
+        const content = readFileSync(safePath);
+        res.writeHead(200, { 'Content-Type': contentType });
+        res.end(content);
+    } catch (err) {
+        res.writeHead(500, { 'Content-Type': 'text/plain' });
+        res.end(`Internal error: ${err.message}`);
+    }
+});
+
+server.listen(PORT, () => {
+    console.log(`\n  🗺️  FlightScanner Dashboard → http://localhost:${PORT}\n`);
+});
+
+process.on('SIGINT', () => {
+    if (activeHuntProcess) activeHuntProcess.kill();
+    process.exit(0);
+});
+
+process.on('SIGTERM', () => {
+    if (activeHuntProcess) activeHuntProcess.kill();
+    process.exit(0);
 });

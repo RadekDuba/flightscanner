@@ -54,14 +54,21 @@ function loadKeys() {
     const path = 'active_keys.json';
     if (!existsSync(path)) {
         log('err', `${c.bold}active_keys.json${c.reset} not found. Run ${c.cyan}npm run scan${c.reset} first.`);
-        process.exit(1);
+        return {};
     }
-    const raw = JSON.parse(readFileSync(path, 'utf-8'));
-    _keysCache = {};
-    for (const [provider, keys] of Object.entries(raw)) {
-        _keysCache[provider] = (keys || []).map(k => typeof k === 'string' ? k : k.key).filter(Boolean);
+    try {
+        const raw = JSON.parse(readFileSync(path, 'utf-8'));
+        _keysCache = {};
+        for (const [provider, keys] of Object.entries(raw)) {
+            _keysCache[provider] = (keys || []).map(k => {
+                if (typeof k === 'string') return { key: k, info: '' };
+                return k;
+            }).filter(k => k && k.key);
+        }
+        return _keysCache;
+    } catch {
+        return {};
     }
-    return _keysCache;
 }
 
 // ─── Validation ─────────────────────────────────────────────
@@ -386,28 +393,42 @@ async function searchKiwi(key, params) {
 
     return {
         provider: 'Kiwi.com',
-        offers: data.data.slice(0, 40).map(f => ({
-            price: f.price || 0,
-            currency: 'EUR',
-            airline: f.airlines?.join(', ') || 'Unknown',
-            airlineCode: f.airlines?.[0] || '',
-            departure: new Date(f.dTime * 1000).toISOString(),
-            arrival: new Date(f.aTime * 1000).toISOString(),
-            duration: formatMinutes(Math.floor((f.fly_duration || 0) / 60)),
-            stops: (f.route?.filter(r => r.return === 0)?.length || 1) - 1,
-            segments: [{
-                legs: (f.route || []).filter(r => r.return === 0).map(r => ({
-                    from: r.flyFrom,
-                    to: r.flyTo,
-                    airline: r.airline,
-                    flightNo: `${r.airline}${r.flight_no}`,
-                    depart: new Date(r.dTime * 1000).toISOString(),
-                    arrive: new Date(r.aTime * 1000).toISOString(),
-                }))
-            }],
-            bookingUrl: f.deep_link || null,
-            source: 'kiwi',
-        }))
+        offers: data.data.slice(0, 40).map(f => {
+            let durationStr = '?';
+            if (typeof f.fly_duration === 'string') {
+                durationStr = f.fly_duration;
+            } else if (typeof f.fly_duration === 'number' && f.fly_duration > 0) {
+                durationStr = formatMinutes(Math.floor(f.fly_duration / 60));
+            } else if (f.dTime && f.aTime) {
+                durationStr = formatMinutes(Math.floor((f.aTime - f.dTime) / 60));
+            }
+
+            const depTime = f.local_departure || (f.dTime ? new Date(f.dTime * 1000).toISOString() : '');
+            const arrTime = f.local_arrival || (f.aTime ? new Date(f.aTime * 1000).toISOString() : '');
+
+            return {
+                price: f.price || 0,
+                currency: 'EUR',
+                airline: f.airlines?.join(', ') || 'Unknown',
+                airlineCode: f.airlines?.[0] || '',
+                departure: depTime,
+                arrival: arrTime,
+                duration: durationStr,
+                stops: (f.route?.filter(r => r.return === 0)?.length || 1) - 1,
+                segments: [{
+                    legs: (f.route || []).filter(r => r.return === 0).map(r => ({
+                        from: r.flyFrom,
+                        to: r.flyTo,
+                        airline: r.airline,
+                        flightNo: `${r.airline || ''}${r.flight_no || ''}`,
+                        depart: r.local_departure || (r.dTime ? new Date(r.dTime * 1000).toISOString() : ''),
+                        arrive: r.local_arrival || (r.aTime ? new Date(r.aTime * 1000).toISOString() : ''),
+                    }))
+                }],
+                bookingUrl: f.deep_link || null,
+                source: 'kiwi',
+            };
+        })
     };
 }
 
@@ -621,26 +642,30 @@ export async function searchFlights(params, quiet = false) {
         // ── Smart key filtering ─────────────────────────────
         if (id === 'duffel') {
             // Only use duffel_live_ keys — test keys return sandbox data
-            providerKeys = providerKeys.filter(k => k.key.startsWith('duffel_live_'));
+            providerKeys = providerKeys.filter(k => {
+                const keyStr = typeof k === 'string' ? k : k?.key || '';
+                return keyStr.startsWith('duffel_live_');
+            });
             if (providerKeys.length === 0) {
-                if (!quiet) log('warn', `Duffel: skipping ${keys[id].length} test keys (sandbox only)`);
+                if (!quiet) log('warn', `Duffel: skipping test keys (need duffel_live_)`);
                 continue;
             }
         }
         if (id === 'serpapi') {
             // Skip depleted keys (0 searches remaining)
             providerKeys = providerKeys.filter(k => {
-                if (k.deep?.usable === false) return false;
+                if (k && typeof k === 'object' && k.deep?.usable === false) return false;
                 return true;
             });
             if (providerKeys.length === 0) {
-                if (!quiet) log('warn', `SerpAPI: all ${keys[id].length} keys depleted (0 searches left)`);
+                if (!quiet) log('warn', `SerpAPI: all keys depleted (0 searches left)`);
                 continue;
             }
         }
 
         // Try keys with fallback — if first fails, try next
-        const keyList = providerKeys.map(k => k.key);
+        const keyList = providerKeys.map(k => typeof k === 'string' ? k : k?.key).filter(Boolean);
+        if (keyList.length === 0) continue;
         activeProviders.push(provider.name);
         searches.push(
             (async () => {
