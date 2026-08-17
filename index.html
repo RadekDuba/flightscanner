@@ -926,10 +926,14 @@
                     <span class="filter-label" id="origin-label">Origin Airports</span>
                     <div class="filter-chips" role="group" aria-labelledby="origin-label">
                         <button class="chip active origin-prg" data-filter="origin" data-value="PRG">PRG (Prague) (<span id="cnt-orig-PRG">0</span>)</button>
+                        <button class="chip active" data-filter="origin" data-value="BRQ">BRQ (Brno) (<span id="cnt-orig-BRQ">0</span>)</button>
+                        <button class="chip active" data-filter="origin" data-value="OSR">OSR (Ostrava) (<span id="cnt-orig-OSR">0</span>)</button>
+                        <button class="chip active" data-filter="origin" data-value="PED">PED (Pardubice) (<span id="cnt-orig-PED">0</span>)</button>
+                        <button class="chip active" data-filter="origin" data-value="KLV">KLV (Karlovy Vary) (<span id="cnt-orig-KLV">0</span>)</button>
+                        <button class="chip active" data-filter="origin" data-value="JCL">JCL (Č. Budějovice) (<span id="cnt-orig-JCL">0</span>)</button>
                         <button class="chip active" data-filter="origin" data-value="VIE">VIE (Vienna) (<span id="cnt-orig-VIE">0</span>)</button>
                         <button class="chip active" data-filter="origin" data-value="BTS">BTS (Bratislava) (<span id="cnt-orig-BTS">0</span>)</button>
                         <button class="chip active" data-filter="origin" data-value="KTW">KTW (Katowice) (<span id="cnt-orig-KTW">0</span>)</button>
-                        <button class="chip active" data-filter="origin" data-value="OSR">OSR (Ostrava) (<span id="cnt-orig-OSR">0</span>)</button>
                     </div>
                 </div>
 
@@ -1091,7 +1095,7 @@
 
         // Filter State
         const state = {
-            origins: new Set(['PRG', 'VIE', 'BTS', 'KTW', 'OSR']),
+            origins: new Set(['PRG', 'BRQ', 'OSR', 'PED', 'KLV', 'JCL', 'VIE', 'BTS', 'KTW']),
             tags: new Set(['ERROR FARE', 'GREAT DEAL', 'GOOD DEAL', 'NORMAL']),
             airline: 'all',
             search: '',
@@ -1140,12 +1144,14 @@
             "BKK":[100.7470,13.6810],"DEL":[77.1031,28.5664],"GRO":[2.7605,41.9010],"MLE":[73.5290,4.1918],
             "MRU":[57.6836,-20.4302],"NRT":[140.3860,35.7647],"BTS":[17.2126,48.1702],"PRG":[14.2600,50.1007],
             "KTW":[19.0799,50.4743],"VIE":[16.5697,48.1102],"OSR":[18.1110,49.6963],
+            "BRQ":[16.6944,49.1513],"PED":[15.7386,50.0134],"KLV":[12.9150,50.2030],"JCL":[14.4283,48.9472],
             "STN":[-0.2350,51.8860],"BGY":[9.7041,45.6738]
         };
 
         const ORIGIN_COORDS = {
-            PRG: [14.267, 50.101], VIE: [16.570, 48.110], BTS: [17.213, 48.170],
-            KTW: [19.080, 50.474], OSR: [18.111, 49.696],
+            PRG: [14.267, 50.101], BRQ: [16.694, 49.151], OSR: [18.111, 49.696],
+            PED: [15.739, 50.013], KLV: [12.915, 50.203], JCL: [14.428, 48.947],
+            VIE: [16.570, 48.110], BTS: [17.213, 48.170], KTW: [19.080, 50.474],
         };
 
         let geoCache = {};
@@ -1836,7 +1842,7 @@
             });
 
             // 2. Origin airport counts (always shows available flights for that hub under current filters)
-            const originCounts = { PRG: 0, VIE: 0, BTS: 0, KTW: 0, OSR: 0 };
+            const originCounts = { PRG: 0, BRQ: 0, OSR: 0, PED: 0, KLV: 0, JCL: 0, VIE: 0, BTS: 0, KTW: 0 };
             for (const d of baseMatches) {
                 if (originCounts[d.origin] !== undefined) {
                     originCounts[d.origin]++;
@@ -2358,7 +2364,7 @@
 
             if (pReset) {
                 pReset.addEventListener('click', () => {
-                    state.origins = new Set(['PRG', 'VIE', 'BTS', 'KTW', 'OSR']);
+                    state.origins = new Set(['PRG', 'BRQ', 'OSR', 'PED', 'KLV', 'JCL', 'VIE', 'BTS', 'KTW']);
                     state.tags = new Set(['ERROR FARE', 'GREAT DEAL', 'GOOD DEAL', 'NORMAL']);
                     state.airline = 'all';
                     state.search = '';

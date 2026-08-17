@@ -14,7 +14,7 @@
 ## 🚀 Key Features
 
 * **🧠 Smart Insights & Live Header**: Top control bar featuring quick preset chips (🔥 Error Fares, 💰 Under €50, ✈️ Direct Only, 🏖️ Weekend Trips, ↺ Reset All) and live route counters.
-* **⚡ 90-Day Date-Window Chunking**: Divides the 90-day booking horizon into 3 distinct 30-day windows requesting up to 1,000 direct flight offers per airport per window, ensuring **100% complete direct flight coverage** out of PRG, VIE, BTS, KTW, and OSR.
+* **⚡ 90-Day Date-Window Chunking**: Divides the 90-day booking horizon into 3 distinct 30-day windows requesting up to 1,000 direct flight offers per airport per window, ensuring **100% complete direct flight coverage** out of Czech airports (PRG, BRQ, OSR, PED, KLV, JCL) and Central European hubs (VIE, BTS, KTW).
 * **🗺️ 3D MapTiler Vector Globe**: Interactive 3D canvas featuring curved flight paths, pulsing destination nodes, interactive hover popups, and atmospheric fog.
 * **🎯 Unified Bi-Directional Sync**:
   * **Card Hover/Click**: Highlights the route on the 3D globe and opens the route detail drawer.
@@ -32,10 +32,14 @@
 | Airport | Code | Location | Coverage Strategy |
 | :--- | :---: | :--- | :--- |
 | **Prague Airport** | `PRG` | Czech Republic | Exhaustive 90d window scan (~120 direct destinations) |
+| **Brno–Tuřany Airport** | `BRQ` | Czech Republic | Complete direct route coverage (Ryanair, Smartwings, charters) |
+| **Ostrava Airport** | `OSR` | Czech Republic | Complete direct route coverage (LOT, Ryanair, Smartwings) |
+| **Pardubice Airport** | `PED` | Czech Republic | Complete direct route coverage (Ryanair, seasonal charters) |
+| **Karlovy Vary Airport** | `KLV` | Czech Republic | Complete direct route coverage (International & seasonal flights) |
+| **České Budějovice Airport** | `JCL` | Czech Republic | Complete direct route coverage (South Bohemia charter/leisure) |
 | **Vienna International** | `VIE` | Austria | Exhaustive 90d window scan (~190 direct destinations) |
 | **Katowice Airport** | `KTW` | Poland | Exhaustive 90d window scan (Wizz Air / Ryanair Base) |
 | **Bratislava Airport** | `BTS` | Slovakia | Complete direct route coverage |
-| **Ostrava Airport** | `OSR` | Czech Republic | Complete direct route coverage |
 
 ---
 

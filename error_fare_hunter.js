@@ -71,10 +71,14 @@ function addDays(dateStr, days) {
 
 const ORIGINS = [
     { code: 'PRG', name: 'Prague' },
+    { code: 'BRQ', name: 'Brno' },
+    { code: 'OSR', name: 'Ostrava' },
+    { code: 'PED', name: 'Pardubice' },
+    { code: 'KLV', name: 'Karlovy Vary' },
+    { code: 'JCL', name: 'České Budějovice' },
     { code: 'VIE', name: 'Vienna' },
     { code: 'BTS', name: 'Bratislava' },
     { code: 'KTW', name: 'Katowice' },
-    { code: 'OSR', name: 'Ostrava' },
 ];
 
 // ─── Smart Deal Scoring ─────────────────────────────────────
@@ -89,7 +93,7 @@ const STATIC_BASELINES = {
 };
 
 // Known short-haul destinations (< 2hr from CEE)
-const SHORT_DESTS = new Set(['VIE','PRG','KTW','WAW','BUD','BTS','MUC','DRS','BER','FRA','DTM','NUE','STR','ZRH','GVA','LJU','ZAG','BLL','MST','EIN','HAM','CGN','LEJ','KRK','WRO','POZ','GDN','BRN','SZG','GRZ','INN','LNZ','BRQ','KSC','TSR','CLJ','SBZ','OTP','SOF','SJJ','TGD','SKP','TIA','GHV']);
+const SHORT_DESTS = new Set(['VIE','PRG','KTW','WAW','BUD','BTS','MUC','DRS','BER','FRA','DTM','NUE','STR','ZRH','GVA','LJU','ZAG','BLL','MST','EIN','HAM','CGN','LEJ','KRK','WRO','POZ','GDN','BRN','SZG','GRZ','INN','LNZ','BRQ','KSC','TSR','CLJ','SBZ','OTP','SOF','SJJ','TGD','SKP','TIA','GHV','PED','KLV','JCL','OSR']);
 // Medium-haul (2-4hr)
 const MEDIUM_DESTS = new Set(['LHR','LTN','STN','LGW','CDG','ORY','AMS','BCN','FCO','NAP','MXP','LIN','BGY','VCE','BLQ','PSA','BRI','BDS','CTA','PMO','SUF','CAG','OLB','SPU','DBV','ATH','SKG','LIS','OPO','AGP','ALC','PMI','MAD','DUB','EDI','CPH','ARN','OSL','HEL','RIX','VNO','TLL','CFU','RHO','JMK','HER','CHQ','IST','SAW','LCA','PFO','CMN','RAK','MLA','TFS','LPA','FUE','ACE','KUT','TBS','EVN','CAS']);
 
@@ -290,6 +294,10 @@ async function kiwiAnywhereSearch(origin, dateFrom, dateTo, nightsMin, nightsMax
             });
 
             if (!res.ok) {
+                if (res.status === 422) {
+                    log('warn', `Origin ${origin} not supported by Kiwi search API (HTTP 422)`);
+                    return [];
+                }
                 log('warn', `Kiwi key failed: HTTP ${res.status}, trying next...`);
                 continue;
             }

@@ -97,7 +97,8 @@ const BASELINE_PRICES = {
 // Falls back to heuristics based on region detection
 const REGION_MAP = {
     // Europe
-    'PRG': 'EU', 'KTW': 'EU', 'WAW': 'EU', 'BCN': 'EU', 'LHR': 'EU', 'CDG': 'EU',
+    'PRG': 'EU', 'BRQ': 'EU', 'OSR': 'EU', 'PED': 'EU', 'KLV': 'EU', 'JCL': 'EU', 'BTS': 'EU',
+    'KTW': 'EU', 'WAW': 'EU', 'BCN': 'EU', 'LHR': 'EU', 'CDG': 'EU',
     'FRA': 'EU', 'AMS': 'EU', 'FCO': 'EU', 'VIE': 'EU', 'MUC': 'EU', 'BER': 'EU',
     'MAD': 'EU', 'LIS': 'EU', 'ATH': 'EU', 'IST': 'EU', 'ZRH': 'EU', 'BRU': 'EU',
     'CPH': 'EU', 'OSL': 'EU', 'HEL': 'EU', 'DUB': 'EU', 'EDI': 'EU', 'MAN': 'EU',
