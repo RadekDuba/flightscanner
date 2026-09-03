@@ -956,6 +956,20 @@
                     <div class="filter-chips" role="group" aria-labelledby="trip-style-label">
                         <button class="chip trip-weekend" data-filter="weekend" data-value="true">🏖️ Weekend Trips (<span id="cnt-weekend">0</span>)</button>
                         <button class="chip trip-atl" data-filter="atl" data-value="true">🏆 All-Time Lows (<span id="cnt-atl">0</span>)</button>
+                        <button class="chip trip-triangle" data-filter="triangle" data-value="true">🚆 Open-Jaw Triangle (<span id="cnt-triangle">0</span>)</button>
+                        <button class="chip trip-verified" data-filter="verified" data-value="true">🟢 Live Verified (<span id="cnt-verified">0</span>)</button>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <span class="filter-label" id="baggage-label">True Cost Baggage Mode</span>
+                    <div class="filter-chips" role="group" aria-labelledby="baggage-label" id="baggage-toggle-group">
+                        <button class="chip active baggage-chip" data-baggage="bare" id="bag-bare">🎒 Bare Fare</button>
+                        <button class="chip baggage-chip" data-baggage="cabin" id="bag-cabin">🧳 + Cabin Bag (10kg)</button>
+                        <button class="chip baggage-chip" data-baggage="checked" id="bag-checked">📦 + Checked Bag (20kg)</button>
+                    </div>
+                    <div style="font-size: 10px; color: var(--text-muted); margin-top: 4px;" id="baggage-explainer">
+                        Showing airline bare ticket price (under-seat item only).
                     </div>
                 </div>
 
@@ -1104,8 +1118,27 @@
             sort: 'score',
             days: 90,
             weekendOnly: false,
-            atlOnly: false
+            atlOnly: false,
+            triangleOnly: false,
+            verifiedOnly: false,
+            baggageMode: 'bare' // 'bare' | 'cabin' | 'checked'
         };
+
+        function getEffectivePrice(d, mode = state.baggageMode) {
+            if (!d || typeof d.price !== 'number') return 0;
+            if (mode === 'bare') return d.price;
+
+            const lccAirlines = ['Ryanair', 'Wizz Air', 'easyJet', 'Vueling', 'Eurowings', 'Transavia', 'FR', 'W6', 'U2', 'VY'];
+            const isLcc = d.score?.isLCC || (d.airline && lccAirlines.some(a => d.airline.includes(a)));
+
+            if (mode === 'cabin') {
+                return d.price + (isLcc ? 36 : 0);
+            }
+            if (mode === 'checked') {
+                return d.price + (isLcc ? 70 : 50);
+            }
+            return d.price;
+        }
 
         let deals = [];
         let allRouteGroups = [];
@@ -1359,20 +1392,25 @@
 
             const groups = [];
             for (const group of routeMap.values()) {
-                group.offers.sort((a, b) => a.price - b.price);
-                group.minPrice = group.offers[0].price;
-                group.maxPrice = Math.max(...group.offers.map(o => o.price));
+                group.offers.sort((a, b) => getEffectivePrice(a) - getEffectivePrice(b));
+                group.minPrice = getEffectivePrice(group.offers[0]);
+                group.maxPrice = Math.max(...group.offers.map(o => getEffectivePrice(o)));
+                group.rawMinPrice = group.offers[0].price;
+
+                const isBagAdded = state.baggageMode !== 'bare';
                 group.priceRangeStr = group.minPrice === group.maxPrice
-                    ? `€${group.minPrice}`
-                    : `€${group.minPrice} – €${group.maxPrice}`;
+                    ? `€${group.minPrice}${isBagAdded ? ' (all-in)' : ''}`
+                    : `€${group.minPrice} – €${group.maxPrice}${isBagAdded ? ' (all-in)' : ''}`;
 
                 const tagPriority = { 'ERROR FARE': 0, 'GREAT DEAL': 1, 'GOOD DEAL': 2, 'NORMAL': 3 };
-                const sortedByTag = [...group.offers].sort((a, b) => (tagPriority[a.score?.tag] ?? 3) - (tagPriority[b.score?.tag] ?? 3) || a.price - b.price);
+                const sortedByTag = [...group.offers].sort((a, b) => (tagPriority[a.score?.tag] ?? 3) - (tagPriority[b.score?.tag] ?? 3) || getEffectivePrice(a) - getEffectivePrice(b));
 
                 group.bestDeal = sortedByTag[0];
                 group.score = group.bestDeal.score;
                 group.isAllTimeLow = group.offers.some(o => o.isAllTimeLow);
                 group.priceCrash = group.offers.find(o => o.priceCrash)?.priceCrash || null;
+                group.hasVerified = group.offers.some(o => o.liveVerification?.status === 'VERIFIED_LIVE');
+                group.isTriangle = group.offers.some(o => o.isTriangle);
                 group.airlines = [...new Set(group.offers.map(o => o.airline).filter(Boolean))].join(', ');
 
                 groups.push(group);
@@ -1452,7 +1490,18 @@
                 document.getElementById('d-leg-return').innerHTML = `<strong>Return:</strong> ${offer.dest} → ${offer.origin} (${offer.airline})<br>Date: ${offer.returnDate} · Direct Non-Stop`;
 
                 const dufEl = document.getElementById('d-duffel-verify');
-                if (offer.crossCheck) {
+                if (offer.liveVerification) {
+                    const v = offer.liveVerification;
+                    const isLive = v.status === 'VERIFIED_LIVE';
+                    const timeStr = v.verifiedAt ? new Date(v.verifiedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'recently';
+                    dufEl.innerHTML = `
+                        <div style="background: ${isLive ? 'rgba(78,205,196,0.12)' : 'rgba(255,193,7,0.12)'}; border: 1px solid ${isLive ? 'rgba(78,205,196,0.3)' : 'rgba(255,193,7,0.3)'}; border-radius: 6px; padding: 6px 10px; margin-top: 6px;">
+                            <span style="font-weight: 700; color: ${isLive ? '#4ecdc4' : '#ffc107'};">${isLive ? '🟢 Zero-Phantom Verified Live' : '🟡 Live Price Updated'}</span> · Checked ${timeStr}
+                            ${offer.isTriangle ? `<br><span style="color:#ba55d3; font-weight:600;">🚆 Triangle Open-Jaw: ${offer.railLabel || 'Ground rail connection'}</span>` : ''}
+                            ${state.baggageMode !== 'bare' ? `<br><span style="color:#94a3b8;">🧳 All-In with ${state.baggageMode === 'cabin' ? '10kg Cabin Bag' : '20kg Checked Bag'}: <strong>€${getEffectivePrice(offer)}</strong> (Bare: €${offer.price})</span>` : ''}
+                        </div>
+                    `;
+                } else if (offer.crossCheck) {
                     dufEl.textContent = `🔍 Live Verification (Duffel): €${offer.crossCheck.duffelPrice || '—'} · Status: ${offer.crossCheck.status}`;
                 } else { dufEl.textContent = ''; }
 
@@ -1787,12 +1836,15 @@
                         <span class="tag-pill ${tagCss}">${group.score?.emoji || ''} ${group.score?.tag || 'NORMAL'} ${discTagStr}</span>
                         <span class="badge-stops">📅 ${group.offers.length} Date${group.offers.length > 1 ? 's' : ''}</span>
                         <span class="badge-stops" style="background:rgba(78,205,196,0.12); color:#4ecdc4; border-color:rgba(78,205,196,0.3);">✈️ Direct</span>
+                        ${group.hasVerified ? `<span class="badge-stops" style="background:rgba(78,205,196,0.2); color:#4ecdc4; border-color:rgba(78,205,196,0.4); font-weight:700;">🟢 Live Verified</span>` : ''}
                         ${group.isAllTimeLow ? `<span class="badge-stops" style="background:rgba(255,215,0,0.18); color:#ffd700; border-color:rgba(255,215,0,0.4); font-weight:700;">🏆 All-Time Low</span>` : ''}
+                        ${best.zScore && best.zScore >= 2.0 ? `<span class="badge-stops" style="background:rgba(255,107,107,0.18); color:#ff6b6b; border-color:rgba(255,107,107,0.4); font-weight:700;">⚡ ${best.zScore}σ Anomaly</span>` : ''}
+                        ${group.isTriangle ? `<span class="badge-stops" style="background:rgba(186,85,211,0.2); color:#ba55d3; border-color:rgba(186,85,211,0.5); font-weight:700;">🚆 Triangle Rail</span>` : ''}
                         ${isWknd ? `<span class="badge-stops" style="background:rgba(78,205,196,0.15); color:#4ecdc4; border-color:rgba(78,205,196,0.3);">🏖️ Weekend</span>` : ''}
                         ${group.priceCrash ? `<span class="badge-stops" style="background:rgba(255,59,92,0.18); color:#ff3b5c; border-color:rgba(255,59,92,0.4);">📉 -€${group.priceCrash.dropEur} Drop</span>` : ''}
                     </div>
                     <div class="card-details">
-                        Lowest: €${group.minPrice} (${best.date}) · ${group.airlines}
+                        Lowest: €${group.minPrice} (${best.date}) · ${group.airlines} ${state.baggageMode !== 'bare' ? `<span style="color:#94a3b8; font-size:10px;">(Bare: €${group.rawMinPrice})</span>` : ''}
                     </div>
                 `;
                 card.addEventListener('mouseenter', () => highlightRouteGroup(group.key));
@@ -1830,10 +1882,13 @@
 
             // 1. Base Matches: search, price, airline, horizon, weekend, atl constraints
             const baseMatches = deals.filter(d => {
-                if (d.price > state.maxPrice) return false;
+                const effPrice = getEffectivePrice(d);
+                if (effPrice > state.maxPrice) return false;
                 if (state.airline && state.airline !== 'all' && !(d.airline || '').includes(state.airline)) return false;
                 if (state.weekendOnly && !isWeekendGetaway(d)) return false;
                 if (state.atlOnly && !d.isAllTimeLow) return false;
+                if (state.triangleOnly && !d.isTriangle) return false;
+                if (state.verifiedOnly && d.liveVerification?.status !== 'VERIFIED_LIVE') return false;
                 if (state.days && d.date) {
                     const flightDate = new Date(d.date);
                     const maxDate = new Date();
@@ -1854,8 +1909,9 @@
             // 2. Origin airport counts (always shows available flights for that hub under current filters)
             const originCounts = { PRG: 0, BRQ: 0, OSR: 0, PED: 0, KLV: 0, JCL: 0, VIE: 0, BTS: 0, KTW: 0 };
             for (const d of baseMatches) {
-                if (originCounts[d.origin] !== undefined) {
-                    originCounts[d.origin]++;
+                const oKey = d.primaryOrigin || d.origin;
+                if (originCounts[oKey] !== undefined) {
+                    originCounts[oKey]++;
                 }
             }
             for (const [orig, count] of Object.entries(originCounts)) {
@@ -1867,7 +1923,8 @@
             const activeOriginsForTags = state.origins.size > 0 ? state.origins : new Set(Object.keys(originCounts));
             const tagCounts = { 'ERROR FARE': 0, 'GREAT DEAL': 0, 'GOOD DEAL': 0, 'NORMAL': 0 };
             for (const d of baseMatches) {
-                if (activeOriginsForTags.has(d.origin)) {
+                const oKey = d.primaryOrigin || d.origin;
+                if (activeOriginsForTags.has(oKey)) {
                     const tag = d.score?.tag || 'NORMAL';
                     if (tagCounts[tag] !== undefined) tagCounts[tag]++;
                 }
@@ -1881,19 +1938,28 @@
             if (gooCnt) gooCnt.textContent = tagCounts['GOOD DEAL'];
             if (norCnt) norCnt.textContent = tagCounts['NORMAL'];
 
-            // 4. Trip style counts (Weekend and ATL)
+            // 4. Trip style counts (Weekend, ATL, Triangle, Verified)
             const weekendCntEl = document.getElementById('cnt-weekend');
             const atlCntEl = document.getElementById('cnt-atl');
+            const triangleCntEl = document.getElementById('cnt-triangle');
+            const verifiedCntEl = document.getElementById('cnt-verified');
             if (weekendCntEl) {
-                weekendCntEl.textContent = baseMatches.filter(d => activeOriginsForTags.has(d.origin) && isWeekendGetaway(d)).length;
+                weekendCntEl.textContent = baseMatches.filter(d => activeOriginsForTags.has(d.primaryOrigin || d.origin) && isWeekendGetaway(d)).length;
             }
             if (atlCntEl) {
-                atlCntEl.textContent = baseMatches.filter(d => activeOriginsForTags.has(d.origin) && d.isAllTimeLow).length;
+                atlCntEl.textContent = baseMatches.filter(d => activeOriginsForTags.has(d.primaryOrigin || d.origin) && d.isAllTimeLow).length;
+            }
+            if (triangleCntEl) {
+                triangleCntEl.textContent = baseMatches.filter(d => activeOriginsForTags.has(d.primaryOrigin || d.origin) && d.isTriangle).length;
+            }
+            if (verifiedCntEl) {
+                verifiedCntEl.textContent = baseMatches.filter(d => activeOriginsForTags.has(d.primaryOrigin || d.origin) && d.liveVerification?.status === 'VERIFIED_LIVE').length;
             }
 
             // 5. Final Filtered Deals matching selected origins and selected tags
             const filtered = baseMatches.filter(d => {
-                if (!state.origins.has(d.origin)) return false;
+                const oKey = d.primaryOrigin || d.origin;
+                if (!state.origins.has(oKey) && !state.origins.has(d.origin)) return false;
                 if (!state.tags.has(d.score?.tag || 'NORMAL')) return false;
                 return true;
             });
@@ -2278,6 +2344,46 @@
                     btn.classList.toggle('active', state.atlOnly);
                     const pAtl = document.getElementById('preset-atl');
                     if (pAtl) pAtl.classList.toggle('active', state.atlOnly);
+                    applyFilters();
+                });
+            });
+
+            // Triangle Open-Jaw Toggle Chip
+            document.querySelectorAll('.chip[data-filter="triangle"]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    state.triangleOnly = !state.triangleOnly;
+                    btn.classList.toggle('active', state.triangleOnly);
+                    applyFilters();
+                });
+            });
+
+            // Live Verified Toggle Chip
+            document.querySelectorAll('.chip[data-filter="verified"]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    state.verifiedOnly = !state.verifiedOnly;
+                    btn.classList.toggle('active', state.verifiedOnly);
+                    applyFilters();
+                });
+            });
+
+            // True Cost Baggage Mode Switcher
+            document.querySelectorAll('.baggage-chip').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.baggage-chip').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    state.baggageMode = btn.dataset.baggage || 'bare';
+                    
+                    const explainer = document.getElementById('baggage-explainer');
+                    if (explainer) {
+                        if (state.baggageMode === 'cabin') {
+                            explainer.innerHTML = 'Showing <strong>All-In True Cost</strong> including 10kg overhead cabin bag (+€36 LCC / €0 Legacy).';
+                        } else if (state.baggageMode === 'checked') {
+                            explainer.innerHTML = 'Showing <strong>All-In True Cost</strong> including 20kg checked baggage (+€70 LCC / +€50 Legacy).';
+                        } else {
+                            explainer.innerHTML = 'Showing airline bare ticket price (under-seat item only).';
+                        }
+                    }
+                    showToast(`Baggage: ${btn.textContent}`);
                     applyFilters();
                 });
             });

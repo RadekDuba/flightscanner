@@ -112,17 +112,47 @@ export function processHistoryAndCrashes(deals, minDropEur = 30, minDropPct = 20
             }
         }
 
-        // Calculate running average price
-        const prices = history.map(h => h.price);
-        const avgPrice = Math.round(prices.reduce((a, b) => a + b, 0) / prices.length);
+        // Calculate running statistics (mean, median, standard deviation, Z-score)
+        const prices = history.map(h => h.price).filter(p => typeof p === 'number' && !isNaN(p));
+        const avgPrice = prices.length > 0 ? Math.round(prices.reduce((a, b) => a + b, 0) / prices.length) : deal.price;
+        
+        const sortedPrices = [...prices].sort((a, b) => a - b);
+        const mid = Math.floor(sortedPrices.length / 2);
+        const medianPrice = sortedPrices.length % 2 !== 0 
+            ? sortedPrices[mid] 
+            : Math.round(((sortedPrices[mid - 1] + sortedPrices[mid]) / 2));
+
+        const variance = prices.length > 1
+            ? prices.reduce((sum, p) => sum + Math.pow(p - avgPrice, 2), 0) / prices.length
+            : 0;
+        const stdDev = Math.round(Math.sqrt(variance) * 10) / 10;
+
+        // Z-Score: how many standard deviations below historical mean
+        const zScore = stdDev > 0 ? Math.round(((avgPrice - deal.price) / stdDev) * 10) / 10 : 0;
+        const dropPctFromAvg = avgPrice > 0 ? Math.round(((avgPrice - deal.price) / avgPrice) * 100) : 0;
+
         routeMeta.avgPrice = avgPrice;
+        routeMeta.medianPrice = medianPrice;
+        routeMeta.stdDev = stdDev;
+
+        // Statistical Anomaly Classification
+        const isStatError = zScore >= 3.0 && dropPctFromAvg >= 50 && history.length >= 3;
+        const isStatGreat = zScore >= 2.0 && dropPctFromAvg >= 30 && history.length >= 2;
 
         // Attach comprehensive history stats to deal object
         deal.isAllTimeLow = isNewAllTimeLow || deal.price === routeMeta.allTimeLow;
+        deal.zScore = zScore;
         deal.historyStats = {
             allTimeLow: routeMeta.allTimeLow,
             allTimeHigh: routeMeta.allTimeHigh,
             avgPrice,
+            medianPrice,
+            stdDev,
+            zScore,
+            dropPctFromAvg,
+            isAllTimeLow: deal.isAllTimeLow,
+            isStatError,
+            isStatGreat,
             totalScans: routeMeta.scansCount,
             historyPointsCount: history.length,
         };
@@ -130,6 +160,37 @@ export function processHistoryAndCrashes(deals, minDropEur = 30, minDropPct = 20
 
     saveHistory(db);
     return crashes;
+}
+
+/**
+ * Computes anomaly metrics for a given route and price against historical records
+ */
+export function getRouteAnomaly(origin, dest, price) {
+    const db = loadHistory();
+    const routeKey = `${origin}→${dest}`;
+    const routeMeta = db.routes[routeKey];
+    if (!routeMeta || !Array.isArray(routeMeta.history) || routeMeta.history.length < 2) {
+        return null;
+    }
+    const prices = routeMeta.history.map(h => h.price).filter(p => typeof p === 'number' && !isNaN(p));
+    if (prices.length < 2) return null;
+
+    const avgPrice = Math.round(prices.reduce((a, b) => a + b, 0) / prices.length);
+    const variance = prices.reduce((sum, p) => sum + Math.pow(p - avgPrice, 2), 0) / prices.length;
+    const stdDev = Math.round(Math.sqrt(variance) * 10) / 10;
+    const zScore = stdDev > 0 ? Math.round(((avgPrice - price) / stdDev) * 10) / 10 : 0;
+    const dropPct = avgPrice > 0 ? Math.round(((avgPrice - price) / avgPrice) * 100) : 0;
+
+    return {
+        avgPrice,
+        allTimeLow: routeMeta.allTimeLow,
+        stdDev,
+        zScore,
+        dropPct,
+        isAllTimeLow: price <= (routeMeta.allTimeLow || price),
+        isStatError: zScore >= 3.0 && dropPct >= 50 && prices.length >= 3,
+        isStatGreat: zScore >= 2.0 && dropPct >= 30 && prices.length >= 2,
+    };
 }
 
 /**

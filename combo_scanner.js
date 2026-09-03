@@ -105,3 +105,91 @@ export function buildHubSpokeCombos(leg1Flights, leg2Flights) {
 
     return combos.sort((a, b) => a.price - b.price);
 }
+
+/**
+ * Rail-connected Central European origin pairs with high-speed ground transit
+ */
+export const TRIANGLE_PAIRS = [
+    { hubA: 'PRG', hubB: 'VIE', transitTime: '4h 00m', transitCostEur: 14, label: 'PRG ⇄ VIE Railjet (€14)' },
+    { hubA: 'PRG', hubB: 'BRQ', transitTime: '2h 30m', transitCostEur: 9, label: 'PRG ⇄ BRQ Rail (€9)' },
+    { hubA: 'VIE', hubB: 'BTS', transitTime: '50m', transitCostEur: 6, label: 'VIE ⇄ BTS Twin-City (€6)' },
+    { hubA: 'KTW', hubB: 'KRK', transitTime: '1h 00m', transitCostEur: 7, label: 'KTW ⇄ KRK Shuttle (€7)' },
+    { hubA: 'PRG', hubB: 'PED', transitTime: '55m', transitCostEur: 5, label: 'PRG ⇄ PED Express (€5)' },
+    { hubA: 'BRQ', hubB: 'VIE', transitTime: '1h 30m', transitCostEur: 10, label: 'BRQ ⇄ VIE Railjet (€10)' },
+];
+
+/**
+ * Discovers Central European Open-Jaw Triangle routes (e.g. Outbound PRG → Dest, Return Dest → VIE)
+ * connected by high-speed rail, exploiting airline multi-city / open-jaw pricing inefficiencies.
+ * @param {Array} deals All direct flight deals collected across hubs
+ */
+export function buildTriangleOpenJaws(deals) {
+    const triangleDeals = [];
+    // Group deals by destination
+    const dealsByDest = new Map();
+    for (const d of deals) {
+        if (!d.dest || d.isSelfTransfer || d.isTriangle) continue;
+        if (!dealsByDest.has(d.dest)) dealsByDest.set(d.dest, []);
+        dealsByDest.get(d.dest).push(d);
+    }
+
+    for (const pair of TRIANGLE_PAIRS) {
+        const { hubA, hubB, transitTime, transitCostEur, label } = pair;
+
+        for (const [dest, destDeals] of dealsByDest.entries()) {
+            const aDeals = destDeals.filter(d => d.origin === hubA);
+            const bDeals = destDeals.filter(d => d.origin === hubB);
+            if (aDeals.length === 0 || bDeals.length === 0) continue;
+
+            // Check if open-jaw Out A / In B or Out B / In A yields significant savings
+            for (const da of aDeals.slice(0, 3)) {
+                for (const db of bDeals.slice(0, 3)) {
+                    // Similar dates window
+                    if (da.date !== db.date && Math.abs(new Date(da.date) - new Date(db.date)) > 7 * 86400000) continue;
+
+                    // Compute blended open-jaw price
+                    const blendedFlightPrice = Math.round((da.price * 0.5 + db.price * 0.5));
+                    const totalCostWithRail = blendedFlightPrice + transitCostEur;
+
+                    // If open-jaw is cheaper than the more expensive single-hub flight by at least €25
+                    const maxDirectPrice = Math.max(da.price, db.price);
+                    if (totalCostWithRail < maxDirectPrice - 20) {
+                        const savingsEur = maxDirectPrice - totalCostWithRail;
+                        triangleDeals.push({
+                            origin: `${hubA}/${hubB}`,
+                            primaryOrigin: hubA,
+                            returnHub: hubB,
+                            dest,
+                            destName: da.destName || db.destName,
+                            country: da.country || db.country,
+                            date: da.date,
+                            returnDate: da.returnDate || db.returnDate,
+                            tripDays: da.tripDays || db.tripDays || 7,
+                            price: totalCostWithRail,
+                            flightPrice: blendedFlightPrice,
+                            transitCostEur,
+                            transitTime,
+                            railLabel: label,
+                            currency: 'EUR',
+                            airline: `${da.airline} / ${db.airline}`,
+                            stops: 0,
+                            isTriangle: true,
+                            savingsEur,
+                            bookingLinks: {
+                                airline: da.bookingLinks?.airline || db.bookingLinks?.airline,
+                                leg1: da.bookingLinks?.airline || null,
+                                leg2: db.bookingLinks?.airline || null,
+                                skyscanner: da.bookingLinks?.skyscanner || db.bookingLinks?.skyscanner,
+                                googleFlights: `https://www.google.com/travel/flights?q=flights+from+${hubA}+to+${dest}+on+${da.date}+and+${dest}+to+${hubB}+on+${da.returnDate || db.returnDate}`,
+                            },
+                            source: 'triangle_open_jaw',
+                        });
+                    }
+                }
+            }
+        }
+    }
+
+    return triangleDeals.sort((a, b) => a.price - b.price);
+}
+

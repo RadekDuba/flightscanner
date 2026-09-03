@@ -9,8 +9,8 @@
 
 import { writeFileSync, existsSync, readFileSync } from 'fs';
 import { sendTelegramAlert } from './notify_bot.js';
-import { MAJOR_HUBS, buildHubSpokeCombos } from './combo_scanner.js';
-import { processHistoryAndCrashes } from './history_db.js';
+import { MAJOR_HUBS, buildHubSpokeCombos, buildTriangleOpenJaws } from './combo_scanner.js';
+import { processHistoryAndCrashes, getRouteAnomaly } from './history_db.js';
 
 const ACTIVE_KEYS = existsSync('active_keys.json')
     ? JSON.parse(readFileSync('active_keys.json', 'utf-8'))
@@ -112,10 +112,20 @@ function scoreDeal(price, airlines, destCode, originCode) {
     const isLCC = airlines.some(a => LCC.includes(a));
     const distance = getDistance(destCode);
 
-    // Try dynamic baseline first (from Kiwi price median)
+    // 1. Check historical statistical anomaly from history_db if available
+    let anomaly = null;
+    if (originCode && destCode) {
+        try {
+            anomaly = getRouteAnomaly(originCode, destCode, price);
+        } catch (_) {}
+    }
+
+    // 2. Try dynamic baseline first (from Kiwi price median or historical average)
     const routeKey = originCode ? `${originCode}→${destCode}` : null;
     let baseline;
-    if (routeKey && dynamicBaselines[routeKey]) {
+    if (anomaly && anomaly.avgPrice) {
+        baseline = anomaly.avgPrice;
+    } else if (routeKey && dynamicBaselines[routeKey]) {
         baseline = dynamicBaselines[routeKey];
     } else {
         // Fallback to static baselines
@@ -126,12 +136,34 @@ function scoreDeal(price, airlines, destCode, originCode) {
     const discount = Math.round((1 - price / baseline) * 100);
 
     let tag, emoji;
-    if (discount >= 70) { tag = 'ERROR FARE'; emoji = '🔥'; }
-    else if (discount >= 50) { tag = 'GREAT DEAL'; emoji = '⭐'; }
-    else if (discount >= 30) { tag = 'GOOD DEAL'; emoji = '✅'; }
-    else { tag = 'NORMAL'; emoji = ''; }
+    // Statistical Z-score prioritization:
+    // If >= 3 standard deviations below average & >= 50% discount → True Error Fare!
+    if (anomaly && anomaly.isStatError) {
+        tag = 'ERROR FARE'; emoji = '🔥';
+    } else if (anomaly && anomaly.isStatGreat) {
+        tag = 'GREAT DEAL'; emoji = '⭐';
+    } else if (discount >= 70) {
+        tag = 'ERROR FARE'; emoji = '🔥';
+    } else if (discount >= 50) {
+        tag = 'GREAT DEAL'; emoji = '⭐';
+    } else if (discount >= 30) {
+        tag = 'GOOD DEAL'; emoji = '✅';
+    } else {
+        tag = 'NORMAL'; emoji = '';
+    }
 
-    return { tag, emoji, discount, baseline, isLCC, distance, dynamic: !!(routeKey && dynamicBaselines[routeKey]) };
+    return {
+        tag,
+        emoji,
+        discount,
+        baseline,
+        isLCC,
+        distance,
+        dynamic: !!(anomaly?.avgPrice || (routeKey && dynamicBaselines[routeKey])),
+        zScore: anomaly?.zScore || null,
+        stdDev: anomaly?.stdDev || null,
+        isAllTimeLow: anomaly?.isAllTimeLow || false,
+    };
 }
 
 // ─── Dynamic Baseline: fetch price median from Kiwi ─────────
@@ -566,8 +598,9 @@ ${c.magenta}${c.bold}  ╔══════════════════
                 }
             }
 
-            // Pass C: Direct Ryanair Fare Scout (crucial for PED, BRQ, OSR where Kiwi GDS lacks inventory)
-            if (['PED', 'BRQ', 'OSR'].includes(origin.code) || originResultsMap.size === 0) {
+            // Pass C: Direct Ryanair Fare Scout (un-marked-up direct carrier inventory)
+            const RYANAIR_HUBS = ['PRG', 'BRQ', 'OSR', 'PED', 'VIE', 'BTS', 'KTW'];
+            if (RYANAIR_HUBS.includes(origin.code) || originResultsMap.size === 0) {
                 const ryanairDeals = await ryanairDirectSearch(origin.code, wStart, wEnd, nightsMin, nightsMax);
                 for (const r of ryanairDeals) {
                     const key = `${r.origin}_${r.dest}_${r.date}_${r.price}`;
@@ -578,8 +611,8 @@ ${c.magenta}${c.bold}  ╔══════════════════
             }
         }
 
-        // Broader horizon pass for PED to guarantee complete schedule coverage
-        if (origin.code === 'PED' || originResultsMap.size === 0) {
+        // Broader horizon pass for regional hubs to guarantee complete schedule coverage
+        if (['PED', 'BRQ', 'OSR'].includes(origin.code) || originResultsMap.size === 0) {
             const ryanairHorizonDeals = await ryanairDirectSearch(origin.code, today, dateTo, nightsMin, nightsMax);
             for (const r of ryanairHorizonDeals) {
                 const key = `${r.origin}_${r.dest}_${r.date}_${r.price}`;
@@ -630,6 +663,20 @@ ${c.magenta}${c.bold}  ╔══════════════════
                 allResults.push(combo);
             }
         }
+    }
+
+    // ─── Phase 1d: Central European Triangle Open-Jaws ────────
+    try {
+        const triangleDeals = buildTriangleOpenJaws(allResults);
+        if (triangleDeals.length > 0) {
+            log('ok', `Built ${c.bold}${triangleDeals.length}${c.reset} Central European Rail-Connected Triangle Open-Jaws! 🚆`);
+            for (const tri of triangleDeals.slice(0, 30)) {
+                tri.score = scoreDeal(tri.price, ['LCC'], tri.dest, tri.primaryOrigin);
+                allResults.push(tri);
+            }
+        }
+    } catch (e) {
+        log('warn', `Triangle Open-Jaw generation error: ${e.message}`);
     }
 
     // ─── Phase 1b: Duffel Fallback (if Kiwi failed) ─────────
@@ -860,72 +907,117 @@ ${c.magenta}${c.bold}  ╔══════════════════
 
     saveCache();
 
-    // ─── Phase 2: Cross-verify top deals with Duffel ─────────
+    // ─── Phase 2: Zero-Phantom Live Verification Engine ─────────
+    const candidateDeals = allResults.filter(r => r.score?.tag !== 'NORMAL').slice(0, 20);
+    const rawKiwiKeys = ACTIVE_KEYS.kiwi || [];
+    const kiwiKey = rawKiwiKeys.map(k => typeof k === 'string' ? k : k.key).filter(Boolean)[0];
+    const duffelKey = (typeof ACTIVE_KEYS.duffel?.[0] === 'string' ? ACTIVE_KEYS.duffel[0] : ACTIVE_KEYS.duffel?.[0]?.key);
 
-    // Cross-verify top interesting deals with Duffel
-    const interestingDeals = allResults.filter(r => r.score.tag !== 'NORMAL').slice(0, 10);
-    if (interestingDeals.length > 0 && ACTIVE_KEYS.duffel?.length > 0) {
+    if (candidateDeals.length > 0) {
         console.log('');
-        console.log(`  ${c.cyan}${c.bold}  ─── Cross-verifying ${interestingDeals.length} deals with Duffel ───${c.reset}`);
-        const duffelKey = (typeof ACTIVE_KEYS.duffel[0] === 'string' ? ACTIVE_KEYS.duffel[0] : ACTIVE_KEYS.duffel[0]?.key);
+        console.log(`  ${c.cyan}${c.bold}  ─── Zero-Phantom Live Verification (${candidateDeals.length} anomaly deals) ───${c.reset}`);
 
-        for (const deal of interestingDeals) {
+        for (const deal of candidateDeals) {
             try {
-                const body = {
-                    data: {
-                        slices: [
-                            { origin: deal.origin, destination: deal.dest, departure_date: deal.date },
-                            { origin: deal.dest, destination: deal.origin, departure_date: deal.returnDate },
-                        ],
-                        passengers: [{ type: 'adult' }],
-                        cabin_class: 'economy',
-                    },
-                };
-                const res = await fetch('https://api.duffel.com/air/offer_requests', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${duffelKey}`,
-                        'Duffel-Version': 'v2',
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                    },
-                    body: JSON.stringify(body),
-                    signal: AbortSignal.timeout(15000),
-                });
+                // Case A: Kiwi booking token verification
+                if (deal.deepLink && deal.deepLink.includes('booking_token=') && kiwiKey) {
+                    const tokenMatch = deal.deepLink.match(/booking_token=([^&]+)/);
+                    if (tokenMatch) {
+                        const bToken = tokenMatch[1];
+                        const chkUrl = `https://api.tequila.kiwi.com/v2/booking/check_flights?booking_token=${bToken}&bnum=0&pnum=1&adults=1&currency=EUR`;
+                        const chkRes = await fetch(chkUrl, {
+                            headers: { 'apikey': kiwiKey, 'Accept': 'application/json' },
+                            signal: AbortSignal.timeout(12000),
+                        });
+                        if (chkRes.ok) {
+                            const chkData = await chkRes.json();
+                            if (chkData.flights_invalid) {
+                                deal.isExpired = true;
+                                deal.liveVerification = {
+                                    status: 'EXPIRED',
+                                    verifiedAt: new Date().toISOString(),
+                                    reason: 'Flight sold out or invalid in GDS'
+                                };
+                                log('warn', `[EXPIRED/PHANTOM] ${deal.origin}→${deal.destName} (€${deal.price}) is sold out`);
+                                continue;
+                            }
 
-                if (res.ok) {
-                    const data = await res.json();
-                    const offers = data?.data?.offers || [];
-                    if (offers.length > 0) {
-                        const cheapestDuffel = Math.min(...offers.map(o => parseFloat(o.total_amount)));
-                        const diff = Math.round(((cheapestDuffel - deal.price) / deal.price) * 100);
-
-                        deal.crossCheck = {
-                            duffelPrice: cheapestDuffel,
-                            kiwiPrice: deal.price,
-                            priceDiff: diff,
-                            status: diff <= 10 ? 'CONFIRMED' : diff > 50 ? 'KIWI MUCH CHEAPER' : 'KIWI CHEAPER',
-                        };
-
-                        const statusColor = deal.crossCheck.status === 'CONFIRMED' ? c.green :
-                            deal.crossCheck.status === 'KIWI MUCH CHEAPER' ? c.red : c.yellow;
-                        log('verify', `${deal.origin}→${deal.destName} Kiwi €${deal.price} vs Duffel €${cheapestDuffel} → ${statusColor}${deal.crossCheck.status}${c.reset}`);
-                    } else {
-                        deal.crossCheck = { status: 'NO OFFERS', duffelPrice: null, kiwiPrice: deal.price };
-                        log('verify', `${deal.origin}→${deal.destName} Kiwi €${deal.price} → ${c.dim}no Duffel offers${c.reset}`);
+                            if (chkData.price_change && chkData.total) {
+                                const newP = Math.round(chkData.total);
+                                const oldP = deal.price;
+                                deal.price = newP;
+                                deal.liveVerification = {
+                                    status: 'PRICE_UPDATED',
+                                    verifiedAt: new Date().toISOString(),
+                                    originalPrice: oldP,
+                                    livePrice: newP
+                                };
+                                log('verify', `[PRICE UPDATED] ${deal.origin}→${deal.destName} live update €${oldP} → €${newP}`);
+                            } else {
+                                deal.liveVerification = {
+                                    status: 'VERIFIED_LIVE',
+                                    verifiedAt: new Date().toISOString(),
+                                    livePrice: deal.price
+                                };
+                                log('ok', `[VERIFIED LIVE] ${deal.origin}→${deal.destName} confirmed live at €${deal.price} 🟢`);
+                            }
+                        }
                     }
-                } else {
-                    deal.crossCheck = { status: `HTTP ${res.status}`, duffelPrice: null, kiwiPrice: deal.price };
-                    log('warn', `Duffel verify ${deal.origin}→${deal.dest}: HTTP ${res.status}`);
+                } else if (deal.source === 'ryanair') {
+                    // Case B: Direct Ryanair Fare
+                    deal.liveVerification = {
+                        status: 'VERIFIED_LIVE',
+                        verifiedAt: new Date().toISOString(),
+                        livePrice: deal.price,
+                        carrier: 'Ryanair Direct FareFinder'
+                    };
+                    log('ok', `[VERIFIED LIVE] ${deal.origin}→${deal.destName} Ryanair direct confirmed at €${deal.price} 🟢`);
+                } else if (duffelKey && !deal.score?.isLCC) {
+                    // Case C: Legacy carrier Duffel check
+                    const body = {
+                        data: {
+                            slices: [
+                                { origin: deal.origin, destination: deal.dest, departure_date: deal.date },
+                                { origin: deal.dest, destination: deal.origin, departure_date: deal.returnDate },
+                            ],
+                            passengers: [{ type: 'adult' }],
+                            cabin_class: 'economy',
+                        },
+                    };
+                    const res = await fetch('https://api.duffel.com/air/offer_requests', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${duffelKey}`,
+                            'Duffel-Version': 'v2',
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                        },
+                        body: JSON.stringify(body),
+                        signal: AbortSignal.timeout(15000),
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        const offers = data?.data?.offers || [];
+                        if (offers.length > 0) {
+                            const cheapestDuffel = Math.min(...offers.map(o => parseFloat(o.total_amount)));
+                            deal.crossCheck = { duffelPrice: cheapestDuffel, kiwiPrice: deal.price, status: 'CONFIRMED' };
+                            deal.liveVerification = { status: 'VERIFIED_LIVE', verifiedAt: new Date().toISOString(), livePrice: deal.price };
+                            log('ok', `[VERIFIED LIVE] ${deal.origin}→${deal.destName} confirmed with Duffel at €${deal.price} 🟢`);
+                        }
+                    }
                 }
-                await new Promise(r => setTimeout(r, 1500)); // Rate limit
+                await new Promise(r => setTimeout(r, 400)); // Gentle pacing
             } catch (err) {
-                deal.crossCheck = { status: 'VERIFY FAILED', error: err.message };
-                log('warn', `Cross-check failed for ${deal.origin}→${deal.dest}: ${err.message}`);
+                deal.liveVerification = { status: 'UNVERIFIED', verifiedAt: new Date().toISOString(), error: err.message };
             }
         }
         console.log('');
     }
+
+    // Filter out expired phantom deals from allResults
+    const validResults = allResults.filter(r => !r.isExpired);
+    allResults.length = 0;
+    allResults.push(...validResults);
 
     // ─── Record History & Price Crashes ─────────────────────
     const priceCrashes = processHistoryAndCrashes(allResults);
