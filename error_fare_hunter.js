@@ -391,6 +391,81 @@ async function kiwiAnywhereSearch(origin, dateFrom, dateTo, nightsMin, nightsMax
     return [];
 }
 
+// ─── Ryanair Direct Fare Finder ──────────────────────────────
+// Direct lookup via Ryanair public API for hubs where Kiwi GDS lacks inventory (e.g. PED, regional airports)
+async function ryanairDirectSearch(origin, dateFrom, dateTo, nightsMin = 3, nightsMax = 14) {
+    const results = [];
+    try {
+        const url = `https://services-api.ryanair.com/farfnd/v4/roundTripFares?departureAirportIataCode=${origin}&language=en&limit=16&market=en-gb&offset=0&outboundDepartureDateFrom=${dateFrom}&outboundDepartureDateTo=${dateTo}&inboundDepartureDateFrom=${dateFrom}&inboundDepartureDateTo=2027-03-31`;
+
+        const res = await fetch(url, {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
+                'Accept': 'application/json'
+            },
+            signal: AbortSignal.timeout(12000)
+        });
+
+        if (!res.ok) {
+            return results;
+        }
+
+        const data = await res.json();
+        const fares = data.fares || [];
+
+        for (const f of fares) {
+            const out = f.outbound;
+            const ret = f.inbound;
+            if (!out || !ret) continue;
+
+            const departDate = out.departureDate?.split('T')[0] || '';
+            const returnDate = ret.departureDate?.split('T')[0] || '';
+            const dest = out.arrivalAirport?.iataCode || '';
+            const destName = out.arrivalAirport?.name || dest;
+            const country = out.arrivalAirport?.countryName || '';
+
+            let priceVal = f.summary?.price?.value || 0;
+            const currency = f.summary?.price?.currencyCode || 'EUR';
+            if (currency === 'CZK') {
+                priceVal = Math.round((priceVal / 25.0) * 100) / 100;
+            }
+
+            const tripDays = f.summary?.tripDurationDays || 7;
+            const flightNumber = out.flightNumber || 'FR';
+
+            const bookingLinks = makeBookingLinks(origin, dest, departDate, returnDate, ['FR']);
+            const score = scoreDeal(Math.round(priceVal), ['FR'], dest, origin);
+
+            results.push({
+                origin,
+                dest,
+                destName,
+                country,
+                date: departDate,
+                returnDate,
+                departure: out.departureDate,
+                arrival: out.arrivalDate,
+                tripDays,
+                price: Math.round(priceVal),
+                currency: 'EUR',
+                airlines: ['FR'],
+                airline: 'Ryanair',
+                flightNumber,
+                stops: 0,
+                layovers: { outbound: [], return: [] },
+                deepLink: bookingLinks.airline?.url || bookingLinks.skyscanner,
+                bookingLinks,
+                score,
+                isGenuineRoundTrip: true,
+                source: 'ryanair'
+            });
+        }
+    } catch (err) {
+        log('warn', `Ryanair direct search error for ${origin}: ${err.message}`);
+    }
+    return results;
+}
+
 // ─── Main Hunt ──────────────────────────────────────────────
 async function main() {
     console.log(`
@@ -448,6 +523,15 @@ ${c.magenta}${c.bold}  ╔══════════════════
     }
     console.log('');
 
+    let existingResults = [];
+    if (originsFilter && existsSync('error_fares_report.json')) {
+        try {
+            const oldReport = JSON.parse(readFileSync('error_fares_report.json', 'utf8'));
+            existingResults = (oldReport.allResults || []).filter(r => !originsFilter.includes(r.origin));
+            log('info', `Loaded ${c.bold}${existingResults.length}${c.reset} existing results for other origins from error_fares_report.json`);
+        } catch (_) {}
+    }
+
     const allResults = [];
 
     // ─── Phase 1: Kiwi Anywhere Search (always fresh) ─────────
@@ -476,6 +560,28 @@ ${c.magenta}${c.bold}  ╔══════════════════
             // Pass B: Deep Price Pass (all offers) for this window
             const priceDeals = await kiwiAnywhereSearch(origin.code, wStart, wEnd, nightsMin, nightsMax, 1000);
             for (const r of priceDeals) {
+                const key = `${r.origin}_${r.dest}_${r.date}_${r.price}`;
+                if (!originResultsMap.has(key)) {
+                    originResultsMap.set(key, r);
+                }
+            }
+
+            // Pass C: Direct Ryanair Fare Scout (crucial for PED, BRQ, OSR where Kiwi GDS lacks inventory)
+            if (['PED', 'BRQ', 'OSR'].includes(origin.code) || originResultsMap.size === 0) {
+                const ryanairDeals = await ryanairDirectSearch(origin.code, wStart, wEnd, nightsMin, nightsMax);
+                for (const r of ryanairDeals) {
+                    const key = `${r.origin}_${r.dest}_${r.date}_${r.price}`;
+                    if (!originResultsMap.has(key)) {
+                        originResultsMap.set(key, r);
+                    }
+                }
+            }
+        }
+
+        // Broader horizon pass for PED to guarantee complete schedule coverage
+        if (origin.code === 'PED' || originResultsMap.size === 0) {
+            const ryanairHorizonDeals = await ryanairDirectSearch(origin.code, today, dateTo, nightsMin, nightsMax);
+            for (const r of ryanairHorizonDeals) {
                 const key = `${r.origin}_${r.dest}_${r.date}_${r.price}`;
                 if (!originResultsMap.has(key)) {
                     originResultsMap.set(key, r);
@@ -888,14 +994,22 @@ ${c.magenta}${c.bold}  ╔══════════════════
         console.log(`\n  ${c.dim}... and ${allResults.length - 30} more (see error_fares_report.json)${c.reset}`);
     }
 
+    // Merge existingResults if partial scan
+    const finalResults = [...existingResults, ...allResults];
+    finalResults.sort((a, b) => a.price - b.price);
+
     // Save full report
+    const allUniqueOrigins = originsFilter && existingResults.length > 0
+        ? Array.from(new Set([...ORIGINS.map(o => o.code)]))
+        : origins.map(o => o.code);
+
     const report = {
         scanDate: new Date().toISOString(),
-        origins: origins.map(o => o.code),
-        totalRoutes: allResults.length,
-        errorFares,
-        cheapest30: allResults.slice(0, 30),
-        allResults,
+        origins: allUniqueOrigins,
+        totalRoutes: finalResults.length,
+        errorFares: finalResults.filter(r => r.score?.tag === 'ERROR FARE'),
+        cheapest30: finalResults.slice(0, 30),
+        allResults: finalResults,
     };
     writeFileSync('error_fares_report.json', JSON.stringify(report, null, 2));
     console.log('');
