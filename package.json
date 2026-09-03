@@ -1,6 +1,6 @@
 {
   "name": "flightscanner",
-  "version": "3.6.0",
+  "version": "3.7.0",
   "type": "module",
   "description": "Error fare hunter & flight intelligence — Kiwi scout + dynamic market scoring + Duffel cross-verification + 3D MapTiler Globe",
   "scripts": {
@@ -11,7 +11,9 @@
     "search": "node flight_search.js",
     "map": "node server.js",
     "start": "node server.js",
-    "full": "node scan_keys.js --force && node error_fare_hunter.js"
+    "full": "node scan_keys.js --force && node error_fare_hunter.js",
+    "test": "node -e \"const fs=require('fs'),{execSync}=require('child_process');fs.readdirSync('.').filter(f=>f.endsWith('.js')).forEach(f=>execSync('node --check '+f,{stdio:'inherit'}));console.log('✓ All JS files passed syntax check.');\"",
+    "audit": "npm audit"
   },
   "dependencies": {}
 }

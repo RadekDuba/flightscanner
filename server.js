@@ -126,6 +126,25 @@ const server = createServer((req, res) => {
         return;
     }
 
+    // GET /api/airport-coords
+    if (pathname === '/api/airport-coords') {
+        const coordsPath = resolve(ROOT_DIR, 'airport_coords.json');
+        if (!existsSync(coordsPath)) {
+            res.writeHead(404, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'airport_coords.json not found' }));
+            return;
+        }
+        try {
+            const data = readFileSync(coordsPath);
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(data);
+        } catch (err) {
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'Failed to read airport coords', details: err.message }));
+        }
+        return;
+    }
+
     // GET /api/status
     if (pathname === '/api/status') {
         const keysExist = existsSync(resolve(ROOT_DIR, 'active_keys.json'));

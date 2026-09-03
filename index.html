@@ -6,8 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#06070b">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="description" content="FlightScanner v3.6 — Real-time 3D flight intelligence and error fare hunter. Discover direct flight error fares and cheapest round-trips from Central European hubs with interactive 3D vector globe visualization.">
+    <meta name="description" content="FlightScanner v3.7 — Real-time 3D flight intelligence and error fare hunter. Discover direct flight error fares and cheapest round-trips from Central European hubs with interactive 3D vector globe visualization.">
     <meta name="keywords" content="flight deals, error fares, cheap flights, prague flights, vienna flights, flight scanner, travel intelligence, 3d flight map, duffel ndc">
     <meta name="author" content="Radek Duba">
     <meta name="robots" content="index, follow">
@@ -16,13 +17,13 @@
     <!-- Open Graph / Social Meta Tags -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://radekduba.github.io/flightscanner/">
-    <meta property="og:title" content="FlightScanner v3.6 — Real-Time Flight Intelligence & Error Fare Hunter">
+    <meta property="og:title" content="FlightScanner v3.7 — Real-Time Flight Intelligence & Error Fare Hunter">
     <meta property="og:description" content="Discover direct flight error fares and cheapest round-trips from Prague, Vienna, Bratislava, and Katowice with interactive 3D globe visualization.">
     <meta property="og:site_name" content="FlightScanner">
 
     <!-- Twitter Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="FlightScanner v3.6 — Real-Time Flight Intelligence & Error Fare Hunter">
+    <meta name="twitter:title" content="FlightScanner v3.7 — Real-Time Flight Intelligence & Error Fare Hunter">
     <meta name="twitter:description" content="Discover direct flight error fares and cheapest round-trips from Central European hubs.">
 
     <!-- JSON-LD Structured Data for SEO -->
@@ -56,10 +57,10 @@
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔥</text></svg>">
     
-    <title>FlightScanner v3.6 — Real-Time Flight Intelligence &amp; Error Fare Hunter</title>
+    <title>FlightScanner v3.7 — Real-Time Flight Intelligence &amp; Error Fare Hunter</title>
 
-    <script src="https://cdn.maptiler.com/maptiler-sdk-js/v4.0.2/maptiler-sdk.umd.min.js"></script>
-    <link href="https://cdn.maptiler.com/maptiler-sdk-js/v4.0.2/maptiler-sdk.css" rel="stylesheet" />
+    <script src="https://cdn.maptiler.com/maptiler-sdk-js/v4.1.0/maptiler-sdk.umd.min.js"></script>
+    <link href="https://cdn.maptiler.com/maptiler-sdk-js/v4.1.0/maptiler-sdk.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
@@ -888,7 +889,7 @@
         <!-- 100% Full-Width Top Header Bar with Live Presets & Stats -->
         <header class="app-header" id="app-header" role="banner">
             <div class="brand-group">
-                <h1 class="brand-title">🔥 FlightScanner <span class="brand-version">v3.6</span></h1>
+                <h1 class="brand-title">🔥 FlightScanner <span class="brand-version">v3.7</span></h1>
                 <span class="brand-status"><span class="status-dot"></span> Direct Flights Only</span>
             </div>
 
@@ -1145,7 +1146,10 @@
             "MRU":[57.6836,-20.4302],"NRT":[140.3860,35.7647],"BTS":[17.2126,48.1702],"PRG":[14.2600,50.1007],
             "KTW":[19.0799,50.4743],"VIE":[16.5697,48.1102],"OSR":[18.1110,49.6963],
             "BRQ":[16.6944,49.1513],"PED":[15.7386,50.0134],"KLV":[12.9150,50.2030],"JCL":[14.4283,48.9472],
-            "STN":[-0.2350,51.8860],"BGY":[9.7041,45.6738]
+            "STN":[0.2350,51.8860],"BGY":[9.7041,45.6738],"GYD":[50.0461,40.4675],"DXB":[55.3644,25.2532],
+            "ICN":[126.4406,37.4602],"OTP":[26.0844,44.5711],"LYS":[5.0811,45.7256],"TUN":[10.2272,36.8510],
+            "JED":[39.1565,21.6796],"MRS":[5.2150,43.4367],"HND":[139.7811,35.5494],"RVN":[25.8304,66.5648],
+            "IST":[28.7519,41.2753],"HAN":[105.8072,21.2212]
         };
 
         const ORIGIN_COORDS = {
@@ -1291,7 +1295,7 @@
 
         const map = new maptilersdk.Map({
             container: 'map',
-            style: isLocalHost ? DARK_FALLBACK_STYLE : maptilersdk.MapStyle.DATAVIZ.DARK,
+            style: isLocalHost ? 'https://tiles.openfreemap.org/styles/dark' : maptilersdk.MapStyle.DATAVIZ.DARK,
             center: [15, 48],
             zoom: 3.6,
             projection: 'globe',
@@ -1303,6 +1307,12 @@
         });
 
         map.on('error', () => { /* gracefully handle network hiccups */ });
+        map.on('styleimagemissing', (e) => {
+            const id = e.id;
+            if (!map.hasImage(id)) {
+                map.addImage(id, { width: 1, height: 1, data: new Uint8Array(4) });
+            }
+        });
         map.on('load', () => { setTimeout(() => map.resize(), 100); });
 
         let routeLinesData = null, destPointsData = null, originPointsData = null;
@@ -2172,6 +2182,15 @@
                     if (res.ok) report = await res.json();
                 } catch { }
             }
+
+            // Pre-load offline airport coordinates dictionary
+            try {
+                const acRes = await fetch('airport_coords.json');
+                if (acRes.ok) {
+                    const extraCoords = await acRes.json();
+                    Object.assign(AIRPORT_COORDS, extraCoords);
+                }
+            } catch { }
 
             if (report?.allResults) {
                 deals = report.allResults;

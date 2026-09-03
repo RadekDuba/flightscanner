@@ -1,10 +1,11 @@
-const CACHE_NAME = 'flightscanner-v3.6.1-cache';
+const CACHE_NAME = 'flightscanner-v3.7.0-cache';
 const ASSETS_TO_CACHE = [
   './',
   './manifest.json',
-  'https://cdn.maptiler.com/maptiler-sdk-js/v4.0.2/maptiler-sdk.css',
-  'https://cdn.maptiler.com/maptiler-sdk-js/v4.0.2/maptiler-sdk.umd.min.js',
-  'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap'
+  './airport_coords.json',
+  'https://cdn.maptiler.com/maptiler-sdk-js/v4.1.0/maptiler-sdk.css',
+  'https://cdn.maptiler.com/maptiler-sdk-js/v4.1.0/maptiler-sdk.umd.min.js',
+  'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap'
 ];
 
 self.addEventListener('install', (event) => {
