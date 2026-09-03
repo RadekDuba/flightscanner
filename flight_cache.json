@@ -9140,431 +9140,431 @@
   },
   "baselines": {
     "BTS→VAR": {
-      "median": 28,
-      "min": 28,
-      "max": 187,
+      "median": 39,
+      "min": 39,
+      "max": 106,
       "samples": 20,
-      "ts": 1786956870353,
+      "ts": 1788469537016,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 29
+          "date": "2026-09-03",
+          "price": 44
         }
       ]
     },
     "BTS→TZL": {
       "median": 19,
       "min": 18,
-      "max": 75,
+      "max": 76,
       "samples": 20,
-      "ts": 1786956867932,
+      "ts": 1788469519090,
       "history": [
         {
-          "date": "2026-08-17",
+          "date": "2026-09-03",
           "price": 18
         }
       ]
     },
     "BTS→OHD": {
-      "median": 36,
-      "min": 30,
-      "max": 192,
+      "median": 39,
+      "min": 36,
+      "max": 102,
       "samples": 20,
-      "ts": 1786956870354,
+      "ts": 1788469524738,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 30
+          "date": "2026-09-03",
+          "price": 36
         }
       ]
     },
     "BTS→TIA": {
-      "median": 29,
-      "min": 29,
-      "max": 198,
+      "median": 27,
+      "min": 27,
+      "max": 107,
       "samples": 20,
-      "ts": 1786956867932,
+      "ts": 1788469519091,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 29
+          "date": "2026-09-03",
+          "price": 27
         }
       ]
     },
     "BTS→PDV": {
-      "median": 29,
+      "median": 31,
       "min": 27,
-      "max": 209,
+      "max": 140,
       "samples": 20,
-      "ts": 1786956867932,
+      "ts": 1788469519091,
       "history": [
         {
-          "date": "2026-08-17",
+          "date": "2026-09-03",
           "price": 27
         }
       ]
     },
     "KTW→BLL": {
-      "median": 31,
-      "min": 30,
-      "max": 320,
+      "median": 29,
+      "min": 28,
+      "max": 347,
       "samples": 20,
-      "ts": 1786956870354,
+      "ts": 1788469519091,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 30
+          "date": "2026-09-03",
+          "price": 28
         }
       ]
     },
     "BTS→SUF": {
-      "median": 66,
-      "min": 43,
-      "max": 115,
+      "median": 57,
+      "min": 38,
+      "max": 132,
       "samples": 20,
-      "ts": 1786956881133,
+      "ts": 1788469530940,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 43
+          "date": "2026-09-03",
+          "price": 38
         }
       ]
     },
     "BTS→PMO": {
       "median": 38,
-      "min": 34,
-      "max": 115,
+      "min": 37,
+      "max": 109,
       "samples": 20,
-      "ts": 1786956872778,
+      "ts": 1788469527746,
       "history": [
         {
-          "date": "2026-08-17",
+          "date": "2026-09-03",
           "price": 37
         }
       ]
     },
     "BTS→WAW": {
-      "median": 33,
-      "min": 32,
-      "max": 68,
+      "median": 32,
+      "min": 31,
+      "max": 72,
       "samples": 20,
-      "ts": 1786956870354,
+      "ts": 1788469521674,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 32
+          "date": "2026-09-03",
+          "price": 31
         }
       ]
     },
     "BTS→PRN": {
-      "median": 42,
-      "min": 41,
-      "max": 184,
+      "median": 38,
+      "min": 37,
+      "max": 147,
       "samples": 20,
-      "ts": 1786956875189,
+      "ts": 1788469527745,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 40
-        }
-      ]
-    },
-    "BTS→NAP": {
-      "median": 36,
-      "min": 34,
-      "max": 195,
-      "samples": 20,
-      "ts": 1786956872777,
-      "history": [
-        {
-          "date": "2026-08-17",
-          "price": 34
-        }
-      ]
-    },
-    "BTS→KSC": {
-      "median": 48,
-      "min": 45,
-      "max": 64,
-      "samples": 20,
-      "ts": 1786956884154,
-      "history": [
-        {
-          "date": "2026-08-17",
-          "price": 45
-        }
-      ]
-    },
-    "BTS→LTN": {
-      "median": 37,
-      "min": 36,
-      "max": 269,
-      "samples": 20,
-      "ts": 1786956872778,
-      "history": [
-        {
-          "date": "2026-08-17",
-          "price": 38
-        }
-      ]
-    },
-    "KTW→SPU": {
-      "median": 45,
-      "min": 38,
-      "max": 224,
-      "samples": 20,
-      "ts": 1786956872778,
-      "history": [
-        {
-          "date": "2026-08-17",
-          "price": 38
-        }
-      ]
-    },
-    "KTW→TIA": {
-      "median": 45,
-      "min": 41,
-      "max": 611,
-      "samples": 20,
-      "ts": 1786956878257,
-      "history": [
-        {
-          "date": "2026-08-17",
-          "price": 41
-        }
-      ]
-    },
-    "BTS→OSL": {
-      "median": 37,
-      "min": 36,
-      "max": 136,
-      "samples": 20,
-      "ts": 1786956872778,
-      "history": [
-        {
-          "date": "2026-08-17",
+          "date": "2026-09-03",
           "price": 37
         }
       ]
     },
-    "KTW→GHV": {
-      "median": 34,
-      "min": 29,
-      "max": 98,
+    "BTS→NAP": {
+      "median": 37,
+      "min": 34,
+      "max": 92,
       "samples": 20,
-      "ts": 1786956870354,
+      "ts": 1788469527746,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 29
+          "date": "2026-09-03",
+          "price": 38
         }
       ]
     },
-    "PRG→TIA": {
-      "median": 44,
+    "BTS→KSC": {
+      "median": 43,
       "min": 43,
-      "max": 423,
+      "max": 60,
       "samples": 20,
-      "ts": 1786956881133,
+      "ts": 1788469537015,
       "history": [
         {
-          "date": "2026-08-17",
+          "date": "2026-09-03",
           "price": 43
         }
       ]
     },
-    "BTS→RMO": {
-      "median": 39,
-      "min": 39,
-      "max": 251,
+    "BTS→LTN": {
+      "median": 52,
+      "min": 51,
+      "max": 379,
       "samples": 20,
-      "ts": 1786956875189,
+      "ts": 1788469555528,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 39
+          "date": "2026-09-03",
+          "price": 60
+        }
+      ]
+    },
+    "KTW→SPU": {
+      "median": 41,
+      "min": 36,
+      "max": 538,
+      "samples": 20,
+      "ts": 1788469527745,
+      "history": [
+        {
+          "date": "2026-09-03",
+          "price": 36
+        }
+      ]
+    },
+    "KTW→TIA": {
+      "median": 36,
+      "min": 35,
+      "max": 577,
+      "samples": 20,
+      "ts": 1788469524738,
+      "history": [
+        {
+          "date": "2026-09-03",
+          "price": 35
+        }
+      ]
+    },
+    "BTS→OSL": {
+      "median": 42,
+      "min": 35,
+      "max": 97,
+      "samples": 20,
+      "ts": 1788469524737,
+      "history": [
+        {
+          "date": "2026-09-03",
+          "price": 35
+        }
+      ]
+    },
+    "KTW→GHV": {
+      "median": 38,
+      "min": 28,
+      "max": 90,
+      "samples": 20,
+      "ts": 1788469521674,
+      "history": [
+        {
+          "date": "2026-09-03",
+          "price": 28
+        }
+      ]
+    },
+    "PRG→TIA": {
+      "median": 55,
+      "min": 49,
+      "max": 361,
+      "samples": 20,
+      "ts": 1788469542517,
+      "history": [
+        {
+          "date": "2026-09-03",
+          "price": 49
+        }
+      ]
+    },
+    "BTS→RMO": {
+      "median": 38,
+      "min": 38,
+      "max": 215,
+      "samples": 20,
+      "ts": 1788469530941,
+      "history": [
+        {
+          "date": "2026-09-03",
+          "price": 38
         }
       ]
     },
     "BTS→BCN": {
       "median": 41,
-      "min": 40,
-      "max": 367,
+      "min": 39,
+      "max": 230,
       "samples": 20,
-      "ts": 1786956881132,
+      "ts": 1788469534120,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 42
+          "date": "2026-09-03",
+          "price": 39
         }
       ]
     },
     "KTW→BDS": {
-      "median": 70,
-      "min": 47,
-      "max": 162,
+      "median": 76,
+      "min": 53,
+      "max": 126,
       "samples": 20,
-      "ts": 1786956887229,
+      "ts": 1788469547848,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 47
+          "date": "2026-09-03",
+          "price": 53
         }
       ]
     },
     "BTS→BER": {
-      "median": 43,
-      "min": 42,
-      "max": 90,
+      "median": 44,
+      "min": 39,
+      "max": 75,
       "samples": 20,
-      "ts": 1786956878257,
+      "ts": 1788469530941,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 42
+          "date": "2026-09-03",
+          "price": 39
         }
       ]
     },
     "BTS→BSL": {
-      "median": 40,
-      "min": 40,
-      "max": 132,
+      "median": 38,
+      "min": 36,
+      "max": 159,
       "samples": 20,
-      "ts": 1786956875189,
+      "ts": 1788469524738,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 39
+          "date": "2026-09-03",
+          "price": 36
         }
       ]
     },
     "BTS→DTM": {
-      "median": 43,
-      "min": 42,
-      "max": 130,
-      "samples": 20,
-      "ts": 1786956878257,
-      "history": [
-        {
-          "date": "2026-08-17",
-          "price": 42
-        }
-      ]
-    },
-    "BTS→ATH": {
-      "median": 44,
-      "min": 43,
-      "max": 176,
-      "samples": 20,
-      "ts": 1786956881133,
-      "history": [
-        {
-          "date": "2026-08-17",
-          "price": 43
-        }
-      ]
-    },
-    "BTS→ALC": {
-      "median": 44,
-      "min": 34,
-      "max": 194,
-      "samples": 20,
-      "ts": 1786956878257,
-      "history": [
-        {
-          "date": "2026-08-17",
-          "price": 41
-        }
-      ]
-    },
-    "BTS→TGD": {
-      "median": 39,
-      "min": 39,
-      "max": 185,
-      "samples": 20,
-      "ts": 1786956875189,
-      "history": [
-        {
-          "date": "2026-08-17",
-          "price": 39
-        }
-      ]
-    },
-    "BTS→SKP": {
-      "median": 29,
-      "min": 28,
-      "max": 132,
-      "samples": 20,
-      "ts": 1786956867932,
-      "history": [
-        {
-          "date": "2026-08-17",
-          "price": 28
-        }
-      ]
-    },
-    "KTW→LTN": {
       "median": 46,
-      "min": 43,
-      "max": 273,
+      "min": 45,
+      "max": 96,
       "samples": 20,
-      "ts": 1786956884154,
+      "ts": 1788469540167,
       "history": [
         {
-          "date": "2026-08-17",
+          "date": "2026-09-03",
           "price": 45
         }
       ]
     },
-    "KTW→DTM": {
-      "median": 51,
-      "min": 51,
-      "max": 132,
+    "BTS→ATH": {
+      "median": 47,
+      "min": 44,
+      "max": 239,
       "samples": 20,
-      "ts": 1786956893777,
+      "ts": 1788469537016,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 51
+          "date": "2026-09-03",
+          "price": 44
+        }
+      ]
+    },
+    "BTS→ALC": {
+      "median": 43,
+      "min": 36,
+      "max": 195,
+      "samples": 20,
+      "ts": 1788469524738,
+      "history": [
+        {
+          "date": "2026-09-03",
+          "price": 36
+        }
+      ]
+    },
+    "BTS→TGD": {
+      "median": 35,
+      "min": 35,
+      "max": 116,
+      "samples": 20,
+      "ts": 1788469521674,
+      "history": [
+        {
+          "date": "2026-09-03",
+          "price": 35
+        }
+      ]
+    },
+    "BTS→SKP": {
+      "median": 27,
+      "min": 27,
+      "max": 95,
+      "samples": 20,
+      "ts": 1788469519091,
+      "history": [
+        {
+          "date": "2026-09-03",
+          "price": 27
+        }
+      ]
+    },
+    "KTW→LTN": {
+      "median": 48,
+      "min": 47,
+      "max": 241,
+      "samples": 20,
+      "ts": 1788469540167,
+      "history": [
+        {
+          "date": "2026-09-03",
+          "price": 47
+        }
+      ]
+    },
+    "KTW→DTM": {
+      "median": 57,
+      "min": 57,
+      "max": 107,
+      "samples": 20,
+      "ts": 1788469550807,
+      "history": [
+        {
+          "date": "2026-09-03",
+          "price": 57
         }
       ]
     },
     "KTW→SUF": {
-      "median": 87,
+      "median": 79,
       "min": 66,
-      "max": 468,
+      "max": 278,
       "samples": 20,
-      "ts": 1786956902980,
+      "ts": 1788469558858,
       "history": [
         {
-          "date": "2026-08-17",
+          "date": "2026-09-03",
           "price": 66
         }
       ]
     },
     "BTS→FCO": {
-      "median": 43,
-      "min": 40,
-      "max": 134,
+      "median": 40,
+      "min": 39,
+      "max": 250,
       "samples": 20,
-      "ts": 1786956875189,
+      "ts": 1788469530941,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 40
+          "date": "2026-09-03",
+          "price": 39
         }
       ]
     },
     "BTS→LCA": {
-      "median": 44,
-      "min": 44,
-      "max": 374,
+      "median": 49,
+      "min": 48,
+      "max": 361,
       "samples": 20,
-      "ts": 1786956906244,
+      "ts": 1788469542518,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 69
+          "date": "2026-09-03",
+          "price": 49
         }
       ]
     },
@@ -9582,93 +9582,93 @@
       ]
     },
     "KTW→FCO": {
-      "median": 44,
-      "min": 42,
-      "max": 436,
+      "median": 48,
+      "min": 43,
+      "max": 489,
       "samples": 20,
-      "ts": 1786956881133,
+      "ts": 1788469537016,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 42
+          "date": "2026-09-03",
+          "price": 43
         }
       ]
     },
     "PRG→FCO": {
-      "median": 48,
-      "min": 47,
-      "max": 323,
+      "median": 55,
+      "min": 55,
+      "max": 131,
       "samples": 20,
-      "ts": 1786956887229,
+      "ts": 1788469547849,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 47
+          "date": "2026-09-03",
+          "price": 55
         }
       ]
     },
     "PRG→LTN": {
-      "median": 49,
-      "min": 49,
-      "max": 293,
+      "median": 57,
+      "min": 57,
+      "max": 264,
       "samples": 20,
-      "ts": 1786956887229,
+      "ts": 1788469550807,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 49
+          "date": "2026-09-03",
+          "price": 57
         }
       ]
     },
     "BTS→NCE": {
-      "median": 60,
-      "min": 56,
-      "max": 223,
+      "median": 55,
+      "min": 50,
+      "max": 130,
       "samples": 20,
-      "ts": 1786956896893,
+      "ts": 1788469545093,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 56
-        }
-      ]
-    },
-    "KTW→CTA": {
-      "median": 52,
-      "min": 47,
-      "max": 111,
-      "samples": 20,
-      "ts": 1786956887229,
-      "history": [
-        {
-          "date": "2026-08-17",
-          "price": 47
-        }
-      ]
-    },
-    "KTW→EIN": {
-      "median": 53,
-      "min": 48,
-      "max": 217,
-      "samples": 20,
-      "ts": 1786956890433,
-      "history": [
-        {
-          "date": "2026-08-17",
+          "date": "2026-09-03",
           "price": 50
         }
       ]
     },
-    "PRG→SOF": {
-      "median": 61,
-      "min": 59,
-      "max": 470,
+    "KTW→CTA": {
+      "median": 49,
+      "min": 48,
+      "max": 111,
       "samples": 20,
-      "ts": 1786956896893,
+      "ts": 1788469542517,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 59
+          "date": "2026-09-03",
+          "price": 48
+        }
+      ]
+    },
+    "KTW→EIN": {
+      "median": 67,
+      "min": 66,
+      "max": 225,
+      "samples": 20,
+      "ts": 1788469558858,
+      "history": [
+        {
+          "date": "2026-09-03",
+          "price": 66
+        }
+      ]
+    },
+    "PRG→SOF": {
+      "median": 55,
+      "min": 54,
+      "max": 588,
+      "samples": 20,
+      "ts": 1788469547848,
+      "history": [
+        {
+          "date": "2026-09-03",
+          "price": 54
         }
       ]
     },
@@ -9681,430 +9681,430 @@
     },
     "KTW→NAP": {
       "median": 48,
-      "min": 45,
-      "max": 218,
+      "min": 43,
+      "max": 190,
       "samples": 20,
-      "ts": 1786956884154,
+      "ts": 1788469553172,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 45
+          "date": "2026-09-03",
+          "price": 58
         }
       ]
     },
     "BTS→EVN": {
-      "median": 39,
-      "min": 39,
-      "max": 339,
+      "median": 47,
+      "min": 46,
+      "max": 229,
       "samples": 20,
-      "ts": 1786956878257,
+      "ts": 1788469540167,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 40
+          "date": "2026-09-03",
+          "price": 46
         }
       ]
     },
     "KTW→MAD": {
-      "median": 62,
-      "min": 50,
-      "max": 490,
+      "median": 90,
+      "min": 56,
+      "max": 499,
       "samples": 20,
-      "ts": 1786956893777,
+      "ts": 1788469550807,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 50
+          "date": "2026-09-03",
+          "price": 56
         }
       ]
     },
     "KTW→MLA": {
-      "median": 55,
-      "min": 53,
-      "max": 591,
+      "median": 49,
+      "min": 49,
+      "max": 499,
       "samples": 20,
-      "ts": 1786956893777,
+      "ts": 1788469545093,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 53
+          "date": "2026-09-03",
+          "price": 49
         }
       ]
     },
     "PRG→RMO": {
       "median": 52,
-      "min": 52,
-      "max": 337,
+      "min": 49,
+      "max": 374,
       "samples": 20,
-      "ts": 1786956893777,
+      "ts": 1788469542517,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 52
+          "date": "2026-09-03",
+          "price": 49
         }
       ]
     },
     "KTW→ATH": {
-      "median": 61,
-      "min": 59,
-      "max": 437,
+      "median": 57,
+      "min": 56,
+      "max": 501,
       "samples": 20,
-      "ts": 1786956899929,
+      "ts": 1788469553171,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 61
+          "date": "2026-09-03",
+          "price": 57
         }
       ]
     },
     "KTW→LCA": {
-      "median": 203,
-      "min": 63,
-      "max": 720,
+      "median": 60,
+      "min": 58,
+      "max": 702,
       "samples": 20,
-      "ts": 1786956902980,
+      "ts": 1788469555527,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 65
+          "date": "2026-09-03",
+          "price": 58
         }
       ]
     },
     "BTS→AGP": {
-      "median": 56,
-      "min": 51,
-      "max": 336,
-      "samples": 20,
-      "ts": 1786956899929,
-      "history": [
-        {
-          "date": "2026-08-17",
-          "price": 59
-        }
-      ]
-    },
-    "BTS→KUT": {
-      "median": 48,
-      "min": 38,
-      "max": 775,
-      "samples": 20,
-      "ts": 1786956896893,
-      "history": [
-        {
-          "date": "2026-08-17",
-          "price": 59
-        }
-      ]
-    },
-    "KTW→ALC": {
-      "median": 63,
-      "min": 61,
-      "max": 354,
-      "samples": 20,
-      "ts": 1786956902980,
-      "history": [
-        {
-          "date": "2026-08-17",
-          "price": 65
-        }
-      ]
-    },
-    "KTW→BCN": {
-      "median": 55,
-      "min": 53,
-      "max": 563,
-      "samples": 20,
-      "ts": 1786956896893,
-      "history": [
-        {
-          "date": "2026-08-17",
-          "price": 53
-        }
-      ]
-    },
-    "VIE→BCN": {
-      "median": 73,
-      "min": 69,
-      "max": 343,
-      "samples": 20,
-      "ts": 1786956906244,
-      "history": [
-        {
-          "date": "2026-08-17",
-          "price": 69
-        }
-      ]
-    },
-    "KTW→KUT": {
-      "median": 72,
-      "min": 70,
-      "max": 281,
-      "samples": 20,
-      "ts": 1786956906244,
-      "history": [
-        {
-          "date": "2026-08-17",
-          "price": 72
-        }
-      ]
-    },
-    "OSR→WAW": {
-      "median": 95,
-      "min": 91,
-      "max": 176,
-      "samples": 20,
-      "ts": 1786956729670,
-      "history": [
-        {
-          "date": "2026-08-17",
-          "price": 91
-        }
-      ]
-    },
-    "KTW→OPO": {
-      "median": 72,
-      "min": 58,
-      "max": 740,
-      "samples": 20,
-      "ts": 1786956914103,
-      "history": [
-        {
-          "date": "2026-08-17",
-          "price": 90
-        }
-      ]
-    },
-    "KTW→WAW": {
-      "median": 46,
-      "min": 46,
-      "max": 113,
-      "samples": 20,
-      "ts": 1786956884154,
-      "history": [
-        {
-          "date": "2026-08-17",
-          "price": 46
-        }
-      ]
-    },
-    "PRG→MXP": {
-      "median": 55,
+      "median": 54,
       "min": 52,
-      "max": 314,
+      "max": 359,
       "samples": 20,
-      "ts": 1786956893777,
+      "ts": 1788469545093,
       "history": [
         {
-          "date": "2026-08-17",
+          "date": "2026-09-03",
           "price": 52
         }
       ]
     },
-    "PRG→EVN": {
-      "median": 57,
-      "min": 46,
-      "max": 662,
+    "BTS→KUT": {
+      "median": 86,
+      "min": 84,
+      "max": 319,
       "samples": 20,
-      "ts": 1786956890432,
+      "ts": 1788469568933,
       "history": [
         {
-          "date": "2026-08-17",
+          "date": "2026-09-03",
+          "price": 84
+        }
+      ]
+    },
+    "KTW→ALC": {
+      "median": 60,
+      "min": 58,
+      "max": 419,
+      "samples": 20,
+      "ts": 1788469553172,
+      "history": [
+        {
+          "date": "2026-09-03",
+          "price": 58
+        }
+      ]
+    },
+    "KTW→BCN": {
+      "median": 49,
+      "min": 48,
+      "max": 668,
+      "samples": 20,
+      "ts": 1788469542517,
+      "history": [
+        {
+          "date": "2026-09-03",
+          "price": 48
+        }
+      ]
+    },
+    "VIE→BCN": {
+      "median": 55,
+      "min": 42,
+      "max": 217,
+      "samples": 20,
+      "ts": 1788469534120,
+      "history": [
+        {
+          "date": "2026-09-03",
+          "price": 42
+        }
+      ]
+    },
+    "KTW→KUT": {
+      "median": 67,
+      "min": 64,
+      "max": 187,
+      "samples": 20,
+      "ts": 1788469555528,
+      "history": [
+        {
+          "date": "2026-09-03",
+          "price": 64
+        }
+      ]
+    },
+    "OSR→WAW": {
+      "median": 91,
+      "min": 72,
+      "max": 175,
+      "samples": 20,
+      "ts": 1788469562212,
+      "history": [
+        {
+          "date": "2026-09-03",
+          "price": 72
+        }
+      ]
+    },
+    "KTW→OPO": {
+      "median": 73,
+      "min": 59,
+      "max": 571,
+      "samples": 20,
+      "ts": 1788469555528,
+      "history": [
+        {
+          "date": "2026-09-03",
+          "price": 63
+        }
+      ]
+    },
+    "KTW→WAW": {
+      "median": 38,
+      "min": 38,
+      "max": 115,
+      "samples": 20,
+      "ts": 1788469530941,
+      "history": [
+        {
+          "date": "2026-09-03",
+          "price": 38
+        }
+      ]
+    },
+    "PRG→MXP": {
+      "median": 50,
+      "min": 50,
+      "max": 317,
+      "samples": 20,
+      "ts": 1788469545093,
+      "history": [
+        {
+          "date": "2026-09-03",
           "price": 50
         }
       ]
     },
-    "PRG→CTA": {
-      "median": 62,
-      "min": 56,
-      "max": 334,
+    "PRG→EVN": {
+      "median": 69,
+      "min": 67,
+      "max": 406,
       "samples": 20,
-      "ts": 1786956899929,
+      "ts": 1788469558858,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 62
+          "date": "2026-09-03",
+          "price": 67
+        }
+      ]
+    },
+    "PRG→CTA": {
+      "median": 60,
+      "min": 55,
+      "max": 266,
+      "samples": 20,
+      "ts": 1788469547849,
+      "history": [
+        {
+          "date": "2026-09-03",
+          "price": 56
         }
       ]
     },
     "PRG→LCA": {
-      "median": 56,
-      "min": 44,
-      "max": 607,
+      "median": 85,
+      "min": 80,
+      "max": 419,
       "samples": 20,
-      "ts": 1786956911465,
+      "ts": 1788469575875,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 85
+          "date": "2026-09-03",
+          "price": 92
         }
       ]
     },
     "VIE→EVN": {
-      "median": 214,
-      "min": 191,
-      "max": 670,
+      "median": 174,
+      "min": 174,
+      "max": 389,
       "samples": 20,
-      "ts": 1786957002610,
+      "ts": 1788469670647,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 379
+          "date": "2026-09-03",
+          "price": 348
         }
       ]
     },
     "PRG→NCE": {
-      "median": 108,
-      "min": 100,
-      "max": 391,
+      "median": 94,
+      "min": 87,
+      "max": 348,
       "samples": 20,
-      "ts": 1786956924967,
+      "ts": 1788469579259,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 110
+          "date": "2026-09-03",
+          "price": 99
         }
       ]
     },
     "PRG→MAN": {
-      "median": 87,
-      "min": 87,
-      "max": 429,
+      "median": 82,
+      "min": 82,
+      "max": 579,
       "samples": 20,
-      "ts": 1786956914102,
+      "ts": 1788469565672,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 87
+          "date": "2026-09-03",
+          "price": 82
         }
       ]
     },
     "VIE→LIN": {
-      "median": 71,
-      "min": 70,
-      "max": 295,
+      "median": 66,
+      "min": 65,
+      "max": 104,
       "samples": 20,
-      "ts": 1786956906244,
+      "ts": 1788469558857,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 70
+          "date": "2026-09-03",
+          "price": 65
         }
       ]
     },
     "VIE→SAW": {
       "median": 119,
       "min": 119,
-      "max": 223,
+      "max": 1447,
       "samples": 20,
-      "ts": 1786956931865,
+      "ts": 1788469592904,
       "history": [
         {
-          "date": "2026-08-17",
+          "date": "2026-09-03",
           "price": 119
         }
       ]
     },
     "PRG→SAW": {
-      "median": 125,
-      "min": 117,
-      "max": 2334,
+      "median": 110,
+      "min": 110,
+      "max": 2328,
       "samples": 20,
-      "ts": 1786956931865,
+      "ts": 1788469586411,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 117
+          "date": "2026-09-03",
+          "price": 110
         }
       ]
     },
     "VIE→SOF": {
-      "median": 107,
+      "median": 104,
       "min": 90,
-      "max": 184,
+      "max": 152,
       "samples": 20,
-      "ts": 1786956914103,
+      "ts": 1788469572591,
       "history": [
         {
-          "date": "2026-08-17",
+          "date": "2026-09-03",
           "price": 90
         }
       ]
     },
     "PRG→BCN": {
-      "median": 79,
-      "min": 75,
-      "max": 307,
+      "median": 75,
+      "min": 70,
+      "max": 415,
       "samples": 20,
-      "ts": 1786956908856,
+      "ts": 1788469562212,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 82
+          "date": "2026-09-03",
+          "price": 70
         }
       ]
     },
     "VIE→WAW": {
-      "median": 104,
-      "min": 91,
-      "max": 209,
+      "median": 80,
+      "min": 77,
+      "max": 210,
       "samples": 20,
-      "ts": 1786956914103,
+      "ts": 1788469565671,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 91
+          "date": "2026-09-03",
+          "price": 77
         }
       ]
     },
     "PRG→ORY": {
-      "median": 90,
-      "min": 74,
-      "max": 861,
+      "median": 91,
+      "min": 86,
+      "max": 969,
       "samples": 20,
-      "ts": 1786956908856,
+      "ts": 1788469572591,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 74
+          "date": "2026-09-03",
+          "price": 90
         }
       ]
     },
     "PRG→BRU": {
-      "median": 168,
-      "min": 137,
-      "max": 457,
+      "median": 176,
+      "min": 176,
+      "max": 512,
       "samples": 20,
-      "ts": 1786956945325,
+      "ts": 1788469608289,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 137
+          "date": "2026-09-03",
+          "price": 138
         }
       ]
     },
     "VIE→VCE": {
-      "median": 114,
+      "median": 110,
       "min": 96,
-      "max": 185,
+      "max": 205,
       "samples": 20,
-      "ts": 1786956928483,
+      "ts": 1788469579259,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 114
+          "date": "2026-09-03",
+          "price": 96
         }
       ]
     },
     "VIE→CGN": {
-      "median": 115,
-      "min": 102,
-      "max": 330,
+      "median": 83,
+      "min": 74,
+      "max": 300,
       "samples": 20,
-      "ts": 1786956919154,
+      "ts": 1788469565671,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 102
+          "date": "2026-09-03",
+          "price": 74
         }
       ]
     },
@@ -10116,236 +10116,236 @@
       "ts": 1775119278772
     },
     "PRG→ALC": {
-      "median": 238,
-      "min": 111,
-      "max": 372,
+      "median": 163,
+      "min": 131,
+      "max": 416,
       "samples": 20,
-      "ts": 1786956945325,
+      "ts": 1788469605521,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 138
+          "date": "2026-09-03",
+          "price": 131
         }
       ]
     },
     "PRG→AGP": {
-      "median": 132,
-      "min": 111,
-      "max": 215,
-      "samples": 20,
-      "ts": 1786956924967,
-      "history": [
-        {
-          "date": "2026-08-17",
-          "price": 111
-        }
-      ]
-    },
-    "PRG→PMI": {
-      "median": 160,
-      "min": 122,
-      "max": 206,
-      "samples": 20,
-      "ts": 1786956935186,
-      "history": [
-        {
-          "date": "2026-08-17",
-          "price": 122
-        }
-      ]
-    },
-    "KTW→FAO": {
-      "median": 116,
-      "min": 104,
-      "max": 938,
-      "samples": 20,
-      "ts": 1786956921591,
-      "history": [
-        {
-          "date": "2026-08-17",
-          "price": 104
-        }
-      ]
-    },
-    "PRG→FLR": {
-      "median": 95,
-      "min": 74,
-      "max": 148,
-      "samples": 20,
-      "ts": 1786956908856,
-      "history": [
-        {
-          "date": "2026-08-17",
-          "price": 74
-        }
-      ]
-    },
-    "PRG→CPH": {
-      "median": 60,
-      "min": 58,
-      "max": 111,
-      "samples": 20,
-      "ts": 1786956896893,
-      "history": [
-        {
-          "date": "2026-08-17",
-          "price": 58
-        }
-      ]
-    },
-    "PRG→GVA": {
-      "median": 161,
-      "min": 86,
-      "max": 371,
-      "samples": 20,
-      "ts": 1786956911465,
-      "history": [
-        {
-          "date": "2026-08-17",
-          "price": 86
-        }
-      ]
-    },
-    "VIE→CPH": {
-      "median": 114,
+      "median": 134,
       "min": 109,
-      "max": 146,
+      "max": 183,
       "samples": 20,
-      "ts": 1786956924966,
+      "ts": 1788469586411,
       "history": [
         {
-          "date": "2026-08-17",
+          "date": "2026-09-03",
           "price": 109
         }
       ]
     },
-    "VIE→CTA": {
-      "median": 127,
-      "min": 113,
-      "max": 235,
+    "PRG→PMI": {
+      "median": 130,
+      "min": 103,
+      "max": 189,
       "samples": 20,
-      "ts": 1786956931865,
+      "ts": 1788469579259,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 120
+          "date": "2026-09-03",
+          "price": 103
+        }
+      ]
+    },
+    "KTW→FAO": {
+      "median": 122,
+      "min": 108,
+      "max": 537,
+      "samples": 20,
+      "ts": 1788469586411,
+      "history": [
+        {
+          "date": "2026-09-03",
+          "price": 108
+        }
+      ]
+    },
+    "PRG→FLR": {
+      "median": 62,
+      "min": 56,
+      "max": 152,
+      "samples": 20,
+      "ts": 1788469550807,
+      "history": [
+        {
+          "date": "2026-09-03",
+          "price": 56
+        }
+      ]
+    },
+    "PRG→CPH": {
+      "median": 71,
+      "min": 59,
+      "max": 357,
+      "samples": 20,
+      "ts": 1788469562211,
+      "history": [
+        {
+          "date": "2026-09-03",
+          "price": 69
+        }
+      ]
+    },
+    "PRG→GVA": {
+      "median": 83,
+      "min": 82,
+      "max": 362,
+      "samples": 20,
+      "ts": 1788469565672,
+      "history": [
+        {
+          "date": "2026-09-03",
+          "price": 82
+        }
+      ]
+    },
+    "VIE→CPH": {
+      "median": 108,
+      "min": 108,
+      "max": 108,
+      "samples": 20,
+      "ts": 1788469582807,
+      "history": [
+        {
+          "date": "2026-09-03",
+          "price": 108
+        }
+      ]
+    },
+    "VIE→CTA": {
+      "median": 153,
+      "min": 112,
+      "max": 277,
+      "samples": 20,
+      "ts": 1788469616698,
+      "history": [
+        {
+          "date": "2026-09-03",
+          "price": 153
         }
       ]
     },
     "PRG→EDI": {
-      "median": 113,
-      "min": 98,
-      "max": 422,
+      "median": 98,
+      "min": 91,
+      "max": 428,
       "samples": 20,
-      "ts": 1786956921592,
+      "ts": 1788469575875,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 107
+          "date": "2026-09-03",
+          "price": 91
         }
       ]
     },
     "PRG→KUT": {
-      "median": 93,
-      "min": 81,
-      "max": 357,
+      "median": 101,
+      "min": 88,
+      "max": 361,
       "samples": 20,
-      "ts": 1786956924967,
+      "ts": 1788469572591,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 110
+          "date": "2026-09-03",
+          "price": 88
         }
       ]
     },
     "VIE→AYT": {
-      "median": 137,
-      "min": 116,
-      "max": 392,
+      "median": 146,
+      "min": 118,
+      "max": 301,
       "samples": 20,
-      "ts": 1786956928483,
+      "ts": 1788469592904,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 116
+          "date": "2026-09-03",
+          "price": 118
         }
       ]
     },
     "VIE→PMO": {
-      "median": 159,
-      "min": 141,
-      "max": 241,
+      "median": 149,
+      "min": 134,
+      "max": 237,
       "samples": 20,
-      "ts": 1786956948359,
+      "ts": 1788469608289,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 141
+          "date": "2026-09-03",
+          "price": 140
         }
       ]
     },
     "KTW→AYT": {
-      "median": 122,
-      "min": 116,
-      "max": 851,
+      "median": 136,
+      "min": 106,
+      "max": 617,
       "samples": 20,
-      "ts": 1786956938572,
+      "ts": 1788469589781,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 129
+          "date": "2026-09-03",
+          "price": 112
         }
       ]
     },
     "VIE→HAM": {
-      "median": 104,
-      "min": 99,
-      "max": 290,
+      "median": 112,
+      "min": 110,
+      "max": 312,
       "samples": 20,
-      "ts": 1786956924967,
+      "ts": 1788469589781,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 110
+          "date": "2026-09-03",
+          "price": 112
         }
       ]
     },
     "PRG→NAP": {
-      "median": 95,
-      "min": 85,
-      "max": 359,
+      "median": 86,
+      "min": 77,
+      "max": 295,
       "samples": 20,
-      "ts": 1786956935186,
+      "ts": 1788469605522,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 122
+          "date": "2026-09-03",
+          "price": 132
         }
       ]
     },
     "VIE→SKG": {
-      "median": 178,
-      "min": 134,
-      "max": 212,
+      "median": 188,
+      "min": 125,
+      "max": 221,
       "samples": 20,
-      "ts": 1786956967707,
+      "ts": 1788469599595,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 178
+          "date": "2026-09-03",
+          "price": 125
         }
       ]
     },
     "VIE→NAP": {
       "median": 131,
-      "min": 116,
-      "max": 299,
+      "min": 115,
+      "max": 308,
       "samples": 20,
-      "ts": 1786956928483,
+      "ts": 1788469592904,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 116
+          "date": "2026-09-03",
+          "price": 115
         }
       ]
     },
@@ -10363,123 +10363,119 @@
       ]
     },
     "PRG→RAK": {
-      "median": 143,
-      "min": 122,
-      "max": 1169,
+      "median": 357,
+      "min": 103,
+      "max": 836,
       "samples": 20,
-      "ts": 1786142080402,
+      "ts": 1788469582806,
       "history": [
         {
-          "date": "2026-08-07",
-          "price": 122
-        },
-        {
-          "date": "2026-08-08",
-          "price": 122
+          "date": "2026-09-03",
+          "price": 103
         }
       ]
     },
     "PRG→BIO": {
-      "median": 85,
-      "min": 76,
-      "max": 371,
+      "median": 75,
+      "min": 70,
+      "max": 263,
       "samples": 20,
-      "ts": 1786956908856,
+      "ts": 1788469562212,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 76
+          "date": "2026-09-03",
+          "price": 70
         }
       ]
     },
     "PRG→LIS": {
-      "median": 208,
-      "min": 183,
-      "max": 436,
+      "median": 323,
+      "min": 182,
+      "max": 701,
       "samples": 20,
-      "ts": 1786956967707,
+      "ts": 1788469636777,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 183
+          "date": "2026-09-03",
+          "price": 195
         }
       ]
     },
     "VIE→DUB": {
-      "median": 255,
-      "min": 132,
-      "max": 543,
+      "median": 120,
+      "min": 93,
+      "max": 493,
       "samples": 20,
-      "ts": 1786956942038,
+      "ts": 1788469602690,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 132
+          "date": "2026-09-03",
+          "price": 128
         }
       ]
     },
     "PRG→VLC": {
-      "median": 187,
-      "min": 133,
-      "max": 222,
+      "median": 166,
+      "min": 88,
+      "max": 432,
       "samples": 20,
-      "ts": 1786956961387,
+      "ts": 1788469610846,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 156
+          "date": "2026-09-03",
+          "price": 146
         }
       ]
     },
     "VIE→ZRH": {
       "median": 194,
-      "min": 184,
-      "max": 888,
+      "min": 194,
+      "max": 1021,
       "samples": 20,
-      "ts": 1786956972990,
+      "ts": 1788469636777,
       "history": [
         {
-          "date": "2026-08-17",
+          "date": "2026-09-03",
           "price": 194
         }
       ]
     },
     "VIE→VLC": {
-      "median": 204,
-      "min": 172,
-      "max": 235,
+      "median": 155,
+      "min": 124,
+      "max": 286,
       "samples": 20,
-      "ts": 1786956972990,
+      "ts": 1788469596143,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 192
+          "date": "2026-09-03",
+          "price": 124
         }
       ]
     },
     "PRG→HEL": {
-      "median": 184,
-      "min": 181,
-      "max": 396,
+      "median": 156,
+      "min": 156,
+      "max": 390,
       "samples": 20,
-      "ts": 1786956967707,
+      "ts": 1788469619449,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 181
+          "date": "2026-09-03",
+          "price": 156
         }
       ]
     },
     "PRG→MAD": {
-      "median": 170,
-      "min": 154,
-      "max": 319,
+      "median": 166,
+      "min": 121,
+      "max": 313,
       "samples": 20,
-      "ts": 1786956964496,
+      "ts": 1788469616698,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 175
+          "date": "2026-09-03",
+          "price": 155
         }
       ]
     },
@@ -10491,54 +10487,54 @@
       "ts": 1775119334749
     },
     "PRG→SKG": {
-      "median": 170,
-      "min": 140,
-      "max": 326,
+      "median": 140,
+      "min": 126,
+      "max": 411,
       "samples": 20,
-      "ts": 1786956975630,
+      "ts": 1788469640335,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 206
+          "date": "2026-09-03",
+          "price": 196
         }
       ]
     },
     "KTW→FNC": {
-      "median": 156,
+      "median": 154,
       "min": 150,
-      "max": 408,
+      "max": 355,
       "samples": 20,
-      "ts": 1786956975630,
+      "ts": 1788469616698,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 200
+          "date": "2026-09-03",
+          "price": 154
         }
       ]
     },
     "VIE→HRG": {
-      "median": 209,
-      "min": 176,
-      "max": 544,
+      "median": 194,
+      "min": 166,
+      "max": 388,
       "samples": 20,
-      "ts": 1786956983730,
+      "ts": 1788469636777,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 223
+          "date": "2026-09-03",
+          "price": 194
         }
       ]
     },
     "KTW→HER": {
-      "median": 154,
-      "min": 134,
-      "max": 736,
+      "median": 210,
+      "min": 147,
+      "max": 719,
       "samples": 20,
-      "ts": 1786956942038,
+      "ts": 1788469622612,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 134
+          "date": "2026-09-03",
+          "price": 165
         }
       ]
     },
@@ -10556,41 +10552,41 @@
       ]
     },
     "VIE→LCA": {
-      "median": 205,
-      "min": 175,
-      "max": 328,
+      "median": 164,
+      "min": 143,
+      "max": 408,
       "samples": 20,
-      "ts": 1786956983730,
+      "ts": 1788469610846,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 224
+          "date": "2026-09-03",
+          "price": 143
         }
       ]
     },
     "VIE→AMS": {
-      "median": 227,
-      "min": 225,
-      "max": 371,
+      "median": 220,
+      "min": 220,
+      "max": 369,
       "samples": 20,
-      "ts": 1786956983730,
+      "ts": 1788469653066,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 225
+          "date": "2026-09-03",
+          "price": 220
         }
       ]
     },
     "PRG→OPO": {
-      "median": 155,
-      "min": 143,
-      "max": 457,
+      "median": 273,
+      "min": 119,
+      "max": 385,
       "samples": 20,
-      "ts": 1786956955026,
+      "ts": 1788469626206,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 149
+          "date": "2026-09-03",
+          "price": 169
         }
       ]
     },
@@ -10608,119 +10604,119 @@
       ]
     },
     "OSR→AYT": {
-      "median": 209,
-      "min": 163,
-      "max": 309,
+      "median": 202,
+      "min": 172,
+      "max": 240,
       "samples": 20,
-      "ts": 1786956729671,
+      "ts": 1788469626207,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 163
+          "date": "2026-09-03",
+          "price": 172
         }
       ]
     },
     "PRG→ZRH": {
-      "median": 227,
-      "min": 208,
-      "max": 402,
+      "median": 229,
+      "min": 225,
+      "max": 385,
       "samples": 20,
-      "ts": 1786956986152,
+      "ts": 1788469656486,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 227
+          "date": "2026-09-03",
+          "price": 229
         }
       ]
     },
     "VIE→OPO": {
-      "median": 180,
-      "min": 140,
-      "max": 417,
+      "median": 144,
+      "min": 116,
+      "max": 431,
       "samples": 20,
-      "ts": 1786956989496,
+      "ts": 1788469659816,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 243
+          "date": "2026-09-03",
+          "price": 244
         }
       ]
     },
     "VIE→LIS": {
-      "median": 178,
-      "min": 158,
-      "max": 585,
+      "median": 350,
+      "min": 145,
+      "max": 679,
       "samples": 20,
-      "ts": 1786956967707,
+      "ts": 1788469610846,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 177
+          "date": "2026-09-03",
+          "price": 145
         }
       ]
     },
     "KTW→TFS": {
-      "median": 157,
-      "min": 152,
-      "max": 653,
+      "median": 151,
+      "min": 149,
+      "max": 564,
       "samples": 20,
-      "ts": 1786956958268,
+      "ts": 1788469613605,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 155
+          "date": "2026-09-03",
+          "price": 149
         }
       ]
     },
     "PRG→TFS": {
-      "median": 167,
-      "min": 158,
-      "max": 557,
+      "median": 179,
+      "min": 150,
+      "max": 345,
       "samples": 20,
-      "ts": 1786956996048,
+      "ts": 1788469656486,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 336
+          "date": "2026-09-03",
+          "price": 234
         }
       ]
     },
     "VIE→IBZ": {
-      "median": 133,
-      "min": 110,
-      "max": 267,
+      "median": 115,
+      "min": 79,
+      "max": 341,
       "samples": 20,
-      "ts": 1786956978270,
+      "ts": 1788469633168,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 208
+          "date": "2026-09-03",
+          "price": 191
         }
       ]
     },
     "PRG→FNC": {
-      "median": 305,
-      "min": 212,
-      "max": 633,
+      "median": 246,
+      "min": 223,
+      "max": 246,
       "samples": 20,
-      "ts": 1786956992819,
+      "ts": 1788469653066,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 271
+          "date": "2026-09-03",
+          "price": 223
         }
       ]
     },
     "BTS→HER": {
-      "median": 222,
-      "min": 191,
-      "max": 282,
+      "median": 190,
+      "min": 190,
+      "max": 190,
       "samples": 20,
-      "ts": 1786956983730,
+      "ts": 1788469633168,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 221
+          "date": "2026-09-03",
+          "price": 190
         }
       ]
     },
@@ -10738,217 +10734,223 @@
       ]
     },
     "KTW→AGA": {
-      "median": 104,
-      "min": 102,
-      "max": 1184,
+      "median": 93,
+      "min": 93,
+      "max": 97,
       "samples": 20,
-      "ts": 1786956921591,
+      "ts": 1788469575875,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 104
+          "date": "2026-09-03",
+          "price": 93
         }
       ]
     },
     "VIE→CAG": {
-      "median": 197,
-      "min": 183,
-      "max": 258,
+      "median": 221,
+      "min": 126,
+      "max": 391,
       "samples": 20,
-      "ts": 1786956981107,
+      "ts": 1788469663039,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 220
+          "date": "2026-09-03",
+          "price": 259
         }
       ]
     },
     "KTW→FUE": {
-      "median": 130,
-      "min": 120,
-      "max": 1780,
+      "median": 132,
+      "min": 119,
+      "max": 1157,
       "samples": 20,
-      "ts": 1786956955026,
+      "ts": 1788469602691,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 147
+          "date": "2026-09-03",
+          "price": 129
         }
       ]
     },
     "VIE→HEL": {
-      "median": 206,
-      "min": 196,
-      "max": 353,
+      "median": 179,
+      "min": 178,
+      "max": 346,
       "samples": 20,
-      "ts": 1786956978270,
+      "ts": 1788469629740,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 212
+          "date": "2026-09-03",
+          "price": 179
         }
       ]
     },
     "OSR→RHO": {
-      "median": 356,
-      "min": 297,
-      "max": 356,
+      "median": 280,
+      "min": 203,
+      "max": 334,
       "samples": 20,
-      "ts": 1786956736495,
+      "ts": 1788469643434,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 297
+          "date": "2026-09-03",
+          "price": 203
         }
       ]
     },
     "BTS→RHO": {
-      "median": 222,
-      "min": 222,
-      "max": 223,
+      "median": 238,
+      "min": 238,
+      "max": 238,
       "samples": 20,
-      "ts": 1786956983730,
+      "ts": 1788469659816,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 222
+          "date": "2026-09-03",
+          "price": 238
         }
       ]
     },
     "VIE→RHO": {
-      "median": 232,
-      "min": 208,
-      "max": 385,
+      "median": 238,
+      "min": 192,
+      "max": 297,
       "samples": 20,
-      "ts": 1786956978270,
+      "ts": 1788469633168,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 208
+          "date": "2026-09-03",
+          "price": 192
         }
       ]
     },
     "PRG→RHO": {
-      "median": 211,
-      "min": 211,
-      "max": 341,
+      "median": 212,
+      "min": 212,
+      "max": 447,
       "samples": 20,
-      "ts": 1786956978270,
+      "ts": 1788469650011,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 211
+          "date": "2026-09-03",
+          "price": 212
         }
       ]
     },
     "PRG→FUE": {
-      "median": 314,
-      "min": 220,
-      "max": 763,
+      "median": 225,
+      "min": 160,
+      "max": 587,
       "samples": 20,
-      "ts": 1775119363538
-    },
-    "PRG→TLV": {
-      "median": 291,
-      "min": 173,
-      "max": 573,
-      "samples": 20,
-      "ts": 1786956996048,
+      "ts": 1788469650011,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 300
+          "date": "2026-09-03",
+          "price": 217
+        }
+      ]
+    },
+    "PRG→TLV": {
+      "median": 268,
+      "min": 257,
+      "max": 614,
+      "samples": 20,
+      "ts": 1788469663038,
+      "history": [
+        {
+          "date": "2026-09-03",
+          "price": 257
         }
       ]
     },
     "PRG→PDL": {
-      "median": 340,
-      "min": 289,
-      "max": 731,
+      "median": 299,
+      "min": 264,
+      "max": 578,
       "samples": 20,
-      "ts": 1786956992819,
+      "ts": 1788469663039,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 289
+          "date": "2026-09-03",
+          "price": 264
         }
       ]
     },
     "OSR→HER": {
-      "median": 339,
-      "min": 339,
-      "max": 339,
+      "median": 188,
+      "min": 188,
+      "max": 455,
       "samples": 20,
-      "ts": 1786956733914,
+      "ts": 1788469629741,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 339
+          "date": "2026-09-03",
+          "price": 188
         }
       ]
     },
     "PRG→HER": {
-      "median": 254,
-      "min": 209,
-      "max": 358,
+      "median": 197,
+      "min": 195,
+      "max": 349,
       "samples": 20,
-      "ts": 1786956989497,
+      "ts": 1788469636777,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 254
+          "date": "2026-09-03",
+          "price": 195
         }
       ]
     },
     "PRG→LPA": {
-      "median": 230,
-      "min": 171,
-      "max": 796,
+      "median": 211,
+      "min": 177,
+      "max": 524,
       "samples": 20,
-      "ts": 1786956996048,
+      "ts": 1788469673405,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 319
+          "date": "2026-09-03",
+          "price": 354
         }
       ]
     },
     "PRG→OLB": {
-      "median": 223,
-      "min": 184,
-      "max": 371,
+      "median": 208,
+      "min": 119,
+      "max": 327,
       "samples": 20,
-      "ts": 1786956967708,
+      "ts": 1788469629740,
       "history": [
         {
-          "date": "2026-08-17",
+          "date": "2026-09-03",
           "price": 184
         }
       ]
     },
     "PRG→CFU": {
-      "median": 232,
-      "min": 228,
-      "max": 244,
+      "median": 243,
+      "min": 229,
+      "max": 245,
       "samples": 20,
-      "ts": 1786956986152,
+      "ts": 1788469656485,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 228
+          "date": "2026-09-03",
+          "price": 229
         }
       ]
     },
     "PRG→CAG": {
-      "median": 204,
-      "min": 204,
-      "max": 302,
+      "median": 205,
+      "min": 205,
+      "max": 442,
       "samples": 20,
-      "ts": 1786956975630,
+      "ts": 1788469646833,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 204
+          "date": "2026-09-03",
+          "price": 205
         }
       ]
     },
@@ -10966,28 +10968,28 @@
       ]
     },
     "KTW→LPA": {
-      "median": 156,
-      "min": 140,
-      "max": 1184,
+      "median": 151,
+      "min": 131,
+      "max": 620,
       "samples": 20,
-      "ts": 1786957015084,
+      "ts": 1788469685870,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 932
+          "date": "2026-09-03",
+          "price": 837
         }
       ]
     },
     "BTS→HRG": {
-      "median": 124,
-      "min": 95,
-      "max": 663,
+      "median": 121,
+      "min": 101,
+      "max": 768,
       "samples": 20,
-      "ts": 1786956970351,
+      "ts": 1788469596142,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 185
+          "date": "2026-09-03",
+          "price": 119
         }
       ]
     },
@@ -10999,28 +11001,28 @@
       "ts": 1775119343681
     },
     "OSR→KGS": {
-      "median": 356,
+      "median": 323,
       "min": 280,
       "max": 357,
       "samples": 20,
-      "ts": 1786956733914,
+      "ts": 1788469665415,
       "history": [
         {
-          "date": "2026-08-17",
+          "date": "2026-09-03",
           "price": 280
         }
       ]
     },
     "OSR→HRG": {
-      "median": 397,
-      "min": 314,
-      "max": 407,
+      "median": 211,
+      "min": 211,
+      "max": 216,
       "samples": 20,
-      "ts": 1786956736495,
+      "ts": 1788469646834,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 314
+          "date": "2026-09-03",
+          "price": 211
         }
       ]
     },
@@ -11039,301 +11041,301 @@
       "ts": 1775119374468
     },
     "BTS→PMI": {
-      "median": 90,
-      "min": 72,
-      "max": 194,
+      "median": 92,
+      "min": 79,
+      "max": 195,
       "samples": 20,
-      "ts": 1786956972990,
+      "ts": 1788469640335,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 194
+          "date": "2026-09-03",
+          "price": 195
         }
       ]
     },
     "VIE→TBS": {
-      "median": 220,
-      "min": 210,
-      "max": 550,
+      "median": 150,
+      "min": 150,
+      "max": 533,
       "samples": 20,
-      "ts": 1786956996048,
+      "ts": 1788469670647,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 329
+          "date": "2026-09-03",
+          "price": 322
         }
       ]
     },
     "VIE→LPA": {
-      "median": 200,
-      "min": 165,
-      "max": 454,
+      "median": 184,
+      "min": 119,
+      "max": 424,
       "samples": 20,
-      "ts": 1786956992819,
+      "ts": 1788469673405,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 278
+          "date": "2026-09-03",
+          "price": 393
         }
       ]
     },
     "VIE→SHJ": {
-      "median": 337,
-      "min": 337,
-      "max": 737,
+      "median": 308,
+      "min": 253,
+      "max": 308,
       "samples": 20,
-      "ts": 1786956999453,
+      "ts": 1788469667788,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 337
+          "date": "2026-09-03",
+          "price": 308
         }
       ]
     },
     "KTW→SSH": {
-      "median": 129,
-      "min": 129,
-      "max": 1099,
+      "median": 122,
+      "min": 114,
+      "max": 125,
       "samples": 20,
-      "ts": 1786956938572,
+      "ts": 1788469589782,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 131
+          "date": "2026-09-03",
+          "price": 114
         }
       ]
     },
     "VIE→TFS": {
-      "median": 245,
-      "min": 232,
-      "max": 257,
+      "median": 200,
+      "min": 193,
+      "max": 247,
       "samples": 20,
-      "ts": 1786956999453,
+      "ts": 1788469673405,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 365
+          "date": "2026-09-03",
+          "price": 375
         }
       ]
     },
     "BTS→CFU": {
-      "median": 289,
-      "min": 150,
-      "max": 289,
+      "median": 290,
+      "min": 134,
+      "max": 290,
       "samples": 20,
-      "ts": 1786956992819,
+      "ts": 1788469665415,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 289
+          "date": "2026-09-03",
+          "price": 290
         }
       ]
     },
     "OSR→ZTH": {
-      "median": 294,
+      "median": 289,
       "min": 225,
-      "max": 453,
+      "max": 2294,
       "samples": 20,
-      "ts": 1786956731091,
+      "ts": 1788469656485,
       "history": [
         {
-          "date": "2026-08-17",
+          "date": "2026-09-03",
           "price": 225
         }
       ]
     },
     "OSR→CFU": {
-      "median": 287,
-      "min": 245,
-      "max": 287,
+      "median": 263,
+      "min": 218,
+      "max": 289,
       "samples": 20,
-      "ts": 1786956732615,
+      "ts": 1788469659815,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 245
+          "date": "2026-09-03",
+          "price": 237
         }
       ]
     },
     "VIE→OLB": {
-      "median": 194,
-      "min": 135,
-      "max": 301,
+      "median": 242,
+      "min": 179,
+      "max": 320,
       "samples": 20,
-      "ts": 1786956942038,
+      "ts": 1788469667789,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 135
+          "date": "2026-09-03",
+          "price": 309
         }
       ]
     },
     "BTS→ZTH": {
-      "median": 289,
-      "min": 240,
-      "max": 376,
+      "median": 290,
+      "min": 242,
+      "max": 291,
       "samples": 20,
-      "ts": 1786956989497,
+      "ts": 1788469659816,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 269
+          "date": "2026-09-03",
+          "price": 242
         }
       ]
     },
     "VIE→FUE": {
-      "median": 268,
-      "min": 199,
-      "max": 983,
+      "median": 275,
+      "min": 170,
+      "max": 631,
       "samples": 20,
-      "ts": 1786957006015,
+      "ts": 1788469673406,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 543
+          "date": "2026-09-03",
+          "price": 428
         }
       ]
     },
     "OSR→RMF": {
-      "median": 409,
-      "min": 326,
-      "max": 420,
+      "median": 223,
+      "min": 223,
+      "max": 229,
       "samples": 20,
-      "ts": 1786956736495,
+      "ts": 1788469653066,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 326
+          "date": "2026-09-03",
+          "price": 223
         }
       ]
     },
     "PRG→NQZ": {
-      "median": 445,
-      "min": 253,
-      "max": 999,
+      "median": 305,
+      "min": 305,
+      "max": 887,
       "samples": 20,
-      "ts": 1786957006014,
+      "ts": 1788469676197,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 507
+          "date": "2026-09-03",
+          "price": 448
         }
       ]
     },
     "KTW→TGD": {
-      "median": 56,
-      "min": 50,
-      "max": 756,
+      "median": 49,
+      "min": 44,
+      "max": 651,
       "samples": 20,
-      "ts": 1786956890433,
+      "ts": 1788469540167,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 50
+          "date": "2026-09-03",
+          "price": 44
         }
       ]
     },
     "KTW→CFU": {
-      "median": 93,
-      "min": 81,
-      "max": 574,
+      "median": 91,
+      "min": 78,
+      "max": 476,
       "samples": 20,
-      "ts": 1786956908856,
+      "ts": 1788469565671,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 81
+          "date": "2026-09-03",
+          "price": 78
         }
       ]
     },
     "PRG→JFK": {
-      "median": 1241,
-      "min": 565,
-      "max": 1881,
+      "median": 957,
+      "min": 363,
+      "max": 2035,
       "samples": 20,
-      "ts": 1786957009005,
+      "ts": 1788469678776,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 565
+          "date": "2026-09-03",
+          "price": 556
         }
       ]
     },
     "VIE→JFK": {
-      "median": 564,
-      "min": 561,
-      "max": 1435,
+      "median": 841,
+      "min": 562,
+      "max": 1291,
       "samples": 20,
-      "ts": 1786957009006,
+      "ts": 1788469678777,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 625
+          "date": "2026-09-03",
+          "price": 562
         }
       ]
     },
     "VIE→FNC": {
-      "median": 283,
-      "min": 209,
-      "max": 665,
+      "median": 230,
+      "min": 186,
+      "max": 727,
       "samples": 20,
-      "ts": 1786957002610,
+      "ts": 1788469676197,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 439
+          "date": "2026-09-03",
+          "price": 453
         }
       ]
     },
     "VIE→LAX": {
-      "median": 569,
-      "min": 561,
-      "max": 1730,
+      "median": 1268,
+      "min": 552,
+      "max": 2043,
       "samples": 20,
-      "ts": 1786957006015,
+      "ts": 1788469678777,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 561
+          "date": "2026-09-03",
+          "price": 560
         }
       ]
     },
     "VIE→DEL": {
-      "median": 586,
-      "min": 484,
-      "max": 1294,
+      "median": 592,
+      "min": 465,
+      "max": 1228,
       "samples": 20,
-      "ts": 1786957012044,
+      "ts": 1788469682184,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 785
+          "date": "2026-09-03",
+          "price": 609
         }
       ]
     },
     "KTW→HRG": {
-      "median": 140,
-      "min": 140,
-      "max": 904,
+      "median": 136,
+      "min": 124,
+      "max": 1510,
       "samples": 20,
-      "ts": 1786956951705,
+      "ts": 1788469599594,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 143
+          "date": "2026-09-03",
+          "price": 124
         }
       ]
     },
     "VIE→BKK": {
-      "median": 493,
-      "min": 469,
-      "max": 1021,
+      "median": 548,
+      "min": 475,
+      "max": 1677,
       "samples": 20,
-      "ts": 1786957012044,
+      "ts": 1788469682185,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 714
+          "date": "2026-09-03",
+          "price": 723
         }
       ]
     },
@@ -11352,54 +11354,54 @@
       "ts": 1775119380478
     },
     "KTW→GRO": {
-      "median": 215,
-      "min": 155,
-      "max": 780,
+      "median": 262,
+      "min": 160,
+      "max": 776,
       "samples": 20,
-      "ts": 1786957012044,
+      "ts": 1788469682184,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 780
+          "date": "2026-09-03",
+          "price": 564
         }
       ]
     },
     "VIE→SIN": {
-      "median": 524,
-      "min": 519,
-      "max": 1098,
+      "median": 481,
+      "min": 479,
+      "max": 889,
       "samples": 20,
-      "ts": 1786957006015,
+      "ts": 1788469676198,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 542
+          "date": "2026-09-03",
+          "price": 506
         }
       ]
     },
     "KTW→DBV": {
-      "median": 95,
-      "min": 59,
-      "max": 531,
+      "median": 136,
+      "min": 92,
+      "max": 459,
       "samples": 20,
-      "ts": 1786956899929,
+      "ts": 1788469575875,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 59
+          "date": "2026-09-03",
+          "price": 92
         }
       ]
     },
     "KTW→PMI": {
-      "median": 119,
-      "min": 97,
-      "max": 967,
+      "median": 107,
+      "min": 89,
+      "max": 995,
       "samples": 20,
-      "ts": 1786957012044,
+      "ts": 1788469682184,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 688
+          "date": "2026-09-03",
+          "price": 631
         }
       ]
     },
@@ -11417,457 +11419,457 @@
       ]
     },
     "VIE→MRU": {
-      "median": 1114,
-      "min": 692,
-      "max": 3252,
+      "median": 938,
+      "min": 605,
+      "max": 1913,
       "samples": 20,
-      "ts": 1786957015084,
+      "ts": 1788469685870,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 1027
+          "date": "2026-09-03",
+          "price": 959
         }
       ]
     },
     "VIE→MLE": {
-      "median": 1166,
-      "min": 624,
-      "max": 1695,
+      "median": 910,
+      "min": 499,
+      "max": 1569,
       "samples": 20,
-      "ts": 1786957015083,
+      "ts": 1788469685870,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 863
+          "date": "2026-09-03",
+          "price": 861
         }
       ]
     },
     "PRG→ATH": {
-      "median": 220,
-      "min": 142,
-      "max": 293,
+      "median": 184,
+      "min": 141,
+      "max": 274,
       "samples": 20,
-      "ts": 1786956948359,
+      "ts": 1788469622611,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 142
+          "date": "2026-09-03",
+          "price": 165
         }
       ]
     },
     "KTW→AGP": {
-      "median": 101,
-      "min": 100,
-      "max": 621,
+      "median": 99,
+      "min": 90,
+      "max": 664,
       "samples": 20,
-      "ts": 1786956916540,
+      "ts": 1788469572591,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 100
+          "date": "2026-09-03",
+          "price": 90
         }
       ]
     },
     "VIE→ATH": {
-      "median": 118,
-      "min": 115,
-      "max": 215,
+      "median": 164,
+      "min": 103,
+      "max": 283,
       "samples": 20,
-      "ts": 1786956928483,
+      "ts": 1788469582807,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 115
+          "date": "2026-09-03",
+          "price": 108
         }
       ]
     },
     "VIE→DBV": {
-      "median": 125,
+      "median": 145,
       "min": 125,
-      "max": 220,
+      "max": 372,
       "samples": 20,
-      "ts": 1786956935186,
+      "ts": 1788469599594,
       "history": [
         {
-          "date": "2026-08-17",
+          "date": "2026-09-03",
           "price": 125
         }
       ]
     },
     "VIE→HER": {
-      "median": 167,
-      "min": 104,
-      "max": 360,
+      "median": 190,
+      "min": 157,
+      "max": 288,
       "samples": 20,
-      "ts": 1786956919154,
+      "ts": 1788469619449,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 104
+          "date": "2026-09-03",
+          "price": 157
         }
       ]
     },
     "BTS→TLV": {
       "median": 117,
       "min": 117,
-      "max": 288,
+      "max": 147,
       "samples": 20,
-      "ts": 1786956931865,
+      "ts": 1788469592904,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 119
+          "date": "2026-09-03",
+          "price": 117
         }
       ]
     },
     "BTS→SAW": {
-      "median": 147,
-      "min": 140,
-      "max": 271,
+      "median": 140,
+      "min": 139,
+      "max": 203,
       "samples": 20,
-      "ts": 1786956948359,
+      "ts": 1788469608289,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 140
+          "date": "2026-09-03",
+          "price": 139
         }
       ]
     },
     "VIE→BRU": {
-      "median": 139,
-      "min": 134,
-      "max": 315,
+      "median": 150,
+      "min": 150,
+      "max": 276,
       "samples": 20,
-      "ts": 1786956942038,
+      "ts": 1788469613606,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 134
+          "date": "2026-09-03",
+          "price": 150
         }
       ]
     },
     "PRG→WAW": {
-      "median": 150,
-      "min": 146,
-      "max": 616,
+      "median": 108,
+      "min": 106,
+      "max": 471,
       "samples": 20,
-      "ts": 1786956964496,
+      "ts": 1788469582806,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 168
+          "date": "2026-09-03",
+          "price": 106
         }
       ]
     },
     "VIE→MAN": {
-      "median": 131,
-      "min": 110,
-      "max": 292,
+      "median": 121,
+      "min": 102,
+      "max": 284,
       "samples": 20,
-      "ts": 1786956935186,
+      "ts": 1788469586411,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 122
+          "date": "2026-09-03",
+          "price": 110
         }
       ]
     },
     "PRG→DUB": {
-      "median": 195,
-      "min": 101,
-      "max": 480,
+      "median": 95,
+      "min": 87,
+      "max": 335,
       "samples": 20,
-      "ts": 1786956919154,
+      "ts": 1788469568934,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 101
+          "date": "2026-09-03",
+          "price": 87
         }
       ]
     },
     "VIE→KRK": {
       "median": 113,
       "min": 100,
-      "max": 246,
+      "max": 274,
       "samples": 20,
-      "ts": 1786956916540,
+      "ts": 1788469579259,
       "history": [
         {
-          "date": "2026-08-17",
+          "date": "2026-09-03",
           "price": 100
         }
       ]
     },
     "KTW→KEF": {
-      "median": 102,
-      "min": 98,
-      "max": 1199,
+      "median": 93,
+      "min": 92,
+      "max": 845,
       "samples": 20,
-      "ts": 1786956919153,
+      "ts": 1788469575875,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 100
+          "date": "2026-09-03",
+          "price": 92
         }
       ]
     },
     "BTS→AYT": {
-      "median": 176,
-      "min": 149,
-      "max": 306,
+      "median": 167,
+      "min": 156,
+      "max": 271,
       "samples": 20,
-      "ts": 1786956955026,
+      "ts": 1788469619449,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 149
+          "date": "2026-09-03",
+          "price": 156
         }
       ]
     },
     "VIE→FCO": {
-      "median": 107,
-      "min": 107,
-      "max": 206,
+      "median": 120,
+      "min": 114,
+      "max": 238,
       "samples": 20,
-      "ts": 1786956921592,
+      "ts": 1788469589782,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 107
+          "date": "2026-09-03",
+          "price": 114
         }
       ]
     },
     "VIE→ORY": {
-      "median": 95,
-      "min": 84,
-      "max": 836,
+      "median": 113,
+      "min": 105,
+      "max": 366,
       "samples": 20,
-      "ts": 1786956911465,
+      "ts": 1788469582806,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 84
+          "date": "2026-09-03",
+          "price": 105
         }
       ]
     },
     "PRG→AMS": {
-      "median": 123,
-      "min": 122,
-      "max": 566,
+      "median": 119,
+      "min": 117,
+      "max": 451,
       "samples": 20,
-      "ts": 1786956935186,
+      "ts": 1788469596143,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 121
+          "date": "2026-09-03",
+          "price": 120
         }
       ]
     },
     "VIE→FRA": {
-      "median": 144,
-      "min": 144,
+      "median": 153,
+      "min": 153,
       "max": 170,
       "samples": 20,
-      "ts": 1786956951705,
+      "ts": 1788469608289,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 144
+          "date": "2026-09-03",
+          "price": 141
         }
       ]
     },
     "VIE→TIA": {
-      "median": 135,
-      "min": 135,
-      "max": 407,
+      "median": 155,
+      "min": 134,
+      "max": 244,
       "samples": 20,
-      "ts": 1786956945325,
+      "ts": 1788469605522,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 135
+          "date": "2026-09-03",
+          "price": 134
         }
       ]
     },
     "VIE→MLA": {
       "median": 155,
-      "min": 150,
-      "max": 191,
+      "min": 155,
+      "max": 510,
       "samples": 20,
-      "ts": 1786956955026,
+      "ts": 1788469619450,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 150
+          "date": "2026-09-03",
+          "price": 157
         }
       ]
     },
     "VIE→DUS": {
-      "median": 134,
-      "min": 131,
-      "max": 478,
+      "median": 127,
+      "min": 127,
+      "max": 477,
       "samples": 20,
-      "ts": 1786956942038,
+      "ts": 1788469599595,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 132
+          "date": "2026-09-03",
+          "price": 127
         }
       ]
     },
     "VIE→ARN": {
-      "median": 151,
-      "min": 131,
-      "max": 213,
+      "median": 114,
+      "min": 93,
+      "max": 212,
       "samples": 20,
-      "ts": 1786956955026,
+      "ts": 1788469602691,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 151
+          "date": "2026-09-03",
+          "price": 130
         }
       ]
     },
     "VIE→PMI": {
-      "median": 164,
-      "min": 118,
-      "max": 261,
+      "median": 153,
+      "min": 133,
+      "max": 218,
       "samples": 20,
-      "ts": 1786956945325,
+      "ts": 1788469605522,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 137
+          "date": "2026-09-03",
+          "price": 136
         }
       ]
     },
     "VIE→BRI": {
-      "median": 137,
-      "min": 114,
-      "max": 310,
+      "median": 144,
+      "min": 124,
+      "max": 271,
       "samples": 20,
-      "ts": 1786956964496,
+      "ts": 1788469626207,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 173
+          "date": "2026-09-03",
+          "price": 174
         }
       ]
     },
     "PRG→OSL": {
-      "median": 93,
-      "min": 85,
-      "max": 310,
+      "median": 92,
+      "min": 90,
+      "max": 311,
       "samples": 20,
-      "ts": 1786956911465,
+      "ts": 1788469572591,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 85
+          "date": "2026-09-03",
+          "price": 90
         }
       ]
     },
     "VIE→BLQ": {
-      "median": 175,
-      "min": 142,
-      "max": 217,
+      "median": 147,
+      "min": 126,
+      "max": 228,
       "samples": 20,
-      "ts": 1786956951705,
+      "ts": 1788469599595,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 142
+          "date": "2026-09-03",
+          "price": 126
         }
       ]
     },
     "VIE→BER": {
-      "median": 135,
+      "median": 134,
       "min": 134,
-      "max": 410,
+      "max": 518,
       "samples": 20,
-      "ts": 1786956958268,
+      "ts": 1788469616698,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 155
+          "date": "2026-09-03",
+          "price": 154
         }
       ]
     },
     "VIE→MAD": {
-      "median": 115,
-      "min": 115,
-      "max": 318,
+      "median": 179,
+      "min": 114,
+      "max": 490,
       "samples": 20,
-      "ts": 1786956928483,
+      "ts": 1788469589782,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 115
+          "date": "2026-09-03",
+          "price": 114
         }
       ]
     },
     "PRG→RIX": {
-      "median": 139,
-      "min": 139,
-      "max": 321,
+      "median": 150,
+      "min": 150,
+      "max": 340,
       "samples": 20,
-      "ts": 1786956948359,
+      "ts": 1788469613606,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 139
+          "date": "2026-09-03",
+          "price": 150
         }
       ]
     },
     "PRG→HRG": {
-      "median": 235,
-      "min": 219,
-      "max": 399,
+      "median": 220,
+      "min": 206,
+      "max": 226,
       "samples": 20,
-      "ts": 1786956981107,
+      "ts": 1788469650011,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 219
+          "date": "2026-09-03",
+          "price": 220
         }
       ]
     },
     "VIE→AGP": {
-      "median": 222,
-      "min": 141,
-      "max": 310,
+      "median": 196,
+      "min": 118,
+      "max": 358,
       "samples": 20,
-      "ts": 1786956981107,
+      "ts": 1788469626207,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 216
+          "date": "2026-09-03",
+          "price": 173
         }
       ]
     },
     "VIE→BEG": {
       "median": 129,
       "min": 129,
-      "max": 199,
+      "max": 176,
       "samples": 20,
-      "ts": 1786956938572,
+      "ts": 1788469602690,
       "history": [
         {
-          "date": "2026-08-17",
+          "date": "2026-09-03",
           "price": 129
         }
       ]
     },
     "PRG→AYT": {
-      "median": 206,
-      "min": 162,
-      "max": 500,
+      "median": 155,
+      "min": 139,
+      "max": 490,
       "samples": 20,
-      "ts": 1786956958268,
+      "ts": 1788469616698,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 154
+          "date": "2026-09-03",
+          "price": 151
         }
       ]
     },
@@ -11879,67 +11881,67 @@
       "ts": 1775119320544
     },
     "PRG→SPU": {
-      "median": 194,
-      "min": 174,
-      "max": 462,
+      "median": 211,
+      "min": 175,
+      "max": 397,
       "samples": 20,
-      "ts": 1786956964496,
+      "ts": 1788469629740,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 174
+          "date": "2026-09-03",
+          "price": 175
         }
       ]
     },
     "VIE→NCE": {
       "median": 163,
       "min": 142,
-      "max": 387,
+      "max": 442,
       "samples": 20,
-      "ts": 1786956958268,
+      "ts": 1788469619450,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 154
+          "date": "2026-09-03",
+          "price": 162
         }
       ]
     },
     "PRG→MLA": {
       "median": 150,
       "min": 150,
-      "max": 402,
+      "max": 367,
       "samples": 20,
-      "ts": 1786956970352,
+      "ts": 1788469633168,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 190
+          "date": "2026-09-03",
+          "price": 191
         }
       ]
     },
     "VIE→ALC": {
       "median": 202,
-      "min": 157,
-      "max": 388,
+      "min": 106,
+      "max": 259,
       "samples": 20,
-      "ts": 1786956970352,
+      "ts": 1788469643434,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 186
+          "date": "2026-09-03",
+          "price": 200
         }
       ]
     },
     "VIE→LHR": {
-      "median": 147,
-      "min": 147,
-      "max": 300,
+      "median": 248,
+      "min": 167,
+      "max": 407,
       "samples": 20,
-      "ts": 1786956970352,
+      "ts": 1788469633168,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 189
+          "date": "2026-09-03",
+          "price": 188
         }
       ]
     },
@@ -11951,149 +11953,145 @@
       "ts": 1775119331704
     },
     "VIE→CAI": {
-      "median": 363,
-      "min": 287,
-      "max": 730,
+      "median": 391,
+      "min": 224,
+      "max": 553,
       "samples": 20,
-      "ts": 1786957002610,
+      "ts": 1788469676197,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 459
+          "date": "2026-09-03",
+          "price": 457
         }
       ]
     },
     "KTW→RJK": {
-      "median": 48,
-      "min": 46,
-      "max": 120,
+      "median": 43,
+      "min": 43,
+      "max": 90,
       "samples": 20,
-      "ts": 1786956887228,
+      "ts": 1788469537016,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 46
+          "date": "2026-09-03",
+          "price": 43
         }
       ]
     },
     "KTW→VAR": {
-      "median": 61,
-      "min": 59,
-      "max": 519,
+      "median": 55,
+      "min": 54,
+      "max": 115,
       "samples": 20,
-      "ts": 1786956899929,
+      "ts": 1788469547849,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 59
+          "date": "2026-09-03",
+          "price": 54
         }
       ]
     },
     "BTS→JMK": {
-      "median": 93,
-      "min": 67,
-      "max": 170,
+      "median": 67,
+      "min": 56,
+      "max": 127,
       "samples": 20,
-      "ts": 1786956902980,
+      "ts": 1788469550807,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 67
+          "date": "2026-09-03",
+          "price": 56
         }
       ]
     },
     "KTW→OHD": {
-      "median": 124,
-      "min": 90,
-      "max": 174,
+      "median": 122,
+      "min": 109,
+      "max": 185,
       "samples": 20,
-      "ts": 1786956914103,
+      "ts": 1788469586411,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 90
+          "date": "2026-09-03",
+          "price": 109
         }
       ]
     },
     "KTW→RMI": {
-      "median": 96,
-      "min": 70,
-      "max": 160,
+      "median": 136,
+      "min": 84,
+      "max": 226,
       "samples": 20,
-      "ts": 1786956906244,
+      "ts": 1788469568934,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 70
+          "date": "2026-09-03",
+          "price": 84
         }
       ]
     },
     "KTW→BOJ": {
-      "median": 100,
-      "min": 95,
-      "max": 855,
+      "median": 156,
+      "min": 147,
+      "max": 531,
       "samples": 20,
-      "ts": 1786956916539,
+      "ts": 1788469610846,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 95
+          "date": "2026-09-03",
+          "price": 147
         }
       ]
     },
     "VIE→LGW": {
-      "median": 129,
-      "min": 97,
-      "max": 723,
+      "median": 117,
+      "min": 96,
+      "max": 573,
       "samples": 20,
-      "ts": 1786142077779,
+      "ts": 1788469579259,
       "history": [
         {
-          "date": "2026-08-07",
-          "price": 97
-        },
-        {
-          "date": "2026-08-08",
-          "price": 97
+          "date": "2026-09-03",
+          "price": 96
         }
       ]
     },
     "KTW→AUH": {
-      "median": 143,
-      "min": 142,
-      "max": 2261,
+      "median": 141,
+      "min": 140,
+      "max": 1825,
       "samples": 20,
-      "ts": 1786956951705,
+      "ts": 1788469610846,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 144
+          "date": "2026-09-03",
+          "price": 141
         }
       ]
     },
     "VIE→EDI": {
-      "median": 220,
-      "min": 170,
-      "max": 391,
+      "median": 258,
+      "min": 131,
+      "max": 543,
       "samples": 20,
-      "ts": 1786956972990,
+      "ts": 1788469605522,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 190
+          "date": "2026-09-03",
+          "price": 131
         }
       ]
     },
     "PRG→FAO": {
-      "median": 233,
-      "min": 158,
-      "max": 775,
+      "median": 207,
+      "min": 135,
+      "max": 717,
       "samples": 20,
-      "ts": 1786956992819,
+      "ts": 1788469665416,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 273
+          "date": "2026-09-03",
+          "price": 305
         }
       ]
     },
@@ -12111,15 +12109,15 @@
       ]
     },
     "OSR→BOJ": {
-      "median": 215,
-      "min": 198,
-      "max": 268,
+      "median": 211,
+      "min": 173,
+      "max": 1704,
       "samples": 20,
-      "ts": 1786956729671,
+      "ts": 1788469643434,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 198
+          "date": "2026-09-03",
+          "price": 200
         }
       ]
     },
@@ -12137,67 +12135,67 @@
       ]
     },
     "OSR→SUF": {
-      "median": 360,
-      "min": 255,
-      "max": 1828,
-      "samples": 20,
-      "ts": 1786956733914,
+      "median": 335,
+      "min": 276,
+      "max": 1797,
+      "samples": 19,
+      "ts": 1788469665415,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 323
+          "date": "2026-09-03",
+          "price": 277
         }
       ]
     },
     "PRG→SHJ": {
-      "median": 349,
-      "min": 346,
-      "max": 461,
+      "median": 318,
+      "min": 318,
+      "max": 318,
       "samples": 20,
-      "ts": 1786956999453,
+      "ts": 1788469667789,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 346
+          "date": "2026-09-03",
+          "price": 318
         }
       ]
     },
     "PRG→TAS": {
-      "median": 462,
-      "min": 435,
-      "max": 960,
+      "median": 652,
+      "min": 405,
+      "max": 908,
       "samples": 20,
-      "ts": 1786957009005,
+      "ts": 1788469682184,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 567
+          "date": "2026-09-03",
+          "price": 597
         }
       ]
     },
     "VIE→EWR": {
-      "median": 561,
-      "min": 561,
-      "max": 2257,
+      "median": 579,
+      "min": 495,
+      "max": 1510,
       "samples": 20,
-      "ts": 1786957006015,
+      "ts": 1788469678777,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 561
+          "date": "2026-09-03",
+          "price": 562
         }
       ]
     },
     "PRG→LGW": {
-      "median": 133,
-      "min": 53,
-      "max": 453,
+      "median": 75,
+      "min": 72,
+      "max": 291,
       "samples": 20,
-      "ts": 1786956890432,
+      "ts": 1788469558858,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 49
+          "date": "2026-09-03",
+          "price": 66
         }
       ]
     },
@@ -12215,15 +12213,15 @@
       ]
     },
     "VIE→HND": {
-      "median": 1046,
-      "min": 801,
-      "max": 2906,
+      "median": 888,
+      "min": 858,
+      "max": 1549,
       "samples": 20,
-      "ts": 1786138718518,
+      "ts": 1788469685870,
       "history": [
         {
-          "date": "2026-08-07",
-          "price": 1173
+          "date": "2026-09-03",
+          "price": 856
         }
       ]
     },
@@ -12235,80 +12233,80 @@
       "ts": 1775119259554
     },
     "PRG→TLL": {
-      "median": 150,
-      "min": 100,
-      "max": 357,
+      "median": 127,
+      "min": 116,
+      "max": 334,
       "samples": 20,
-      "ts": 1786956916540,
+      "ts": 1788469592904,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 100
+          "date": "2026-09-03",
+          "price": 116
         }
       ]
     },
     "VIE→CHQ": {
-      "median": 188,
-      "min": 188,
-      "max": 349,
+      "median": 166,
+      "min": 157,
+      "max": 367,
       "samples": 20,
-      "ts": 1786956975630,
+      "ts": 1788469667789,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 204
+          "date": "2026-09-03",
+          "price": 311
         }
       ]
     },
     "KTW→RHO": {
-      "median": 209,
-      "min": 185,
-      "max": 3975,
+      "median": 184,
+      "min": 139,
+      "max": 302,
       "samples": 20,
-      "ts": 1786957002610,
+      "ts": 1788469608289,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 446
+          "date": "2026-09-03",
+          "price": 139
         }
       ]
     },
     "VIE→SPU": {
-      "median": 167,
-      "min": 167,
-      "max": 410,
+      "median": 240,
+      "min": 166,
+      "max": 422,
       "samples": 20,
-      "ts": 1786956964495,
+      "ts": 1788469622612,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 167
+          "date": "2026-09-03",
+          "price": 166
         }
       ]
     },
     "PRG→SKP": {
-      "median": 25,
-      "min": 19,
-      "max": 331,
+      "median": 43,
+      "min": 41,
+      "max": 320,
       "samples": 20,
-      "ts": 1786956867932,
+      "ts": 1788469534120,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 24
+          "date": "2026-09-03",
+          "price": 41
         }
       ]
     },
     "PRG→VNO": {
-      "median": 39,
-      "min": 34,
-      "max": 339,
+      "median": 46,
+      "min": 40,
+      "max": 336,
       "samples": 20,
-      "ts": 1786956884153,
+      "ts": 1788469534120,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 44
+          "date": "2026-09-03",
+          "price": 40
         }
       ]
     },
@@ -12339,145 +12337,145 @@
       ]
     },
     "VIE→CFU": {
-      "median": 234,
-      "min": 203,
-      "max": 400,
+      "median": 168,
+      "min": 168,
+      "max": 457,
       "samples": 20,
-      "ts": 1786956975630,
+      "ts": 1788469650011,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 203
+          "date": "2026-09-03",
+          "price": 218
         }
       ]
     },
     "VIE→ZTH": {
-      "median": 252,
-      "min": 231,
-      "max": 633,
+      "median": 227,
+      "min": 205,
+      "max": 555,
       "samples": 20,
-      "ts": 1786956989497,
+      "ts": 1788469670647,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 267
+          "date": "2026-09-03",
+          "price": 348
         }
       ]
     },
     "VIE→JTR": {
-      "median": 222,
-      "min": 216,
-      "max": 374,
+      "median": 196,
+      "min": 194,
+      "max": 347,
       "samples": 20,
-      "ts": 1786956981106,
+      "ts": 1788469665415,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 216
+          "date": "2026-09-03",
+          "price": 288
         }
       ]
     },
     "KTW→SKG": {
-      "median": 166,
-      "min": 154,
-      "max": 566,
+      "median": 188,
+      "min": 134,
+      "max": 535,
       "samples": 20,
-      "ts": 1786956999453,
+      "ts": 1788469670647,
       "history": [
         {
-          "date": "2026-08-17",
+          "date": "2026-09-03",
           "price": 343
         }
       ]
     },
     "KTW→CHQ": {
-      "median": 194,
-      "min": 171,
-      "max": 1318,
+      "median": 175,
+      "min": 157,
+      "max": 670,
       "samples": 20,
-      "ts": 1786957009006,
+      "ts": 1788469676197,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 645
+          "date": "2026-09-03",
+          "price": 459
         }
       ]
     },
     "PRG→PMO": {
-      "median": 54,
-      "min": 54,
-      "max": 391,
+      "median": 55,
+      "min": 53,
+      "max": 187,
       "samples": 20,
-      "ts": 1786956902980,
+      "ts": 1788469545093,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 69
+          "date": "2026-09-03",
+          "price": 53
         }
       ]
     },
     "KTW→CIY": {
-      "median": 75,
-      "min": 50,
-      "max": 160,
+      "median": 166,
+      "min": 84,
+      "max": 182,
       "samples": 20,
-      "ts": 1786956890432,
+      "ts": 1788469568934,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 50
+          "date": "2026-09-03",
+          "price": 84
         }
       ]
     },
     "BTS→AGA": {
       "median": 79,
-      "min": 79,
-      "max": 85,
+      "min": 73,
+      "max": 80,
       "samples": 20,
-      "ts": 1786956921591,
+      "ts": 1788469562212,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 105
+          "date": "2026-09-03",
+          "price": 73
         }
       ]
     },
     "VIE→ZAD": {
-      "median": 145,
-      "min": 130,
-      "max": 266,
+      "median": 207,
+      "min": 206,
+      "max": 311,
       "samples": 20,
-      "ts": 1786956938572,
+      "ts": 1788469646834,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 130
+          "date": "2026-09-03",
+          "price": 206
         }
       ]
     },
     "KTW→RMF": {
-      "median": 141,
-      "min": 141,
-      "max": 1219,
+      "median": 136,
+      "min": 129,
+      "max": 814,
       "samples": 20,
-      "ts": 1786956948359,
+      "ts": 1788469602691,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 141
+          "date": "2026-09-03",
+          "price": 129
         }
       ]
     },
     "PRG→VCE": {
-      "median": 147,
-      "min": 147,
-      "max": 329,
+      "median": 148,
+      "min": 148,
+      "max": 326,
       "samples": 20,
-      "ts": 1786956951705,
+      "ts": 1788469613605,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 147
+          "date": "2026-09-03",
+          "price": 148
         }
       ]
     },
@@ -12495,15 +12493,15 @@
       ]
     },
     "VIE→JMK": {
-      "median": 195,
-      "min": 154,
-      "max": 379,
+      "median": 240,
+      "min": 165,
+      "max": 425,
       "samples": 20,
-      "ts": 1786956958268,
+      "ts": 1788469622612,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 154
+          "date": "2026-09-03",
+          "price": 165
         }
       ]
     },
@@ -12515,15 +12513,15 @@
       "ts": 1785360061749
     },
     "VIE→KGS": {
-      "median": 208,
-      "min": 195,
-      "max": 386,
+      "median": 274,
+      "min": 168,
+      "max": 334,
       "samples": 20,
-      "ts": 1786956972990,
+      "ts": 1788469663039,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 195
+          "date": "2026-09-03",
+          "price": 275
         }
       ]
     },
@@ -12541,15 +12539,15 @@
       ]
     },
     "VIE→TLV": {
-      "median": 221,
-      "min": 220,
-      "max": 834,
+      "median": 239,
+      "min": 222,
+      "max": 780,
       "samples": 20,
-      "ts": 1786956986152,
+      "ts": 1788469659815,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 238
+          "date": "2026-09-03",
+          "price": 236
         }
       ]
     },
@@ -12580,15 +12578,15 @@
       ]
     },
     "PRG→ZTH": {
-      "median": 244,
-      "min": 216,
-      "max": 571,
+      "median": 238,
+      "min": 217,
+      "max": 306,
       "samples": 20,
-      "ts": 1786956981106,
+      "ts": 1788469650011,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 216
+          "date": "2026-09-03",
+          "price": 217
         }
       ]
     },
@@ -12626,24 +12624,30 @@
       ]
     },
     "PRG→CDG": {
-      "median": 120,
-      "min": 120,
-      "max": 278,
+      "median": 119,
+      "min": 119,
+      "max": 355,
       "samples": 20,
-      "ts": 1786956931865,
+      "ts": 1788469596143,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 120
+          "date": "2026-09-03",
+          "price": 122
         }
       ]
     },
     "PRG→IST": {
-      "median": 130,
-      "min": 128,
-      "max": 376,
+      "median": 111,
+      "min": 110,
+      "max": 213,
       "samples": 20,
-      "ts": 1785391265027
+      "ts": 1788469640336,
+      "history": [
+        {
+          "date": "2026-09-03",
+          "price": 200
+        }
+      ]
     },
     "VIE→CDG": {
       "median": 144,
@@ -12673,28 +12677,28 @@
       ]
     },
     "KTW→ZTH": {
-      "median": 196,
-      "min": 173,
-      "max": 1392,
+      "median": 169,
+      "min": 150,
+      "max": 1058,
       "samples": 20,
-      "ts": 1786957009006,
+      "ts": 1788469613606,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 603
+          "date": "2026-09-03",
+          "price": 150
         }
       ]
     },
     "PRG→HAN": {
-      "median": 1204,
-      "min": 559,
-      "max": 1912,
+      "median": 568,
+      "min": 560,
+      "max": 1968,
       "samples": 20,
-      "ts": 1786175390741,
+      "ts": 1788469685870,
       "history": [
         {
-          "date": "2026-08-08",
-          "price": 721
+          "date": "2026-09-03",
+          "price": 822
         }
       ]
     },
@@ -12716,210 +12720,210 @@
       ]
     },
     "PRG→FRA": {
-      "median": 129,
-      "min": 127,
-      "max": 156,
+      "median": 122,
+      "min": 122,
+      "max": 153,
       "samples": 20,
-      "ts": 1786956938571,
+      "ts": 1788469596143,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 127
+          "date": "2026-09-03",
+          "price": 124
         }
       ]
     },
     "BRQ→BOJ": {
-      "median": 216,
+      "median": 355,
       "min": 199,
-      "max": 255,
+      "max": 460,
       "samples": 20,
-      "ts": 1786956729671,
+      "ts": 1788469640336,
       "history": [
         {
-          "date": "2026-08-17",
+          "date": "2026-09-03",
           "price": 199
         }
       ]
     },
     "BRQ→VAR": {
-      "median": 217,
-      "min": 200,
-      "max": 242,
+      "median": 486,
+      "min": 201,
+      "max": 567,
       "samples": 20,
-      "ts": 1786956731091,
+      "ts": 1788469643434,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 200
+          "date": "2026-09-03",
+          "price": 201
         }
       ]
     },
     "BRQ→TGD": {
-      "median": 386,
-      "min": 208,
-      "max": 433,
+      "median": 352,
+      "min": 220,
+      "max": 426,
       "samples": 20,
-      "ts": 1786956731091,
+      "ts": 1788469653066,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 208
+          "date": "2026-09-03",
+          "price": 220
         }
       ]
     },
     "BRQ→ZTH": {
-      "median": 248,
+      "median": 281,
       "min": 248,
-      "max": 478,
+      "max": 383,
       "samples": 20,
-      "ts": 1786956731091,
+      "ts": 1788469663038,
       "history": [
         {
-          "date": "2026-08-17",
+          "date": "2026-09-03",
           "price": 248
         }
       ]
     },
     "BRQ→HER": {
-      "median": 282,
-      "min": 263,
-      "max": 339,
+      "median": 188,
+      "min": 188,
+      "max": 265,
       "samples": 20,
-      "ts": 1786956731091,
+      "ts": 1788469629740,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 263
+          "date": "2026-09-03",
+          "price": 188
         }
       ]
     },
     "BRQ→SUF": {
-      "median": 289,
-      "min": 276,
-      "max": 323,
+      "median": 311,
+      "min": 230,
+      "max": 451,
       "samples": 20,
-      "ts": 1786956732615,
+      "ts": 1788469656486,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 276
+          "date": "2026-09-03",
+          "price": 230
         }
       ]
     },
     "BRQ→CFU": {
-      "median": 287,
-      "min": 287,
-      "max": 288,
+      "median": 289,
+      "min": 193,
+      "max": 289,
       "samples": 20,
-      "ts": 1786956732615,
+      "ts": 1788469636777,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 287
+          "date": "2026-09-03",
+          "price": 193
         }
       ]
     },
     "BRQ→AYT": {
-      "median": 351,
-      "min": 275,
-      "max": 354,
+      "median": 200,
+      "min": 200,
+      "max": 201,
       "samples": 20,
-      "ts": 1786956732615,
+      "ts": 1788469640336,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 275
+          "date": "2026-09-03",
+          "price": 200
         }
       ]
     },
     "BRQ→TIV": {
-      "median": 446,
-      "min": 322,
-      "max": 525,
+      "median": 458,
+      "min": 307,
+      "max": 503,
       "samples": 20,
-      "ts": 1786956732615,
+      "ts": 1788469667788,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 322
+          "date": "2026-09-03",
+          "price": 307
         }
       ]
     },
     "BRQ→KGS": {
-      "median": 356,
-      "min": 280,
-      "max": 356,
+      "median": 226,
+      "min": 204,
+      "max": 281,
       "samples": 20,
-      "ts": 1786956733914,
+      "ts": 1788469643434,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 280
+          "date": "2026-09-03",
+          "price": 204
         }
       ]
     },
     "BRQ→RHO": {
-      "median": 355,
-      "min": 280,
-      "max": 356,
+      "median": 204,
+      "min": 204,
+      "max": 204,
       "samples": 20,
-      "ts": 1786956733914,
+      "ts": 1788469646833,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 280
+          "date": "2026-09-03",
+          "price": 204
         }
       ]
     },
     "BRQ→HRG": {
-      "median": 398,
-      "min": 398,
-      "max": 407,
+      "median": 212,
+      "min": 211,
+      "max": 217,
       "samples": 20,
-      "ts": 1786956736495,
+      "ts": 1788469646834,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 398
+          "date": "2026-09-03",
+          "price": 211
         }
       ]
     },
     "BRQ→RMF": {
-      "median": 410,
-      "min": 408,
-      "max": 419,
+      "median": 224,
+      "min": 223,
+      "max": 229,
       "samples": 20,
-      "ts": 1786956736495,
+      "ts": 1788469653066,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 408
+          "date": "2026-09-03",
+          "price": 223
         }
       ]
     },
     "KLV→TAS": {
-      "median": 1025,
-      "min": 977,
-      "max": 1098,
-      "samples": 7,
-      "ts": 1786956738759,
+      "median": 513,
+      "min": 416,
+      "max": 704,
+      "samples": 5,
+      "ts": 1788469673406,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 977
+          "date": "2026-09-03",
+          "price": 416
         }
       ]
     },
     "BTS→GYD": {
-      "median": 79,
-      "min": 75,
-      "max": 85,
+      "median": 85,
+      "min": 81,
+      "max": 91,
       "samples": 20,
-      "ts": 1786956916539,
+      "ts": 1788469568934,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 95
+          "date": "2026-09-03",
+          "price": 84
         }
       ]
     },
@@ -12937,15 +12941,15 @@
       ]
     },
     "PRG→VIE": {
-      "median": 166,
-      "min": 166,
-      "max": 186,
+      "median": 165,
+      "min": 165,
+      "max": 492,
       "samples": 20,
-      "ts": 1786956961387,
+      "ts": 1788469622611,
       "history": [
         {
-          "date": "2026-08-17",
-          "price": 166
+          "date": "2026-09-03",
+          "price": 165
         }
       ]
     },
@@ -12998,7 +13002,101 @@
           "price": 65
         }
       ]
+    },
+    "OSR→STN": {
+      "median": 397,
+      "min": 374,
+      "max": 420,
+      "samples": 20,
+      "ts": 1788469521674,
+      "history": [
+        {
+          "date": "2026-09-03",
+          "price": 32
+        }
+      ]
+    },
+    "OSR→AGP": {
+      "median": 262,
+      "min": 232,
+      "max": 533,
+      "samples": 20,
+      "ts": 1788469534120,
+      "history": [
+        {
+          "date": "2026-09-03",
+          "price": 41
+        }
+      ]
+    },
+    "BRQ→STN": {
+      "median": 410,
+      "min": 362,
+      "max": 427,
+      "samples": 20,
+      "ts": 1788469540167,
+      "history": [
+        {
+          "date": "2026-09-03",
+          "price": 45
+        }
+      ]
+    },
+    "VIE→PRG": {
+      "median": 187,
+      "min": 169,
+      "max": 299,
+      "samples": 20,
+      "ts": 1788469626206,
+      "history": [
+        {
+          "date": "2026-09-03",
+          "price": 169
+        }
+      ]
+    },
+    "PRG→CAI": {
+      "median": 275,
+      "min": 219,
+      "max": 472,
+      "samples": 20,
+      "ts": 1788469670647,
+      "history": [
+        {
+          "date": "2026-09-03",
+          "price": 320
+        }
+      ]
+    },
+    "VIE→AUH": {
+      "median": 205,
+      "min": 182,
+      "max": 985,
+      "samples": 20,
+      "ts": 1788469678776,
+      "history": [
+        {
+          "date": "2026-09-03",
+          "price": 546
+        }
+      ]
+    },
+    "BRQ→BGY": {
+      "history": [
+        {
+          "date": "2026-09-03",
+          "price": 30
+        }
+      ]
+    },
+    "BRQ→AGP": {
+      "history": [
+        {
+          "date": "2026-09-03",
+          "price": 38
+        }
+      ]
     }
   },
-  "savedAt": "2026-09-03T21:00:44.179Z"
+  "savedAt": "2026-09-03T21:08:05.941Z"
 }
