@@ -610,9 +610,12 @@ function formatTime(isoOrTime) {
 }
 
 function addDays(dateStr, days) {
-    const d = new Date(dateStr + 'T00:00:00');
-    d.setDate(d.getDate() + days);
-    return d.toISOString().split('T')[0];
+    const parts = dateStr.split('-').map(Number);
+    const date = new Date(parts[0], parts[1] - 1, parts[2] + days);
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
 }
 
 export async function searchTravelpayouts(params, key) {

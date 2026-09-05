@@ -68,9 +68,16 @@ const server = createServer((req, res) => {
         }
         const daysParam = parseInt(parsedUrl.searchParams.get('days') || '90', 10);
         const days = isNaN(daysParam) ? 90 : Math.min(365, Math.max(1, daysParam));
+        const dateFrom = parsedUrl.searchParams.get('dateFrom') || parsedUrl.searchParams.get('from');
+        const dateTo = parsedUrl.searchParams.get('dateTo') || parsedUrl.searchParams.get('to');
+
+        const spawnArgs = ['error_fare_hunter.js'];
+        if (dateFrom) spawnArgs.push('--from-date', dateFrom);
+        if (dateTo) spawnArgs.push('--to-date', dateTo);
+        if (!dateFrom && !dateTo) spawnArgs.push('--days', String(days));
 
         activeHuntStartTime = new Date().toISOString();
-        activeHuntProcess = spawn('node', ['error_fare_hunter.js', '--days', String(days)], { cwd: ROOT_DIR });
+        activeHuntProcess = spawn('node', spawnArgs, { cwd: ROOT_DIR });
 
         activeHuntProcess.on('exit', () => {
             activeHuntProcess = null;
@@ -78,7 +85,16 @@ const server = createServer((req, res) => {
         });
 
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ status: 'started', message: `Flight hunt launched for next ${days} days`, days, startedAt: activeHuntStartTime }));
+        res.end(JSON.stringify({
+            status: 'started',
+            message: (dateFrom || dateTo)
+                ? `Flight hunt launched for dates ${dateFrom || 'today'} → ${dateTo || 'custom'}`
+                : `Flight hunt launched for next ${days} days`,
+            days: (!dateFrom && !dateTo) ? days : undefined,
+            dateFrom: dateFrom || null,
+            dateTo: dateTo || null,
+            startedAt: activeHuntStartTime
+        }));
         return;
     }
 

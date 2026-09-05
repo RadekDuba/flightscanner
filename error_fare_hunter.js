@@ -64,9 +64,12 @@ function log(level, msg) {
 }
 
 function addDays(dateStr, days) {
-    const d = new Date(dateStr + 'T00:00:00');
-    d.setDate(d.getDate() + days);
-    return d.toISOString().split('T')[0];
+    const parts = dateStr.split('-').map(Number);
+    const date = new Date(parts[0], parts[1] - 1, parts[2] + days);
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
 }
 
 const ORIGINS = [
@@ -519,6 +522,8 @@ ${c.magenta}${c.bold}  ╔══════════════════
 
     // Parse options
     let daysAhead = 90; // 90 days (3 months) max horizon for 100% complete flight coverage
+    let dateFromParam = null;
+    let dateToParam = null;
     let nightsMin = 3;
     let nightsMax = 14;
     let limit = 500;
@@ -527,6 +532,14 @@ ${c.magenta}${c.bold}  ╔══════════════════
     for (let i = 0; i < args.length; i++) {
         switch (args[i]) {
             case '--days': daysAhead = parseInt(args[++i]) || 90; break;
+            case '--from-date':
+            case '--date-from':
+                dateFromParam = args[++i];
+                break;
+            case '--to-date':
+            case '--date-to':
+                dateToParam = args[++i];
+                break;
             case '--nights-min': nightsMin = parseInt(args[++i]) || 3; break;
             case '--nights-max': nightsMax = parseInt(args[++i]) || 14; break;
             case '--limit': limit = parseInt(args[++i]) || 80; break;
@@ -540,13 +553,15 @@ ${c.magenta}${c.bold}  ╔══════════════════
         loadCache();
     }
 
-    const dateTo = addDays(today, daysAhead);
+    const dateFrom = dateFromParam || today;
+    const dateTo = dateToParam || addDays(dateFrom, daysAhead);
+    const totalDays = Math.max(1, Math.round((new Date(dateTo + 'T00:00:00') - new Date(dateFrom + 'T00:00:00')) / (1000 * 60 * 60 * 24)));
     const origins = originsFilter
         ? ORIGINS.filter(o => originsFilter.includes(o.code))
         : ORIGINS;
 
     log('info', `Origins: ${c.bold}${origins.map(o => `${o.name} (${o.code})`).join(', ')}${c.reset}`);
-    log('info', `Date range: ${c.bold}${today}${c.reset} → ${c.bold}${dateTo}${c.reset} (${daysAhead} days)`);
+    log('info', `Date range: ${c.bold}${dateFrom}${c.reset} → ${c.bold}${dateTo}${c.reset} (${totalDays} days)`);
     log('info', `Trip length: ${c.bold}${nightsMin}-${nightsMax} nights${c.reset}`);
     log('info', `Top destinations per airport: ${c.bold}${limit}${c.reset}`);
     if (cache.savedAt) {
@@ -568,8 +583,8 @@ ${c.magenta}${c.bold}  ╔══════════════════
 
     // ─── Phase 1: Kiwi Anywhere Search (always fresh) ─────────
     let kiwiWorked = false;
-    const WINDOW_SIZE = 30; // 30-day date chunks (3 windows over 90 days) for maximum exposure
-    const numWindows = Math.ceil(daysAhead / WINDOW_SIZE);
+    const WINDOW_SIZE = 30; // 30-day date chunks for maximum exposure
+    const numWindows = Math.ceil(totalDays / WINDOW_SIZE);
 
     for (const origin of origins) {
         console.log(`  ${c.cyan}${'─'.repeat(60)}${c.reset}`);
@@ -579,8 +594,8 @@ ${c.magenta}${c.bold}  ╔══════════════════
         const originResultsMap = new Map();
 
         for (let w = 0; w < numWindows; w++) {
-            const wStart = addDays(today, w * WINDOW_SIZE);
-            const wEnd = addDays(today, Math.min(daysAhead, (w + 1) * WINDOW_SIZE));
+            const wStart = addDays(dateFrom, w * WINDOW_SIZE);
+            const wEnd = addDays(dateFrom, Math.min(totalDays, (w + 1) * WINDOW_SIZE));
 
             // Pass A: City-Coverage Pass (one_for_city=1) for this window
             const cityDeals = await kiwiAnywhereSearch(origin.code, wStart, wEnd, nightsMin, nightsMax, 1000, { one_for_city: 1 });
@@ -704,8 +719,8 @@ ${c.magenta}${c.bold}  ╔══════════════════
         const tasks = [];
         for (const origin of origins) {
             for (const dest of DESTS) {
-                for (let day = 0; day <= daysAhead; day += 10) {
-                    tasks.push({ origin, dest, date: addDays(today, day) });
+                for (let day = 0; day <= totalDays; day += 10) {
+                    tasks.push({ origin, dest, date: addDays(dateFrom, day) });
                 }
             }
         }

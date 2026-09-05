@@ -15,6 +15,7 @@
 ## 🚀 Key Features
 
 * **🧠 Smart Insights & Live Header**: Top control bar featuring quick preset chips (🔥 Error Fares, 💰 Under €50, ✈️ Direct Only, 🏖️ Weekend Trips, ↺ Reset All) and live route counters.
+* **📅 Interactive Custom Date Picker & Horizon**: Specify exact travel dates (Depart From, Depart To, Return By) or toggle horizon chips (7d, 30d, 90d, All Dates) with real-time reactive filtering across the 3D globe, route cards, counters, and detail drawer.
 * **⚡ 90-Day Date-Window Chunking**: Divides the 90-day booking horizon into 3 distinct 30-day windows requesting up to 1,000 direct flight offers per airport per window, ensuring **100% complete direct flight coverage** out of Czech airports (PRG, BRQ, OSR, PED, KLV, JCL) and Central European hubs (VIE, BTS, KTW).
 * **🗺️ 3D MapTiler Vector Globe**: Interactive 3D canvas featuring curved flight paths, pulsing destination nodes, interactive hover popups, and atmospheric fog.
 * **🎯 Unified Bi-Directional Sync**:
@@ -111,8 +112,11 @@ npm run scan
 # Run single route flight search (e.g. PRG to BCN on 2026-09-15)
 npm run search -- PRG BCN 2026-09-15
 
-# Run full error fare hunter scan
+# Run full error fare hunter scan (default 90-day horizon)
 npm run hunt
+
+# Run hunt for a specific date range (e.g. October 2026)
+npm run hunt -- --from-date 2026-10-01 --to-date 2026-10-31
 
 # Run scan with fresh baseline cache
 npm run hunt:fresh

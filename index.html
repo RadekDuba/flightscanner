@@ -461,6 +461,95 @@
             text-align: right;
         }
 
+        /* Travel Date Inputs & Controls */
+        .date-range-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 3px;
+        }
+
+        .date-field {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .date-sublabel {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text-subtle);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .date-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 8px;
+            padding: 6px 8px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-main);
+            color-scheme: dark;
+            outline: none;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .date-input:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.25);
+        }
+
+        .date-input::-webkit-calendar-picker-indicator {
+            filter: invert(0.85);
+            cursor: pointer;
+            opacity: 0.8;
+            transition: opacity 0.15s ease;
+        }
+
+        .date-input::-webkit-calendar-picker-indicator:hover {
+            opacity: 1;
+        }
+
+        .clear-dates-btn {
+            background: transparent;
+            border: none;
+            color: #ff3b5c;
+            font-size: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 2px 5px;
+            border-radius: 4px;
+            transition: all 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .clear-dates-btn:hover {
+            background: rgba(255, 59, 92, 0.15);
+            color: #ff6b6b;
+        }
+
+        .date-status-pill {
+            font-size: 10px;
+            color: var(--accent-cyan);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 4px 8px;
+            background: rgba(0, 242, 254, 0.08);
+            border-radius: 6px;
+            border: 1px solid rgba(0, 242, 254, 0.25);
+            margin-top: 4px;
+            line-height: 1.3;
+        }
+
         /* 3D Map Viewport */
         .map-viewport {
             flex: 1;
@@ -980,12 +1069,33 @@
                     </select>
                 </div>
 
-                <div class="filter-group">
-                    <span class="filter-label" id="horizon-label">Booking Horizon</span>
-                    <div class="filter-chips" role="group" aria-labelledby="horizon-label">
+                <div class="filter-group" id="date-filter-group">
+                    <div class="filter-label">
+                        <span id="horizon-label">Travel Dates &amp; Horizon</span>
+                        <button type="button" id="btn-clear-dates" class="clear-dates-btn" style="display: none;" title="Clear specific dates">✕ Clear</button>
+                    </div>
+                    <div class="filter-chips" role="group" aria-labelledby="horizon-label" id="horizon-chips-group">
                         <button class="chip" data-filter="days" data-value="7">7 Days</button>
                         <button class="chip" data-filter="days" data-value="30">30 Days</button>
-                        <button class="chip active" data-filter="days" data-value="90">90 Days (Max)</button>
+                        <button class="chip active" data-filter="days" data-value="90">90 Days</button>
+                        <button class="chip" data-filter="days" data-value="all">All Dates</button>
+                    </div>
+                    <div class="date-range-grid">
+                        <div class="date-field">
+                            <label for="filter-date-from" class="date-sublabel">Depart From</label>
+                            <input type="date" id="filter-date-from" class="date-input" aria-label="Earliest departure date">
+                        </div>
+                        <div class="date-field">
+                            <label for="filter-date-to" class="date-sublabel">Depart To</label>
+                            <input type="date" id="filter-date-to" class="date-input" aria-label="Latest departure date">
+                        </div>
+                    </div>
+                    <div class="date-field" style="margin-top: 2px;">
+                        <label for="filter-return-to" class="date-sublabel">Return By (Optional)</label>
+                        <input type="date" id="filter-return-to" class="date-input" aria-label="Latest return date">
+                    </div>
+                    <div id="date-active-indicator" class="date-status-pill" style="display: none;">
+                        <span id="date-active-text">📅 Custom dates active</span>
                     </div>
                 </div>
 
@@ -1117,6 +1227,9 @@
             maxPrice: 2000,
             sort: 'score',
             days: 90,
+            dateFrom: '',
+            dateTo: '',
+            returnTo: '',
             weekendOnly: false,
             atlOnly: false,
             triangleOnly: false,
@@ -1460,7 +1573,16 @@
             fitMapToRoute(group.origin, group.dest);
 
             document.getElementById('d-route').textContent = `${group.origin} → ${group.destName}`;
-            document.getElementById('d-dates').textContent = `${group.offers.length} available flight dates · Lowest: €${group.minPrice}`;
+            let datesSummary = `${group.offers.length} available flight dates · Lowest: €${group.minPrice}`;
+            if (state.dateFrom || state.dateTo || state.returnTo) {
+                const rangeParts = [];
+                if (state.dateFrom && state.dateTo) rangeParts.push(`${state.dateFrom} → ${state.dateTo}`);
+                else if (state.dateFrom) rangeParts.push(`from ${state.dateFrom}`);
+                else if (state.dateTo) rangeParts.push(`until ${state.dateTo}`);
+                if (state.returnTo) rangeParts.push(`ret ≤ ${state.returnTo}`);
+                datesSummary = `${group.offers.length} offer${group.offers.length > 1 ? 's' : ''} in ${rangeParts.join(', ')} · Lowest: €${group.minPrice}`;
+            }
+            document.getElementById('d-dates').textContent = datesSummary;
             document.getElementById('d-price').textContent = group.priceRangeStr;
             document.getElementById('d-baseline').textContent = `Market Baseline: €${group.score?.baseline || '—'}`;
 
@@ -1889,7 +2011,13 @@
                 if (state.atlOnly && !d.isAllTimeLow) return false;
                 if (state.triangleOnly && !d.isTriangle) return false;
                 if (state.verifiedOnly && d.liveVerification?.status !== 'VERIFIED_LIVE') return false;
-                if (state.days && d.date) {
+                // Custom Date Range filter
+                if (state.dateFrom && d.date && d.date < state.dateFrom) return false;
+                if (state.dateTo && d.date && d.date > state.dateTo) return false;
+                if (state.returnTo && d.returnDate && d.returnDate > state.returnTo) return false;
+
+                // Rolling Horizon days constraint (active when specific dates are not set)
+                if (state.days && !state.dateFrom && !state.dateTo && d.date) {
                     const flightDate = new Date(d.date);
                     const maxDate = new Date();
                     maxDate.setDate(maxDate.getDate() + state.days);
@@ -2262,6 +2390,20 @@
                 deals = report.allResults;
                 allRouteGroups = groupDealsByRoute(deals);
                 populateAirlineDropdown(deals);
+
+                // Set initial bounds for date pickers based on available flight inventory
+                const validDates = deals.map(d => d.date).filter(Boolean).sort();
+                if (validDates.length > 0) {
+                    const minD = validDates[0];
+                    const maxD = validDates[validDates.length - 1];
+                    const dFrom = document.getElementById('filter-date-from');
+                    const dTo = document.getElementById('filter-date-to');
+                    const dRet = document.getElementById('filter-return-to');
+                    if (dFrom) { dFrom.min = minD; dFrom.max = maxD; }
+                    if (dTo) { dTo.min = minD; dTo.max = maxD; }
+                    if (dRet) { dRet.min = minD; }
+                }
+
                 applyFilters();
 
                 // Process geocoding and map updates
@@ -2388,12 +2530,96 @@
                 });
             });
 
+            // Travel Dates UI State Sync Helper
+            function updateDateUIState() {
+                const clearBtn = document.getElementById('btn-clear-dates');
+                const indicator = document.getElementById('date-active-indicator');
+                const textEl = document.getElementById('date-active-text');
+                const hasCustom = Boolean(state.dateFrom || state.dateTo || state.returnTo);
+
+                if (clearBtn) clearBtn.style.display = hasCustom ? 'inline-flex' : 'none';
+                if (indicator) indicator.style.display = hasCustom ? 'flex' : 'none';
+                if (textEl && hasCustom) {
+                    let label = '📅 ';
+                    if (state.dateFrom && state.dateTo) label += `${state.dateFrom} → ${state.dateTo}`;
+                    else if (state.dateFrom) label += `From ${state.dateFrom}`;
+                    else if (state.dateTo) label += `Until ${state.dateTo}`;
+                    if (state.returnTo) label += ` (Ret ≤ ${state.returnTo})`;
+                    textEl.textContent = label;
+                }
+            }
+
+            const dFrom = document.getElementById('filter-date-from');
+            const dTo = document.getElementById('filter-date-to');
+            const dRet = document.getElementById('filter-return-to');
+            const clearDatesBtn = document.getElementById('btn-clear-dates');
+
+            function onDateFilterInput() {
+                state.dateFrom = dFrom ? dFrom.value : '';
+                state.dateTo = dTo ? dTo.value : '';
+                state.returnTo = dRet ? dRet.value : '';
+
+                if (dFrom && dTo) {
+                    if (dFrom.value) {
+                        dTo.min = dFrom.value;
+                        if (dRet) dRet.min = dFrom.value;
+                        if (dTo.value && dTo.value < dFrom.value) {
+                            dTo.value = dFrom.value;
+                            state.dateTo = dFrom.value;
+                        }
+                    }
+                }
+
+                if (state.dateFrom || state.dateTo || state.returnTo) {
+                    document.querySelectorAll('.chip[data-filter="days"]').forEach(b => b.classList.remove('active'));
+                    state.days = null;
+                } else {
+                    state.days = 90;
+                    document.querySelectorAll('.chip[data-filter="days"]').forEach(b => {
+                        b.classList.toggle('active', b.dataset.value === '90');
+                    });
+                }
+
+                updateDateUIState();
+                applyFilters();
+            }
+
+            if (dFrom) dFrom.addEventListener('input', onDateFilterInput);
+            if (dTo) dTo.addEventListener('input', onDateFilterInput);
+            if (dRet) dRet.addEventListener('input', onDateFilterInput);
+
+            if (clearDatesBtn) {
+                clearDatesBtn.addEventListener('click', () => {
+                    if (dFrom) dFrom.value = '';
+                    if (dTo) dTo.value = '';
+                    if (dRet) dRet.value = '';
+                    state.dateFrom = '';
+                    state.dateTo = '';
+                    state.returnTo = '';
+                    state.days = 90;
+                    document.querySelectorAll('.chip[data-filter="days"]').forEach(b => {
+                        b.classList.toggle('active', b.dataset.value === '90');
+                    });
+                    updateDateUIState();
+                    showToast('Travel dates reset to 90 Days');
+                    applyFilters();
+                });
+            }
+
             // Booking Horizon Chips
             document.querySelectorAll('.chip[data-filter="days"]').forEach(btn => {
                 btn.addEventListener('click', () => {
                     document.querySelectorAll('.chip[data-filter="days"]').forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
-                    state.days = Number(btn.dataset.value);
+                    const val = btn.dataset.value;
+                    state.days = val === 'all' ? null : Number(val);
+                    state.dateFrom = '';
+                    state.dateTo = '';
+                    state.returnTo = '';
+                    if (dFrom) dFrom.value = '';
+                    if (dTo) dTo.value = '';
+                    if (dRet) dRet.value = '';
+                    updateDateUIState();
                     applyFilters();
                 });
             });
@@ -2496,10 +2722,18 @@
                     state.maxPrice = 2000;
                     state.sort = 'score';
                     state.days = 90;
+                    state.dateFrom = '';
+                    state.dateTo = '';
+                    state.returnTo = '';
                     state.weekendOnly = false;
                     state.atlOnly = false;
 
                     if (searchEl) searchEl.value = '';
+                    if (dFrom) dFrom.value = '';
+                    if (dTo) dTo.value = '';
+                    if (dRet) dRet.value = '';
+                    updateDateUIState();
+
                     if (priceSlider) {
                         priceSlider.value = 2000;
                         priceSlider.setAttribute('aria-valuenow', 2000);
