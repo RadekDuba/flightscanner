@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#06070b">
+    <meta name="theme-color" content="#161310">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -61,23 +61,44 @@
 
     <script src="https://cdn.maptiler.com/maptiler-sdk-js/v4.1.0/maptiler-sdk.umd.min.js"></script>
     <link href="https://cdn.maptiler.com/maptiler-sdk-js/v4.1.0/maptiler-sdk.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <style>
+        <style>
         :root {
-            --bg-dark: #06070b;
-            --panel-bg: rgba(11, 15, 25, 0.90);
-            --panel-border: rgba(255, 255, 255, 0.12);
-            --panel-blur: blur(24px) saturate(180%);
-            --error-color: #ff3b5c;
-            --great-color: #00f2fe;
-            --good-color: #ffb703;
-            --normal-color: #94a3b8;
-            --accent-cyan: #00f2fe;
-            --accent-mint: #4ecdc4;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --text-subtle: #cbd5e1;
+            --bg-dark: #161310;
+            --bg-ink: #1c1916;
+            --bg-panel: rgba(32, 28, 24, 0.92);
+            --bg-panel-hover: rgba(48, 42, 36, 0.96);
+            --border-panel: rgba(244, 236, 224, 0.09);
+            --border-panel-glow: rgba(232, 184, 109, 0.28);
+            --panel-blur: blur(18px);
+
+            --accent: #e8b86d;          /* Champagne gold primary */
+            --accent-strong: #d4a056;
+            --accent-coral: #d4786a;   /* Error fares / deep discounts */
+            --accent-gold: #e8b86d;    /* Great deals / awards */
+            --accent-emerald: #7d9e7a; /* Good deals / direct status */
+            --sea: #6f9e98;            /* Coastal teal / live verified */
+            --accent-purple: #b89a78;  /* Warm taupe */
+
+            --error-color: #d4786a;
+            --great-color: #6f9e98;
+            --good-color: #7d9e7a;
+            --normal-color: #8a8074;
+            --accent-cyan: #e8b86d;
+            --accent-mint: #7d9e7a;
+
+            --text-main: #f4efe8;      /* Warm cream */
+            --text-muted: #b4a99b;     /* Warm sand */
+            --text-subtle: #8a8074;    /* Muted taupe */
+
+            --font-ui: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-display: 'Fraunces', Georgia, serif;
+            --font-mono: 'Figtree', ui-sans-serif, sans-serif;
+            --radius-sm: 10px;
+            --radius-md: 14px;
+            --radius-lg: 22px;
+            --shadow-hud: 0 12px 32px -8px rgba(0, 0, 0, 0.55);
         }
 
         * {
@@ -100,7 +121,7 @@
         }
 
         body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            font-family: var(--font-ui);
             background: var(--bg-dark);
             color: var(--text-main);
             overflow: hidden;
@@ -111,18 +132,18 @@
         }
 
         :focus-visible {
-            outline: 2px solid var(--accent-cyan);
+            outline: 2px solid var(--accent);
             outline-offset: 2px;
         }
 
         /* Glass Panel Common */
         .glass-panel {
-            background: var(--panel-bg);
+            background: var(--bg-panel);
             backdrop-filter: var(--panel-blur);
             -webkit-backdrop-filter: var(--panel-blur);
-            border: 1px solid var(--panel-border);
-            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
+            border: 1px solid var(--border-panel);
+            box-shadow: var(--shadow-hud), inset 0 1px 0 rgba(244, 236, 224, 0.05);
+            border-radius: var(--radius-md);
         }
 
         /* App Layout */
@@ -136,14 +157,15 @@
 
         /* Top Header Bar */
         .app-header {
-            height: 56px;
-            background: rgba(8, 11, 18, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+            height: 58px;
+            background: linear-gradient(180deg, rgba(28, 25, 22, 0.96) 0%, rgba(22, 19, 16, 0.92) 100%);
+            backdrop-filter: var(--panel-blur);
+            -webkit-backdrop-filter: var(--panel-blur);
+            border-bottom: 1px solid var(--border-panel);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 16px;
+            padding: 0 20px;
             gap: 16px;
             z-index: 50;
             flex-shrink: 0;
@@ -152,50 +174,52 @@
         .brand-group {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             white-space: nowrap;
         }
 
         .brand-title {
-            font-size: 17px;
-            font-weight: 800;
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 600;
             letter-spacing: -0.4px;
-            background: linear-gradient(135deg, #ff3b5c, #ffab40, #00f2fe);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--text-main);
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
 
         .brand-version {
+            font-family: var(--font-ui);
             font-size: 11px;
             font-weight: 600;
-            color: var(--text-muted);
-            -webkit-text-fill-color: var(--text-muted);
+            color: var(--accent);
+            background: rgba(232, 184, 109, 0.12);
+            border: 1px solid rgba(232, 184, 109, 0.28);
+            padding: 2px 7px;
+            border-radius: 999px;
         }
 
         .brand-status {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
             font-size: 11px;
             font-weight: 600;
-            color: var(--accent-mint);
-            background: rgba(78, 205, 196, 0.12);
-            padding: 3px 8px;
-            border-radius: 12px;
-            border: 1px solid rgba(78, 205, 196, 0.3);
+            color: #c5d4c2;
+            background: rgba(125, 158, 122, 0.12);
+            padding: 4px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(125, 158, 122, 0.28);
         }
 
         .status-dot {
             width: 6px;
             height: 6px;
             border-radius: 50%;
-            background: #4ecdc4;
-            box-shadow: 0 0 8px #4ecdc4;
-            animation: pulse 2s infinite;
+            background: var(--accent-emerald);
+            box-shadow: 0 0 6px rgba(125, 158, 122, 0.6);
+            animation: pulse 2.5s infinite ease-in-out;
         }
 
         @keyframes pulse {
@@ -206,48 +230,49 @@
         .preset-chips {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 7px;
             overflow-x: auto;
             scrollbar-width: none;
         }
         .preset-chips::-webkit-scrollbar { display: none; }
 
         .preset-chip {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.14);
-            color: var(--text-main);
-            padding: 5px 11px;
-            border-radius: 20px;
+            background: rgba(244, 236, 224, 0.04);
+            border: 1px solid var(--border-panel);
+            color: var(--text-muted);
+            padding: 6px 13px;
+            border-radius: var(--radius-lg);
             font-size: 11px;
             font-weight: 600;
+            font-family: var(--font-ui);
             cursor: pointer;
             white-space: nowrap;
-            transition: all 0.2s ease;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .preset-chip:hover {
-            background: rgba(78, 205, 196, 0.18);
-            border-color: #4ecdc4;
-            color: #4ecdc4;
+            background: rgba(232, 184, 109, 0.12);
+            border-color: rgba(232, 184, 109, 0.35);
+            color: var(--text-main);
             transform: translateY(-1px);
         }
 
         .preset-chip.active {
-            background: rgba(78, 205, 196, 0.25);
-            border-color: #4ecdc4;
-            color: #4ecdc4;
-            box-shadow: 0 0 10px rgba(78, 205, 196, 0.35);
+            background: rgba(232, 184, 109, 0.22);
+            border-color: var(--accent);
+            color: var(--accent);
+            box-shadow: 0 0 12px rgba(232, 184, 109, 0.25);
         }
 
         .preset-chip.reset {
-            color: var(--text-muted);
-            border-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-subtle);
+            border-color: var(--border-panel);
         }
 
         .preset-chip.reset:hover {
-            color: #ff5252;
-            border-color: #ff5252;
-            background: rgba(255, 82, 82, 0.18);
+            color: #e8a39a;
+            border-color: rgba(212, 120, 106, 0.45);
+            background: rgba(212, 120, 106, 0.12);
         }
 
         .header-stats {
@@ -260,24 +285,26 @@
         .stat-pill {
             font-size: 11px;
             font-weight: 700;
-            padding: 4px 9px;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-family: var(--font-ui);
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(244, 236, 224, 0.04);
+            border: 1px solid var(--border-panel);
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 5px;
+            color: var(--text-main);
         }
 
-        .stat-pill.error { color: #ff3b5c; border-color: rgba(255, 59, 92, 0.35); background: rgba(255, 59, 92, 0.12); }
-        .stat-pill.great { color: #00f2fe; border-color: rgba(0, 242, 254, 0.35); background: rgba(0, 242, 254, 0.12); }
-        .stat-pill.routes { color: #4ecdc4; border-color: rgba(78, 205, 196, 0.35); background: rgba(78, 205, 196, 0.12); }
+        .stat-pill.error { color: #e8a39a; border-color: rgba(212, 120, 106, 0.3); background: rgba(212, 120, 106, 0.12); }
+        .stat-pill.great { color: #9ec9c3; border-color: rgba(111, 158, 152, 0.3); background: rgba(111, 158, 152, 0.12); }
+        .stat-pill.routes { color: var(--accent); border-color: rgba(232, 184, 109, 0.3); background: rgba(232, 184, 109, 0.12); }
 
         /* Main Workspace */
         .app-body {
             display: flex;
             flex: 1;
-            height: calc(100vh - 56px);
+            height: calc(100vh - 58px);
             position: relative;
             overflow: hidden;
         }
@@ -285,22 +312,23 @@
         /* Left Filter Sidebar */
         .left-sidebar {
             width: 320px;
-            background: rgba(8, 11, 18, 0.95);
-            backdrop-filter: blur(24px);
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            background: #181512;
+            backdrop-filter: var(--panel-blur);
+            -webkit-backdrop-filter: var(--panel-blur);
+            border-right: 1px solid var(--border-panel);
             display: flex;
             flex-direction: column;
-            gap: 13px;
-            padding: 14px;
+            gap: 14px;
+            padding: 16px 14px;
             overflow-y: auto;
             z-index: 30;
             flex-shrink: 0;
             scrollbar-width: thin;
-            scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
+            scrollbar-color: rgba(244, 236, 224, 0.15) transparent;
         }
 
-        .left-sidebar::-webkit-scrollbar { width: 4px; }
-        .left-sidebar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.16); border-radius: 4px; }
+        .left-sidebar::-webkit-scrollbar { width: 5px; }
+        .left-sidebar::-webkit-scrollbar-thumb { background: rgba(244, 236, 224, 0.15); border-radius: 5px; }
 
         /* Search Input */
         .search-box {
@@ -310,20 +338,25 @@
 
         .search-input {
             width: 100%;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.14);
-            border-radius: 10px;
+            background: rgba(244, 236, 224, 0.04);
+            border: 1px solid var(--border-panel);
+            border-radius: var(--radius-sm);
             padding: 8px 12px 8px 34px;
             font-size: 12px;
+            font-family: var(--font-ui);
             color: var(--text-main);
             outline: none;
             transition: all 0.2s ease;
         }
 
+        .search-input::placeholder {
+            color: var(--text-subtle);
+        }
+
         .search-input:focus {
-            background: rgba(255, 255, 255, 0.09);
-            border-color: var(--accent-cyan);
-            box-shadow: 0 0 12px rgba(0, 242, 254, 0.3);
+            background: rgba(244, 236, 224, 0.07);
+            border-color: var(--accent);
+            box-shadow: 0 0 12px rgba(232, 184, 109, 0.25);
         }
 
         .search-icon {
@@ -332,7 +365,7 @@
             top: 50%;
             transform: translateY(-50%);
             font-size: 12px;
-            color: var(--text-muted);
+            color: var(--text-subtle);
             pointer-events: none;
         }
 
@@ -344,7 +377,7 @@
         }
 
         .filter-label {
-            font-size: 11px;
+            font-size: 10.5px;
             font-weight: 700;
             color: var(--text-subtle);
             text-transform: uppercase;
@@ -361,13 +394,13 @@
         }
 
         .chip {
-            font-family: inherit;
+            font-family: var(--font-ui);
             font-size: 11px;
             font-weight: 600;
-            padding: 5px 9px;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            background: rgba(255, 255, 255, 0.04);
+            padding: 5px 10px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-panel);
+            background: rgba(244, 236, 224, 0.04);
             color: var(--text-muted);
             cursor: pointer;
             transition: all 0.15s ease;
@@ -375,68 +408,93 @@
         }
 
         .chip:hover {
-            border-color: rgba(255, 255, 255, 0.25);
-            color: #fff;
+            border-color: rgba(244, 236, 224, 0.25);
+            color: var(--text-main);
+            background: rgba(244, 236, 224, 0.08);
         }
 
         .chip.active {
-            background: rgba(78, 205, 196, 0.18);
-            border-color: rgba(78, 205, 196, 0.5);
-            color: var(--accent-cyan);
+            background: rgba(232, 184, 109, 0.16);
+            border-color: var(--accent);
+            color: var(--accent);
         }
 
         .chip.active.origin-prg {
-            background: rgba(255, 107, 107, 0.2);
-            border-color: rgba(255, 107, 107, 0.6);
-            color: #ff6b6b;
+            background: rgba(212, 120, 106, 0.18);
+            border-color: var(--accent-coral);
+            color: #e8a39a;
         }
 
         .chip.active.tag-error {
-            background: rgba(255, 59, 92, 0.2);
-            border-color: rgba(255, 59, 92, 0.6);
-            color: var(--error-color);
+            background: rgba(212, 120, 106, 0.2);
+            border-color: var(--accent-coral);
+            color: #e8a39a;
         }
 
         .chip.active.tag-great {
-            background: rgba(0, 242, 254, 0.2);
-            border-color: rgba(0, 242, 254, 0.6);
-            color: var(--great-color);
+            background: rgba(111, 158, 152, 0.2);
+            border-color: var(--sea);
+            color: #9ec9c3;
         }
 
         .chip.active.tag-good {
-            background: rgba(255, 183, 3, 0.2);
-            border-color: rgba(255, 183, 3, 0.6);
-            color: var(--good-color);
+            background: rgba(125, 158, 122, 0.2);
+            border-color: var(--accent-emerald);
+            color: #c5d4c2;
+        }
+
+        .chip.active.tag-normal {
+            background: rgba(244, 236, 224, 0.08);
+            border-color: rgba(244, 236, 224, 0.25);
+            color: var(--text-muted);
         }
 
         .chip.active.trip-weekend {
-            background: rgba(78, 205, 196, 0.22);
-            border-color: rgba(78, 205, 196, 0.6);
-            color: #4ecdc4;
+            background: rgba(111, 158, 152, 0.2);
+            border-color: var(--sea);
+            color: #9ec9c3;
         }
 
         .chip.active.trip-atl {
-            background: rgba(255, 215, 0, 0.22);
-            border-color: rgba(255, 215, 0, 0.6);
-            color: #ffd700;
+            background: rgba(232, 184, 109, 0.2);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .chip.active.trip-triangle {
+            background: rgba(184, 154, 120, 0.2);
+            border-color: var(--accent-purple);
+            color: #d4c0ab;
+        }
+
+        .chip.active.trip-verified {
+            background: rgba(125, 158, 122, 0.2);
+            border-color: var(--accent-emerald);
+            color: #c5d4c2;
         }
 
         .custom-select {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.14);
+            background: rgba(244, 236, 224, 0.04);
+            border: 1px solid var(--border-panel);
             color: var(--text-main);
-            font-size: 11px;
+            font-size: 11.5px;
             font-weight: 500;
-            padding: 6px 10px;
-            border-radius: 8px;
+            font-family: var(--font-ui);
+            padding: 7px 10px;
+            border-radius: var(--radius-sm);
             outline: none;
             cursor: pointer;
             width: 100%;
+            transition: border-color 0.15s ease;
+        }
+
+        .custom-select:focus {
+            border-color: var(--accent);
         }
 
         .custom-select option {
-            background: #0d111a !important;
-            color: #f0f0f5 !important;
+            background: #241f1b !important;
+            color: #f4efe8 !important;
             padding: 8px 10px;
         }
 
@@ -448,15 +506,43 @@
         }
 
         .slider-container input[type=range] {
+            -webkit-appearance: none;
+            appearance: none;
             flex: 1;
-            accent-color: var(--accent-cyan);
+            height: 24px;
+            background: transparent;
+            outline: none;
             cursor: pointer;
         }
 
+        .slider-container input[type=range]::-webkit-slider-runnable-track {
+            height: 5px;
+            background: rgba(244, 236, 224, 0.12);
+            border-radius: 3px;
+        }
+
+        .slider-container input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            margin-top: -5.5px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 6px rgba(232, 184, 109, 0.4);
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .slider-container input[type=range]::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+        }
+
         .price-badge {
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 700;
-            color: var(--accent-cyan);
+            font-family: var(--font-ui);
+            color: var(--accent);
             min-width: 44px;
             text-align: right;
         }
@@ -485,9 +571,9 @@
 
         .date-input {
             width: 100%;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.14);
-            border-radius: 8px;
+            background: rgba(244, 236, 224, 0.04);
+            border: 1px solid var(--border-panel);
+            border-radius: var(--radius-sm);
             padding: 6px 8px;
             font-size: 11px;
             font-weight: 600;
@@ -495,13 +581,13 @@
             color-scheme: dark;
             outline: none;
             transition: all 0.2s ease;
-            font-family: inherit;
+            font-family: var(--font-ui);
         }
 
         .date-input:focus {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: var(--accent-cyan);
-            box-shadow: 0 0 10px rgba(0, 242, 254, 0.25);
+            background: rgba(244, 236, 224, 0.07);
+            border-color: var(--accent);
+            box-shadow: 0 0 10px rgba(232, 184, 109, 0.25);
         }
 
         .date-input::-webkit-calendar-picker-indicator {
@@ -518,11 +604,11 @@
         .clear-dates-btn {
             background: transparent;
             border: none;
-            color: #ff3b5c;
+            color: #e8a39a;
             font-size: 10px;
             font-weight: 700;
             cursor: pointer;
-            padding: 2px 5px;
+            padding: 2px 6px;
             border-radius: 4px;
             transition: all 0.15s ease;
             display: inline-flex;
@@ -531,22 +617,22 @@
         }
 
         .clear-dates-btn:hover {
-            background: rgba(255, 59, 92, 0.15);
-            color: #ff6b6b;
+            background: rgba(212, 120, 106, 0.15);
+            color: #f4efe8;
         }
 
         .date-status-pill {
-            font-size: 10px;
-            color: var(--accent-cyan);
+            font-size: 10.5px;
+            color: var(--accent);
             font-weight: 600;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 4px 8px;
-            background: rgba(0, 242, 254, 0.08);
-            border-radius: 6px;
-            border: 1px solid rgba(0, 242, 254, 0.25);
-            margin-top: 4px;
+            padding: 5px 9px;
+            background: rgba(232, 184, 109, 0.12);
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(232, 184, 109, 0.28);
+            margin-top: 5px;
             line-height: 1.3;
         }
 
@@ -565,133 +651,161 @@
         /* MapTiler Popup Glassmorphism */
         .maplibregl-popup-content,
         .maptilersdk-popup-content {
-            background: rgba(10, 14, 24, 0.96) !important;
-            backdrop-filter: blur(20px) !important;
-            -webkit-backdrop-filter: blur(20px) !important;
-            border: 1px solid rgba(255, 255, 255, 0.16) !important;
-            border-radius: 12px !important;
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.75) !important;
+            background: rgba(28, 25, 22, 0.96) !important;
+            backdrop-filter: blur(18px) !important;
+            -webkit-backdrop-filter: blur(18px) !important;
+            border: 1px solid var(--border-panel-glow) !important;
+            border-radius: var(--radius-md) !important;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75) !important;
             padding: 10px 14px !important;
-            color: #f0f0f5 !important;
+            color: var(--text-main) !important;
         }
 
         .maplibregl-popup-tip,
         .maptilersdk-popup-tip {
-            border-top-color: rgba(10, 14, 24, 0.96) !important;
-            border-bottom-color: rgba(10, 14, 24, 0.96) !important;
+            border-top-color: rgba(28, 25, 22, 0.96) !important;
+            border-bottom-color: rgba(28, 25, 22, 0.96) !important;
         }
 
         /* Right Deals Sidebar */
         .sidebar {
-            width: 370px;
-            background: rgba(8, 11, 18, 0.95);
-            backdrop-filter: blur(24px);
-            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            width: 380px;
+            background: #181512;
+            backdrop-filter: var(--panel-blur);
+            -webkit-backdrop-filter: var(--panel-blur);
+            border-left: 1px solid var(--border-panel);
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            padding: 14px;
+            gap: 11px;
+            padding: 16px 14px;
             z-index: 30;
             flex-shrink: 0;
             scrollbar-width: thin;
-            scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
+            scrollbar-color: rgba(244, 236, 224, 0.15) transparent;
         }
 
-        .sidebar::-webkit-scrollbar { width: 4px; }
-        .sidebar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.16); border-radius: 4px; }
+        .sidebar::-webkit-scrollbar { width: 5px; }
+        .sidebar::-webkit-scrollbar-thumb { background: rgba(244, 236, 224, 0.15); border-radius: 5px; }
 
         /* Smart Insights Banner */
         .smart-banner {
-            background: linear-gradient(135deg, rgba(78, 205, 196, 0.14), rgba(255, 59, 92, 0.14));
-            border: 1px solid rgba(78, 205, 196, 0.35);
-            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(232, 184, 109, 0.12), rgba(212, 120, 106, 0.12));
+            border: 1px solid rgba(232, 184, 109, 0.25);
+            border-radius: var(--radius-md);
             padding: 11px 13px;
             font-size: 11px;
-            line-height: 1.45;
+            line-height: 1.5;
             color: var(--text-main);
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
         }
 
         .deal-card {
-            padding: 13px 15px;
-            border-radius: 13px;
+            padding: 14px 16px;
+            border-radius: var(--radius-md);
             cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: var(--bg-panel);
+            border: 1px solid var(--border-panel);
         }
 
         .deal-card:hover {
             transform: translateY(-2px);
-            border-color: rgba(255, 255, 255, 0.25);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+            background: var(--bg-panel-hover);
+            border-color: var(--border-panel-glow);
+            box-shadow: var(--shadow-hud);
         }
 
-        .deal-card.error-fare { border-left: 4px solid var(--error-color); }
-        .deal-card.great-deal { border-left: 4px solid var(--great-color); }
-        .deal-card.good-deal { border-left: 4px solid var(--good-color); }
-        .deal-card.normal { border-left: 4px solid var(--normal-color); }
+        .deal-card.error-fare { border-left: 4px solid var(--accent-coral); }
+        .deal-card.great-deal { border-left: 4px solid var(--sea); }
+        .deal-card.good-deal { border-left: 4px solid var(--accent-emerald); }
+        .deal-card.normal { border-left: 4px solid var(--text-subtle); }
 
         .deal-card.hover-highlight {
-            border-color: #4ecdc4 !important;
-            box-shadow: 0 0 20px rgba(78, 205, 196, 0.35) !important;
+            border-color: var(--accent) !important;
+            box-shadow: 0 0 24px rgba(232, 184, 109, 0.28) !important;
             transform: translateY(-2px);
-            background: rgba(16, 24, 38, 0.95);
+            background: rgba(48, 42, 36, 0.98);
         }
 
         .card-header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 5px;
+            align-items: baseline;
+            margin-bottom: 6px;
         }
 
         .card-route {
-            font-size: 14px;
-            font-weight: 700;
-            letter-spacing: -0.2px;
+            font-family: var(--font-display);
+            font-size: 15.5px;
+            font-weight: 600;
+            color: var(--text-main);
+            letter-spacing: -0.3px;
         }
 
         .card-price {
-            font-size: 17px;
+            font-family: var(--font-ui);
+            font-size: 18px;
             font-weight: 800;
+            letter-spacing: -0.4px;
+            color: var(--accent);
         }
 
-        .card-price.error-fare { color: var(--error-color); }
-        .card-price.great-deal { color: var(--great-color); }
-        .card-price.good-deal { color: var(--good-color); }
+        .card-price.error-fare { color: #e8a39a; }
+        .card-price.great-deal { color: #9ec9c3; }
+        .card-price.good-deal { color: #c5d4c2; }
+        .card-price.normal { color: var(--text-muted); }
 
         .card-tags {
             display: flex;
             gap: 5px;
             align-items: center;
-            margin-bottom: 6px;
+            margin-bottom: 7px;
             flex-wrap: wrap;
         }
 
         .tag-pill {
-            font-size: 9px;
+            font-family: var(--font-ui);
+            font-size: 9.5px;
             font-weight: 700;
-            padding: 2px 6px;
-            border-radius: 4px;
+            padding: 3px 7px;
+            border-radius: var(--radius-sm);
             text-transform: uppercase;
             letter-spacing: 0.4px;
+            border: 1px solid transparent;
         }
 
-        .tag-pill.error-fare { background: rgba(255, 59, 92, 0.22); color: #ff6666; }
-        .tag-pill.great-deal { background: rgba(0, 242, 254, 0.22); color: #4ecdc4; }
-        .tag-pill.good-deal { background: rgba(255, 183, 3, 0.22); color: #ffe66d; }
-        .tag-pill.normal { background: rgba(120, 120, 140, 0.22); color: #94a3b8; }
+        .tag-pill.error-fare {
+            background: rgba(212, 120, 106, 0.18);
+            border-color: rgba(212, 120, 106, 0.35);
+            color: #e8a39a;
+        }
+        .tag-pill.great-deal {
+            background: rgba(111, 158, 152, 0.18);
+            border-color: rgba(111, 158, 152, 0.35);
+            color: #9ec9c3;
+        }
+        .tag-pill.good-deal {
+            background: rgba(125, 158, 122, 0.18);
+            border-color: rgba(125, 158, 122, 0.35);
+            color: #c5d4c2;
+        }
+        .tag-pill.normal {
+            background: rgba(244, 236, 224, 0.06);
+            border-color: var(--border-panel);
+            color: var(--text-muted);
+        }
 
         .badge-stops {
-            font-size: 9px;
+            font-family: var(--font-ui);
+            font-size: 9.5px;
             font-weight: 600;
-            padding: 2px 6px;
-            border-radius: 4px;
-            background: rgba(255, 255, 255, 0.08);
-            color: #f0f0f5;
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 3px 7px;
+            border-radius: var(--radius-sm);
+            background: rgba(244, 236, 224, 0.05);
+            color: var(--text-main);
+            border: 1px solid var(--border-panel);
         }
 
         .card-details {
@@ -707,8 +821,8 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.55);
-            backdrop-filter: blur(4px);
+            background: rgba(14, 12, 10, 0.65);
+            backdrop-filter: blur(6px);
             z-index: 99;
             opacity: 0;
             pointer-events: none;
@@ -723,9 +837,10 @@
         .drawer {
             position: fixed;
             top: 0;
-            right: -490px;
-            width: 470px;
+            right: -510px;
+            width: 480px;
             height: 100vh;
+            background: #1a1714;
             z-index: 100;
             padding: 24px 22px;
             display: flex;
@@ -733,7 +848,8 @@
             gap: 16px;
             overflow-y: auto;
             transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-            border-left: 1px solid rgba(255, 255, 255, 0.14);
+            border-left: 1px solid var(--border-panel);
+            box-shadow: -12px 0 40px rgba(0, 0, 0, 0.65);
         }
 
         .drawer.open { right: 0; }
@@ -745,14 +861,16 @@
         }
 
         .drawer-title {
-            font-size: 21px;
-            font-weight: 800;
+            font-family: var(--font-display);
+            font-size: 22px;
+            font-weight: 600;
             letter-spacing: -0.4px;
+            color: var(--text-main);
         }
 
         .drawer-close {
-            background: rgba(255, 255, 255, 0.08);
-            border: none;
+            background: rgba(244, 236, 224, 0.06);
+            border: 1px solid var(--border-panel);
             color: var(--text-muted);
             width: 32px;
             height: 32px;
@@ -766,25 +884,26 @@
         }
 
         .drawer-close:hover {
-            background: rgba(255, 255, 255, 0.2);
-            color: #fff;
+            background: rgba(244, 236, 224, 0.14);
+            color: var(--text-main);
+            border-color: rgba(244, 236, 224, 0.25);
         }
 
         /* Savings Box */
         .savings-box {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 14px;
+            background: rgba(244, 236, 224, 0.04);
+            border: 1px solid var(--border-panel);
+            border-radius: var(--radius-md);
+            padding: 14px 16px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 9px;
         }
 
         .savings-bar-container {
-            height: 7px;
+            height: 8px;
             width: 100%;
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(244, 236, 224, 0.08);
             border-radius: 4px;
             overflow: hidden;
             position: relative;
@@ -792,7 +911,7 @@
 
         .savings-bar-fill {
             height: 100%;
-            background: linear-gradient(90deg, #ff3b5c, #4ecdc4);
+            background: linear-gradient(90deg, #d4786a, #e8b86d);
             border-radius: 4px;
             transition: width 0.6s ease;
         }
@@ -801,6 +920,7 @@
             display: flex;
             justify-content: space-between;
             font-size: 11px;
+            font-weight: 600;
             color: var(--text-muted);
         }
 
@@ -815,36 +935,41 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.6px;
-            color: var(--accent-cyan);
+            color: var(--accent);
         }
 
         .flight-leg {
-            background: rgba(255, 255, 255, 0.04);
-            border-left: 3px solid var(--accent-cyan);
-            border-radius: 8px;
-            padding: 10px 12px;
-            font-size: 11px;
+            background: rgba(244, 236, 224, 0.04);
+            border-left: 3px solid var(--accent);
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            font-size: 11.5px;
             line-height: 1.55;
+            color: var(--text-main);
+            border-top: 1px solid var(--border-panel);
+            border-right: 1px solid var(--border-panel);
+            border-bottom: 1px solid var(--border-panel);
         }
 
         .btn-link {
             font-size: 11px;
             font-weight: 600;
-            color: var(--accent-cyan);
+            font-family: var(--font-ui);
+            color: #2a2218;
             text-decoration: none;
-            padding: 6px 11px;
-            border-radius: 7px;
-            background: rgba(78, 205, 196, 0.12);
-            border: 1px solid rgba(78, 205, 196, 0.3);
+            padding: 7px 12px;
+            border-radius: var(--radius-sm);
+            background: var(--accent);
+            border: 1px solid transparent;
             transition: all 0.15s ease;
             display: inline-flex;
             align-items: center;
-            gap: 4px;
+            gap: 5px;
         }
 
         .btn-link:hover {
-            background: rgba(78, 205, 196, 0.28);
-            border-color: var(--accent-cyan);
+            background: #f0c98a;
+            transform: translateY(-1px);
         }
 
         .card-links {
@@ -857,17 +982,17 @@
         .sidebar-legend {
             margin-top: 4px;
             padding-top: 10px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid var(--border-panel);
         }
 
         .legend-items-sidebar {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 6px 8px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(244, 236, 224, 0.03);
+            border: 1px solid var(--border-panel);
             padding: 8px 10px;
-            border-radius: 10px;
+            border-radius: var(--radius-sm);
         }
 
         .legend-item {
@@ -894,17 +1019,22 @@
             left: 50%;
             transform: translateX(-50%);
             z-index: 90;
-            padding: 5px 10px;
-            border-radius: 30px;
+            padding: 6px 10px;
+            border-radius: 999px;
             gap: 6px;
+            background: rgba(28, 25, 22, 0.96);
+            backdrop-filter: var(--panel-blur);
+            -webkit-backdrop-filter: var(--panel-blur);
+            border: 1px solid var(--border-panel-glow);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65);
         }
 
         .mobile-nav button {
-            font-family: inherit;
+            font-family: var(--font-ui);
             font-size: 12px;
             font-weight: 700;
-            padding: 7px 14px;
-            border-radius: 20px;
+            padding: 7px 15px;
+            border-radius: 999px;
             border: none;
             background: transparent;
             color: var(--text-muted);
@@ -913,44 +1043,46 @@
         }
 
         .mobile-nav button.active {
-            background: var(--accent-cyan);
-            color: #000;
+            background: var(--accent);
+            color: #2a2218;
         }
 
         .mobile-handle-bar {
             display: none;
             width: 36px;
             height: 4px;
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(244, 236, 224, 0.25);
             border-radius: 2px;
             margin: 0 auto 10px auto;
         }
 
         @media (max-width: 900px) {
             .app-header {
-                padding: 0 10px;
+                padding: 0 12px;
                 gap: 8px;
             }
             .header-stats { display: none; }
             .left-sidebar {
                 position: fixed;
                 left: -320px;
-                top: 56px;
-                height: calc(100vh - 56px);
+                top: 58px;
+                height: calc(100vh - 58px);
                 z-index: 45;
                 transition: left 0.3s ease;
             }
             .left-sidebar.mobile-show { left: 0; }
             .sidebar {
                 position: fixed;
-                bottom: 60px;
+                bottom: 64px;
                 left: 10px;
                 right: 10px;
                 width: auto;
-                height: 50vh;
+                height: 52vh;
                 display: none;
                 z-index: 40;
-                border-radius: 16px;
+                border-radius: var(--radius-md);
+                border: 1px solid var(--border-panel-glow);
+                box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75);
             }
             .sidebar.mobile-show { display: flex; }
             .mobile-nav { display: flex; }
@@ -962,8 +1094,10 @@
                 width: 100vw;
                 height: auto;
                 max-height: 82vh;
-                border-radius: 20px 20px 0 0;
+                border-radius: 22px 22px 0 0;
                 border-bottom: none;
+                border-left: none;
+                border-top: 1px solid var(--border-panel-glow);
                 transition: bottom 0.35s ease;
                 padding: 16px 18px 28px 18px;
             }
@@ -1124,7 +1258,7 @@
                         <div class="legend-item"><div class="legend-dot" style="background: var(--error-color);"></div> 🔥 Error (70%+)</div>
                         <div class="legend-item"><div class="legend-dot" style="background: var(--great-color);"></div> ⭐ Great (50-70%)</div>
                         <div class="legend-item"><div class="legend-dot" style="background: var(--good-color);"></div> ✅ Good (30-50%)</div>
-                        <div class="legend-item"><div class="legend-dot" style="background: #ff6b6b; box-shadow: 0 0 8px #ff6b6b;"></div> ✈️ Origin Hub</div>
+                        <div class="legend-item"><div class="legend-dot" style="background: var(--accent); box-shadow: 0 0 8px rgba(232, 184, 109, 0.5);"></div> ✈️ Origin Hub</div>
                     </div>
                 </div>
             </aside>
@@ -1376,9 +1510,9 @@
                     bottom: 28px;
                     left: 50%;
                     transform: translateX(-50%) translateY(20px);
-                    background: rgba(10, 20, 26, 0.96);
-                    color: #4ecdc4;
-                    border: 1px solid rgba(78, 205, 196, 0.4);
+                    background: rgba(28, 25, 22, 0.96);
+                    color: var(--accent);
+                    border: 1px solid var(--border-panel-glow);
                     padding: 9px 20px;
                     border-radius: 30px;
                     font-size: 12px;
@@ -1588,8 +1722,8 @@
 
             function selectOffer(offer, cardEl) {
                 if (cardEl) {
-                    document.querySelectorAll('.offer-card-item').forEach(c => c.style.borderColor = 'rgba(255,255,255,0.08)');
-                    cardEl.style.borderColor = 'var(--accent-cyan)';
+                    document.querySelectorAll('.offer-card-item').forEach(c => c.style.borderColor = 'var(--border-panel)');
+                    cardEl.style.borderColor = 'var(--accent)';
                 }
 
                 const baseline = offer.score?.baseline || group.minPrice;
@@ -1600,12 +1734,12 @@
                     document.getElementById('d-discount').textContent = `${discount}% Below Market Baseline`;
                     document.getElementById('d-savings').textContent = `Estimated Savings: €${diff}`;
                     document.getElementById('d-bar-fill').style.width = `${Math.min(100, Math.max(10, discount))}%`;
-                    document.getElementById('d-bar-fill').style.background = 'linear-gradient(90deg, #ff3b5c, #4ecdc4)';
+                    document.getElementById('d-bar-fill').style.background = 'linear-gradient(90deg, #d4786a, #e8b86d)';
                 } else {
                     document.getElementById('d-discount').textContent = `At Market Baseline`;
                     document.getElementById('d-savings').textContent = `Standard Fare`;
                     document.getElementById('d-bar-fill').style.width = '50%';
-                    document.getElementById('d-bar-fill').style.background = '#8a8a9e';
+                    document.getElementById('d-bar-fill').style.background = '#8a8074';
                 }
 
                 document.getElementById('d-leg-outbound').innerHTML = `<strong>Outbound:</strong> ${offer.origin} → ${offer.dest} (${offer.airline})<br>Date: ${offer.date} · Direct Non-Stop`;
@@ -1617,8 +1751,8 @@
                     const isLive = v.status === 'VERIFIED_LIVE';
                     const timeStr = v.verifiedAt ? new Date(v.verifiedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'recently';
                     dufEl.innerHTML = `
-                        <div style="background: ${isLive ? 'rgba(78,205,196,0.12)' : 'rgba(255,193,7,0.12)'}; border: 1px solid ${isLive ? 'rgba(78,205,196,0.3)' : 'rgba(255,193,7,0.3)'}; border-radius: 6px; padding: 6px 10px; margin-top: 6px;">
-                            <span style="font-weight: 700; color: ${isLive ? '#4ecdc4' : '#ffc107'};">${isLive ? '🟢 Zero-Phantom Verified Live' : '🟡 Live Price Updated'}</span> · Checked ${timeStr}
+                        <div style="background: ${isLive ? 'rgba(125,158,122,0.12)' : 'rgba(232,184,109,0.12)'}; border: 1px solid ${isLive ? 'rgba(125,158,122,0.3)' : 'rgba(232,184,109,0.3)'}; border-radius: 6px; padding: 6px 10px; margin-top: 6px;">
+                            <span style="font-weight: 700; color: ${isLive ? '#c5d4c2' : 'var(--accent)'};">${isLive ? '🟢 Zero-Phantom Verified Live' : '🟡 Live Price Updated'}</span> · Checked ${timeStr}
                             ${offer.isTriangle ? `<br><span style="color:#ba55d3; font-weight:600;">🚆 Triangle Open-Jaw: ${offer.railLabel || 'Ground rail connection'}</span>` : ''}
                             ${state.baggageMode !== 'bare' ? `<br><span style="color:#94a3b8;">🧳 All-In with ${state.baggageMode === 'cabin' ? '10kg Cabin Bag' : '20kg Checked Bag'}: <strong>€${getEffectivePrice(offer)}</strong> (Bare: €${offer.price})</span>` : ''}
                         </div>
@@ -1789,7 +1923,7 @@
             const areaPath = `${dPath} L ${lastPoint[0]} ${height - padY} L ${firstPoint[0]} ${height - padY} Z`;
 
             const isCrash = baseline && currentPrice <= baseline * 0.7;
-            const lineColor = isCrash ? '#ff3b5c' : '#4ecdc4';
+            const lineColor = isCrash ? '#d4786a' : '#e8b86d';
             const gradId = `chartGrad_${Math.floor(Math.random() * 100000)}`;
 
             const rawBaselineY = baseline ? getY(baseline) : null;
@@ -1823,7 +1957,7 @@
                         <text x="${firstPoint[0]}" y="${height - 2}" fill="#94a3b8" font-size="8.5">${history[0].date.slice(5)}</text>
                         <text x="${lastPoint[0]}" y="${height - 2}" fill="${lineColor}" font-size="8.5" font-weight="700" text-anchor="end">Today €${currentPrice}</text>
                     </svg>
-                    <div id="chart-tooltip" style="position: absolute; transform: translate(-50%, -100%); display: none; pointer-events: none; background: rgba(10, 14, 24, 0.95); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 6px; font-size: 10px; box-shadow: 0 6px 20px rgba(0,0,0,0.7); z-index: 30; text-align: center; white-space: nowrap;"></div>
+                    <div id="chart-tooltip" style="position: absolute; transform: translate(-50%, -100%); display: none; pointer-events: none; background: rgba(28, 25, 22, 0.95); backdrop-filter: blur(16px); border: 1px solid var(--border-panel-glow); padding: 4px 8px; border-radius: 6px; font-size: 10px; box-shadow: 0 6px 20px rgba(0,0,0,0.7); z-index: 30; text-align: center; white-space: nowrap;"></div>
                 </div>
             `;
 
@@ -1859,7 +1993,7 @@
                         const diff = item.price - baseline;
                         const pct = Math.round((diff / baseline) * 100);
                         if (diff < 0) diffStr = `<span style="color:#4ecdc4; font-weight:700;"> (${pct}%)</span>`;
-                        else if (diff > 0) diffStr = `<span style="color:#ff3b5c; font-weight:700;"> (+${pct}%)</span>`;
+                        else if (diff > 0) diffStr = `<span style="color:var(--accent-coral); font-weight:700;"> (+${pct}%)</span>`;
                     }
 
                     tooltip.innerHTML = `<div style="font-weight:800; color:${lineColor}; font-size:12px;">€${item.price}${diffStr}</div><div style="font-size:9px; color:#94a3b8;">📅 ${item.date}</div>`;
@@ -1911,7 +2045,7 @@
                 text += `Top deal: <strong>${topDeal.origin} → ${topDeal.destName} €${topDeal.price}</strong> (${topDeal.score?.discount || 0}% off). `;
             }
             if (priceCrashes.length > 0) {
-                text += `<span style="color:#4ecdc4;">📉 ${priceCrashes.length} price crashes</span> tracked.`;
+                text += `<span style="color:var(--sea); font-weight:700;">📉 ${priceCrashes.length} price crashes</span> tracked.`;
             }
 
             banner.innerHTML = text;
@@ -1957,13 +2091,13 @@
                     <div class="card-tags">
                         <span class="tag-pill ${tagCss}">${group.score?.emoji || ''} ${group.score?.tag || 'NORMAL'} ${discTagStr}</span>
                         <span class="badge-stops">📅 ${group.offers.length} Date${group.offers.length > 1 ? 's' : ''}</span>
-                        <span class="badge-stops" style="background:rgba(78,205,196,0.12); color:#4ecdc4; border-color:rgba(78,205,196,0.3);">✈️ Direct</span>
-                        ${group.hasVerified ? `<span class="badge-stops" style="background:rgba(78,205,196,0.2); color:#4ecdc4; border-color:rgba(78,205,196,0.4); font-weight:700;">🟢 Live Verified</span>` : ''}
-                        ${group.isAllTimeLow ? `<span class="badge-stops" style="background:rgba(255,215,0,0.18); color:#ffd700; border-color:rgba(255,215,0,0.4); font-weight:700;">🏆 All-Time Low</span>` : ''}
-                        ${best.zScore && best.zScore >= 2.0 ? `<span class="badge-stops" style="background:rgba(255,107,107,0.18); color:#ff6b6b; border-color:rgba(255,107,107,0.4); font-weight:700;">⚡ ${best.zScore}σ Anomaly</span>` : ''}
-                        ${group.isTriangle ? `<span class="badge-stops" style="background:rgba(186,85,211,0.2); color:#ba55d3; border-color:rgba(186,85,211,0.5); font-weight:700;">🚆 Triangle Rail</span>` : ''}
-                        ${isWknd ? `<span class="badge-stops" style="background:rgba(78,205,196,0.15); color:#4ecdc4; border-color:rgba(78,205,196,0.3);">🏖️ Weekend</span>` : ''}
-                        ${group.priceCrash ? `<span class="badge-stops" style="background:rgba(255,59,92,0.18); color:#ff3b5c; border-color:rgba(255,59,92,0.4);">📉 -€${group.priceCrash.dropEur} Drop</span>` : ''}
+                        <span class="badge-stops" style="background:rgba(125,158,122,0.12); color:#c5d4c2; border-color:rgba(125,158,122,0.3);">✈️ Direct</span>
+                        ${group.hasVerified ? `<span class="badge-stops" style="background:rgba(125,158,122,0.18); color:#c5d4c2; border-color:rgba(125,158,122,0.4); font-weight:700;">🟢 Live Verified</span>` : ''}
+                        ${group.isAllTimeLow ? `<span class="badge-stops" style="background:rgba(232,184,109,0.18); color:var(--accent); border-color:rgba(232,184,109,0.4); font-weight:700;">🏆 All-Time Low</span>` : ''}
+                        ${best.zScore && best.zScore >= 2.0 ? `<span class="badge-stops" style="background:rgba(212,120,106,0.18); color:#e8a39a; border-color:rgba(212,120,106,0.4); font-weight:700;">⚡ ${best.zScore}σ Anomaly</span>` : ''}
+                        ${group.isTriangle ? `<span class="badge-stops" style="background:rgba(184,154,120,0.18); color:#d4c0ab; border-color:rgba(184,154,120,0.4); font-weight:700;">🚆 Triangle Rail</span>` : ''}
+                        ${isWknd ? `<span class="badge-stops" style="background:rgba(111,158,152,0.15); color:#9ec9c3; border-color:rgba(111,158,152,0.3);">🏖️ Weekend</span>` : ''}
+                        ${group.priceCrash ? `<span class="badge-stops" style="background:rgba(212,120,106,0.18); color:#e8a39a; border-color:rgba(212,120,106,0.4);">📉 -€${group.priceCrash.dropEur} Drop</span>` : ''}
                     </div>
                     <div class="card-details">
                         Lowest: €${group.minPrice} (${best.date}) · ${group.airlines} ${state.baggageMode !== 'bare' ? `<span style="color:#94a3b8; font-size:10px;">(Bare: €${group.rawMinPrice})</span>` : ''}
@@ -2224,7 +2358,7 @@
 
         map.on('style.load', () => {
             try {
-                map.setFog({ color: 'rgba(10, 10, 30, 1)', 'high-color': 'rgba(20, 20, 60, 1)', 'space-color': 'rgba(5, 5, 15, 1)', 'star-intensity': 0.6 });
+                map.setFog({ color: 'rgba(22, 19, 16, 1)', 'high-color': 'rgba(32, 28, 24, 1)', 'space-color': 'rgba(14, 12, 10, 1)', 'star-intensity': 0.4 });
             } catch { }
             if (window.reAttachLayers) window.reAttachLayers();
         });
@@ -2239,19 +2373,19 @@
                 if (!map.getLayer('route-lines') && map.getSource('routes')) {
                     map.addLayer({
                         id: 'route-lines', type: 'line', source: 'routes',
-                        paint: { 'line-color': ['get', 'color'], 'line-width': 2, 'line-opacity': 0.6 }
+                        paint: { 'line-color': ['get', 'color'], 'line-width': 2.2, 'line-opacity': 0.75 }
                     });
                 }
                 if (!map.getLayer('dest-circles') && map.getSource('destinations')) {
                     map.addLayer({
                         id: 'dest-circles', type: 'circle', source: 'destinations',
-                        paint: { 'circle-radius': 7, 'circle-color': ['get', 'color'], 'circle-stroke-width': 1.5, 'circle-stroke-color': '#fff' }
+                        paint: { 'circle-radius': 7, 'circle-color': ['get', 'color'], 'circle-stroke-width': 1.5, 'circle-stroke-color': '#161310' }
                     });
                 }
                 if (!map.getLayer('origin-dots') && map.getSource('origins')) {
                     map.addLayer({
                         id: 'origin-dots', type: 'circle', source: 'origins',
-                        paint: { 'circle-radius': 6, 'circle-color': '#ff6b6b', 'circle-stroke-width': 2, 'circle-stroke-color': '#fff' }
+                        paint: { 'circle-radius': 6.5, 'circle-color': '#e8b86d', 'circle-stroke-width': 2, 'circle-stroke-color': '#161310' }
                     });
                 }
             };

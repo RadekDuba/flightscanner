@@ -6,7 +6,7 @@
 [![GitHub Actions](https://img.shields.io/badge/Automated_Scan-Hourly-orange?style=for-the-badge&logo=githubactions)](.github/workflows/deploy.yml)
 [![Lighthouse](https://img.shields.io/badge/Lighthouse-100%2F100_Perfect-brightgreen?style=for-the-badge&logo=lighthouse)](https://radekduba.github.io/flightscanner/)
 
-**FlightScanner v3.7** is an enterprise-grade, real-time flight deal intelligence and error fare detection platform. Designed with a **Tactical Glassmorphism HUD** and an interactive **3D MapTiler Vector Globe (SDK v4.1.0)**, it automatically scouts, scores, cross-verifies, and visualizes 100% direct flights from Central European hubs to destinations worldwide with a **perfect 100/100 across all Lighthouse audit categories** (Accessibility, Best Practices, SEO, Agentic Browsing).
+**FlightScanner v3.7** is an enterprise-grade, real-time flight deal intelligence and error fare detection platform. Designed with a **Warm Editorial Glassmorphism Design System** (`Fraunces` serif + `Figtree`, champagne-gold & espresso palette) and an interactive **3D MapTiler Vector Globe (SDK v4.1.0)**, it automatically scouts, scores, cross-verifies, and visualizes 100% direct flights from Central European hubs to destinations worldwide with a **perfect 100/100 across all Lighthouse audit categories** (Accessibility, Best Practices, SEO, Agentic Browsing).
 
 🔗 **Live Application**: [https://radekduba.github.io/flightscanner/](https://radekduba.github.io/flightscanner/)
 
@@ -69,7 +69,7 @@ flowchart TD
 
 ```
 flightscanner/
-├── index.html                 # Tactical Glassmorphism Single-Page App (MapTiler SDK v4.1.0 + MapLibre GL JS)
+├── index.html                 # Warm Editorial Single-Page App (MapTiler SDK v4.1.0 + MapLibre GL JS)
 ├── error_fare_hunter.js       # Core hunter script (Scout + Score + Verify pipeline)
 ├── scan_keys.js               # Health checker and key validator for API pools
 ├── flight_search.js           # Multi-provider client (Duffel LIVE + Kiwi + SerpAPI)
