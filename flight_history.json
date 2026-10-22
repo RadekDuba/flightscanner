@@ -16197,16 +16197,8 @@
       "allTimeLow": 29,
       "allTimeLowDate": "2026-10-01",
       "allTimeHigh": 220,
-      "scansCount": 26834,
+      "scansCount": 26835,
       "history": [
-        {
-          "ts": "2026-10-21T01:28:19.307Z",
-          "price": 106,
-          "date": "2026-11-19",
-          "returnDate": "2026-11-23",
-          "airline": "SK, D8",
-          "tripDays": 3
-        },
         {
           "ts": "2026-10-21T01:28:19.307Z",
           "price": 107,
@@ -16998,11 +16990,19 @@
           "returnDate": "2026-12-02",
           "airline": "SK",
           "tripDays": 13
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 103,
+          "date": "2026-11-02",
+          "returnDate": "2027-03-29",
+          "airline": "Ryanair",
+          "tripDays": 147
         }
       ],
       "avgPrice": 90,
       "medianPrice": 88,
-      "stdDev": 11
+      "stdDev": 10.9
     },
     "BTS→VAR": {
       "origin": "BTS",
@@ -19453,32 +19453,8 @@
       "allTimeLow": 40,
       "allTimeLowDate": "2026-11-15",
       "allTimeHigh": 227,
-      "scansCount": 2785,
+      "scansCount": 2788,
       "history": [
-        {
-          "ts": "2026-10-20T22:19:07.685Z",
-          "price": 64,
-          "date": "2027-01-11",
-          "returnDate": "2027-01-15",
-          "airline": "W6",
-          "tripDays": 4
-        },
-        {
-          "ts": "2026-10-20T22:19:07.685Z",
-          "price": 65,
-          "date": "2026-11-13",
-          "returnDate": "2026-11-27",
-          "airline": "W6",
-          "tripDays": 13
-        },
-        {
-          "ts": "2026-10-20T22:19:07.685Z",
-          "price": 74,
-          "date": "2026-11-16",
-          "returnDate": "2026-11-30",
-          "airline": "W6",
-          "tripDays": 14
-        },
         {
           "ts": "2026-10-20T22:19:07.685Z",
           "price": 80,
@@ -20254,11 +20230,35 @@
           "returnDate": "2027-02-06",
           "airline": "Ryanair",
           "tripDays": 26
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 161,
+          "date": "2026-12-06",
+          "returnDate": "2026-12-11",
+          "airline": "Ryanair",
+          "tripDays": 5
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 171,
+          "date": "2026-11-01",
+          "returnDate": "2026-12-11",
+          "airline": "Ryanair",
+          "tripDays": 40
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 196,
+          "date": "2027-01-11",
+          "returnDate": "2027-02-06",
+          "airline": "Ryanair",
+          "tripDays": 26
         }
       ],
-      "avgPrice": 92,
-      "medianPrice": 73,
-      "stdDev": 49.5
+      "avgPrice": 95,
+      "medianPrice": 74,
+      "stdDev": 51.4
     },
     "BTS→NCE": {
       "origin": "BTS",
@@ -21081,32 +21081,8 @@
       "allTimeLow": 37,
       "allTimeLowDate": "2026-11-04",
       "allTimeHigh": 85,
-      "scansCount": 1772,
+      "scansCount": 1775,
       "history": [
-        {
-          "ts": "2026-10-18T16:38:57.067Z",
-          "price": 49,
-          "date": "2026-11-11",
-          "returnDate": "2026-11-18",
-          "airline": "W6",
-          "tripDays": 7
-        },
-        {
-          "ts": "2026-10-18T16:38:57.067Z",
-          "price": 51,
-          "date": "2026-11-08",
-          "returnDate": "2026-12-13",
-          "airline": "Ryanair",
-          "tripDays": 35
-        },
-        {
-          "ts": "2026-10-18T16:38:57.067Z",
-          "price": 54,
-          "date": "2027-01-11",
-          "returnDate": "2027-01-25",
-          "airline": "W6",
-          "tripDays": 14
-        },
         {
           "ts": "2026-10-18T16:38:57.067Z",
           "price": 57,
@@ -21882,11 +21858,35 @@
           "returnDate": "2026-12-02",
           "airline": "W6",
           "tripDays": 12
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 38,
+          "date": "2026-11-08",
+          "returnDate": "2026-12-13",
+          "airline": "Ryanair",
+          "tripDays": 35
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 43,
+          "date": "2026-11-27",
+          "returnDate": "2026-12-13",
+          "airline": "Ryanair",
+          "tripDays": 16
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 58,
+          "date": "2026-12-22",
+          "returnDate": "2026-12-30",
+          "airline": "Ryanair",
+          "tripDays": 8
         }
       ],
       "avgPrice": 48,
-      "medianPrice": 49,
-      "stdDev": 5.2
+      "medianPrice": 48,
+      "stdDev": 5.3
     },
     "KTW→BDS": {
       "origin": "KTW",
@@ -22709,24 +22709,8 @@
       "allTimeLow": 41,
       "allTimeLowDate": "2026-10-19",
       "allTimeHigh": 268,
-      "scansCount": 3778,
+      "scansCount": 3781,
       "history": [
-        {
-          "ts": "2026-10-21T01:28:19.307Z",
-          "price": 74,
-          "date": "2026-11-18",
-          "returnDate": "2026-11-22",
-          "airline": "W6",
-          "tripDays": 4
-        },
-        {
-          "ts": "2026-10-21T01:28:19.307Z",
-          "price": 166,
-          "date": "2026-11-01",
-          "returnDate": "2026-12-19",
-          "airline": "Ryanair",
-          "tripDays": 48
-        },
         {
           "ts": "2026-10-21T01:28:19.307Z",
           "price": 170,
@@ -23510,11 +23494,27 @@
           "returnDate": "2027-01-15",
           "airline": "Ryanair",
           "tripDays": 7
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 161,
+          "date": "2026-11-01",
+          "returnDate": "2026-12-19",
+          "airline": "Ryanair",
+          "tripDays": 48
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 179,
+          "date": "2026-11-22",
+          "returnDate": "2026-12-19",
+          "airline": "Ryanair",
+          "tripDays": 27
         }
       ],
-      "avgPrice": 83,
+      "avgPrice": 84,
       "medianPrice": 66,
-      "stdDev": 46.2
+      "stdDev": 47.1
     },
     "KTW→CIY": {
       "origin": "KTW",
@@ -25627,16 +25627,8 @@
       "allTimeLow": 59,
       "allTimeLowDate": "2026-08-30",
       "allTimeHigh": 815,
-      "scansCount": 486,
+      "scansCount": 487,
       "history": [
-        {
-          "ts": "2026-10-01T07:12:10.723Z",
-          "price": 131,
-          "date": "2026-10-04",
-          "returnDate": "2026-10-16",
-          "airline": "Ryanair",
-          "tripDays": 12
-        },
         {
           "ts": "2026-10-01T14:31:25.434Z",
           "price": 131,
@@ -26428,11 +26420,19 @@
           "returnDate": "2027-03-28",
           "airline": "Ryanair",
           "tripDays": 156
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 269,
+          "date": "2026-10-23",
+          "returnDate": "2027-03-28",
+          "airline": "Ryanair",
+          "tripDays": 156
         }
       ],
-      "avgPrice": 185,
+      "avgPrice": 186,
       "medianPrice": 153,
-      "stdDev": 56
+      "stdDev": 56.3
     },
     "KTW→LTN": {
       "origin": "KTW",
@@ -33873,32 +33873,8 @@
       "allTimeLow": 30,
       "allTimeLowDate": "2026-09-26",
       "allTimeHigh": 89,
-      "scansCount": 1655,
+      "scansCount": 1658,
       "history": [
-        {
-          "ts": "2026-10-18T16:38:57.067Z",
-          "price": 45,
-          "date": "2026-11-13",
-          "returnDate": "2026-11-21",
-          "airline": "W6",
-          "tripDays": 8
-        },
-        {
-          "ts": "2026-10-18T16:38:57.067Z",
-          "price": 46,
-          "date": "2026-11-01",
-          "returnDate": "2026-11-11",
-          "airline": "W6",
-          "tripDays": 10
-        },
-        {
-          "ts": "2026-10-18T16:38:57.067Z",
-          "price": 47,
-          "date": "2026-11-01",
-          "returnDate": "2026-11-13",
-          "airline": "W6",
-          "tripDays": 12
-        },
         {
           "ts": "2026-10-18T19:27:06.532Z",
           "price": 40,
@@ -34674,11 +34650,35 @@
           "returnDate": "2026-11-12",
           "airline": "W6",
           "tripDays": 11
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 37,
+          "date": "2026-11-01",
+          "returnDate": "2026-11-12",
+          "airline": "Ryanair",
+          "tripDays": 11
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 42,
+          "date": "2027-01-18",
+          "returnDate": "2027-02-05",
+          "airline": "Ryanair",
+          "tripDays": 18
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 47,
+          "date": "2026-12-13",
+          "returnDate": "2027-02-05",
+          "airline": "Ryanair",
+          "tripDays": 54
         }
       ],
       "avgPrice": 45,
       "medianPrice": 45,
-      "stdDev": 4
+      "stdDev": 4.1
     },
     "KTW→MLA": {
       "origin": "KTW",
@@ -34687,32 +34687,8 @@
       "allTimeLow": 42,
       "allTimeLowDate": "2026-11-15",
       "allTimeHigh": 269,
-      "scansCount": 4070,
+      "scansCount": 4073,
       "history": [
-        {
-          "ts": "2026-10-21T07:23:12.233Z",
-          "price": 69,
-          "date": "2026-11-13",
-          "returnDate": "2026-11-27",
-          "airline": "W6",
-          "tripDays": 14
-        },
-        {
-          "ts": "2026-10-21T07:23:12.233Z",
-          "price": 70,
-          "date": "2026-11-15",
-          "returnDate": "2026-11-21",
-          "airline": "W6",
-          "tripDays": 6
-        },
-        {
-          "ts": "2026-10-21T07:23:12.233Z",
-          "price": 71,
-          "date": "2026-11-16",
-          "returnDate": "2026-11-20",
-          "airline": "W6",
-          "tripDays": 4
-        },
         {
           "ts": "2026-10-21T07:23:12.233Z",
           "price": 72,
@@ -35488,11 +35464,35 @@
           "returnDate": "2027-01-08",
           "airline": "Ryanair",
           "tripDays": 18
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 218,
+          "date": "2026-12-06",
+          "returnDate": "2026-12-12",
+          "airline": "Ryanair",
+          "tripDays": 6
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 223,
+          "date": "2026-11-18",
+          "returnDate": "2026-12-12",
+          "airline": "Ryanair",
+          "tripDays": 24
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 247,
+          "date": "2026-12-21",
+          "returnDate": "2027-01-11",
+          "airline": "Ryanair",
+          "tripDays": 21
         }
       ],
-      "avgPrice": 95,
+      "avgPrice": 100,
       "medianPrice": 72,
-      "stdDev": 59.3
+      "stdDev": 63.4
     },
     "KTW→NAP": {
       "origin": "KTW",
@@ -35501,24 +35501,8 @@
       "allTimeLow": 42,
       "allTimeLowDate": "2026-12-06",
       "allTimeHigh": 999,
-      "scansCount": 1139,
+      "scansCount": 1141,
       "history": [
-        {
-          "ts": "2026-10-18T19:27:06.532Z",
-          "price": 67,
-          "date": "2026-12-03",
-          "returnDate": "2026-12-10",
-          "airline": "W6",
-          "tripDays": 7
-        },
-        {
-          "ts": "2026-10-18T19:27:06.532Z",
-          "price": 156,
-          "date": "2026-10-25",
-          "returnDate": "2026-10-29",
-          "airline": "W6",
-          "tripDays": 4
-        },
         {
           "ts": "2026-10-18T19:27:06.532Z",
           "price": 201,
@@ -36302,11 +36286,27 @@
           "returnDate": "2027-01-18",
           "airline": "Ryanair",
           "tripDays": 25
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 165,
+          "date": "2026-12-03",
+          "returnDate": "2026-12-14",
+          "airline": "Ryanair",
+          "tripDays": 11
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 258,
+          "date": "2026-12-24",
+          "returnDate": "2027-01-08",
+          "airline": "Ryanair",
+          "tripDays": 15
         }
       ],
-      "avgPrice": 126,
-      "medianPrice": 155,
-      "stdDev": 72.5
+      "avgPrice": 128,
+      "medianPrice": 156,
+      "stdDev": 73.5
     },
     "VIE→LIN": {
       "origin": "VIE",
@@ -40285,24 +40285,8 @@
       "allTimeLow": 51,
       "allTimeLowDate": "2026-12-07",
       "allTimeHigh": 352,
-      "scansCount": 1816,
+      "scansCount": 1819,
       "history": [
-        {
-          "ts": "2026-10-20T03:47:31.657Z",
-          "price": 83,
-          "date": "2026-10-30",
-          "returnDate": "2026-11-06",
-          "airline": "W6",
-          "tripDays": 7
-        },
-        {
-          "ts": "2026-10-20T03:47:31.657Z",
-          "price": 84,
-          "date": "2026-11-09",
-          "returnDate": "2026-11-20",
-          "airline": "W6",
-          "tripDays": 12
-        },
         {
           "ts": "2026-10-20T03:47:31.657Z",
           "price": 188,
@@ -41086,11 +41070,27 @@
           "returnDate": "2027-01-16",
           "airline": "Ryanair",
           "tripDays": 25
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 205,
+          "date": "2026-10-31",
+          "returnDate": "2027-01-16",
+          "airline": "Ryanair",
+          "tripDays": 77
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 216,
+          "date": "2026-12-22",
+          "returnDate": "2027-01-16",
+          "airline": "Ryanair",
+          "tripDays": 25
         }
       ],
-      "avgPrice": 116,
+      "avgPrice": 118,
       "medianPrice": 78,
-      "stdDev": 63
+      "stdDev": 64.2
     },
     "VIE→WAW": {
       "origin": "VIE",
@@ -44355,32 +44355,8 @@
       "allTimeLow": 54,
       "allTimeLowDate": "2026-11-18",
       "allTimeHigh": 246,
-      "scansCount": 1576,
+      "scansCount": 1579,
       "history": [
-        {
-          "ts": "2026-10-18T19:27:06.532Z",
-          "price": 209,
-          "date": "2027-01-08",
-          "returnDate": "2027-01-18",
-          "airline": "Ryanair",
-          "tripDays": 10
-        },
-        {
-          "ts": "2026-10-18T22:19:50.915Z",
-          "price": 73,
-          "date": "2027-01-11",
-          "returnDate": "2027-01-17",
-          "airline": "W6",
-          "tripDays": 6
-        },
-        {
-          "ts": "2026-10-18T22:19:50.915Z",
-          "price": 78,
-          "date": "2026-12-06",
-          "returnDate": "2026-12-18",
-          "airline": "W6",
-          "tripDays": 12
-        },
         {
           "ts": "2026-10-18T22:19:50.915Z",
           "price": 100,
@@ -45156,11 +45132,35 @@
           "returnDate": "2027-01-18",
           "airline": "Ryanair",
           "tripDays": 7
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 166,
+          "date": "2026-11-30",
+          "returnDate": "2027-01-18",
+          "airline": "Ryanair",
+          "tripDays": 49
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 174,
+          "date": "2026-11-16",
+          "returnDate": "2027-01-18",
+          "airline": "Ryanair",
+          "tripDays": 63
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 205,
+          "date": "2027-01-01",
+          "returnDate": "2027-01-18",
+          "airline": "Ryanair",
+          "tripDays": 17
         }
       ],
-      "avgPrice": 144,
+      "avgPrice": 146,
       "medianPrice": 170,
-      "stdDev": 61
+      "stdDev": 60.3
     },
     "OSR→WAW": {
       "origin": "OSR",
@@ -45983,32 +45983,8 @@
       "allTimeLow": 86,
       "allTimeLowDate": "2026-10-03",
       "allTimeHigh": 443,
-      "scansCount": 1566,
+      "scansCount": 1569,
       "history": [
-        {
-          "ts": "2026-10-18T08:47:37.569Z",
-          "price": 258,
-          "date": "2027-01-11",
-          "returnDate": "2027-01-18",
-          "airline": "Ryanair",
-          "tripDays": 7
-        },
-        {
-          "ts": "2026-10-18T13:12:12.529Z",
-          "price": 98,
-          "date": "2026-11-17",
-          "returnDate": "2026-11-28",
-          "airline": "W6",
-          "tripDays": 11
-        },
-        {
-          "ts": "2026-10-18T13:12:12.529Z",
-          "price": 160,
-          "date": "2026-11-30",
-          "returnDate": "2026-12-21",
-          "airline": "Ryanair",
-          "tripDays": 21
-        },
         {
           "ts": "2026-10-18T13:12:12.529Z",
           "price": 241,
@@ -46784,11 +46760,35 @@
           "returnDate": "2027-01-18",
           "airline": "Ryanair",
           "tripDays": 7
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 160,
+          "date": "2026-11-30",
+          "returnDate": "2026-12-12",
+          "airline": "Ryanair",
+          "tripDays": 12
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 220,
+          "date": "2026-11-16",
+          "returnDate": "2026-12-12",
+          "airline": "Ryanair",
+          "tripDays": 26
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 230,
+          "date": "2027-01-11",
+          "returnDate": "2027-01-18",
+          "airline": "Ryanair",
+          "tripDays": 7
         }
       ],
-      "avgPrice": 168,
+      "avgPrice": 169,
       "medianPrice": 160,
-      "stdDev": 67.1
+      "stdDev": 66.7
     },
     "BTS→AGP": {
       "origin": "BTS",
@@ -46797,24 +46797,8 @@
       "allTimeLow": 37,
       "allTimeLowDate": "2026-11-21",
       "allTimeHigh": 129,
-      "scansCount": 1567,
+      "scansCount": 1569,
       "history": [
-        {
-          "ts": "2026-10-18T19:27:06.532Z",
-          "price": 57,
-          "date": "2026-12-06",
-          "returnDate": "2026-12-20",
-          "airline": "W6",
-          "tripDays": 14
-        },
-        {
-          "ts": "2026-10-18T19:27:06.532Z",
-          "price": 73,
-          "date": "2026-11-16",
-          "returnDate": "2026-11-30",
-          "airline": "W6",
-          "tripDays": 14
-        },
         {
           "ts": "2026-10-18T22:19:50.915Z",
           "price": 38,
@@ -47598,11 +47582,27 @@
           "returnDate": "2026-11-30",
           "airline": "W6",
           "tripDays": 14
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 39,
+          "date": "2026-11-21",
+          "returnDate": "2026-12-21",
+          "airline": "Ryanair",
+          "tripDays": 30
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 50,
+          "date": "2027-01-11",
+          "returnDate": "2027-01-18",
+          "airline": "Ryanair",
+          "tripDays": 7
         }
       ],
-      "avgPrice": 53,
-      "medianPrice": 55,
-      "stdDev": 10.4
+      "avgPrice": 52,
+      "medianPrice": 54,
+      "stdDev": 10.3
     },
     "PRG→NCE": {
       "origin": "PRG",
@@ -54937,24 +54937,8 @@
       "allTimeLow": 41,
       "allTimeLowDate": "2026-10-14",
       "allTimeHigh": 131,
-      "scansCount": 12943,
+      "scansCount": 12946,
       "history": [
-        {
-          "ts": "2026-10-20T03:47:31.657Z",
-          "price": 105,
-          "date": "2027-01-08",
-          "returnDate": "2027-01-22",
-          "airline": "VY",
-          "tripDays": 14
-        },
-        {
-          "ts": "2026-10-20T03:47:31.657Z",
-          "price": 107,
-          "date": "2026-11-30",
-          "returnDate": "2026-12-10",
-          "airline": "VY",
-          "tripDays": 10
-        },
         {
           "ts": "2026-10-20T03:47:31.657Z",
           "price": 111,
@@ -55738,11 +55722,27 @@
           "returnDate": "2026-11-12",
           "airline": "VY",
           "tripDays": 8
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 50,
+          "date": "2026-11-04",
+          "returnDate": "2027-01-13",
+          "airline": "Ryanair",
+          "tripDays": 70
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 52,
+          "date": "2026-11-28",
+          "returnDate": "2027-01-13",
+          "airline": "Ryanair",
+          "tripDays": 46
         }
       ],
-      "avgPrice": 93,
-      "medianPrice": 103,
-      "stdDev": 23.5
+      "avgPrice": 91,
+      "medianPrice": 102,
+      "stdDev": 24.1
     },
     "PRG→OSL": {
       "origin": "PRG",
@@ -60635,24 +60635,8 @@
       "allTimeLow": 34,
       "allTimeLowDate": "2026-11-03",
       "allTimeHigh": 176,
-      "scansCount": 12460,
+      "scansCount": 12463,
       "history": [
-        {
-          "ts": "2026-10-19T19:10:37.716Z",
-          "price": 123,
-          "date": "2026-11-12",
-          "returnDate": "2026-11-18",
-          "airline": "EW",
-          "tripDays": 6
-        },
-        {
-          "ts": "2026-10-20T03:47:31.657Z",
-          "price": 47,
-          "date": "2026-12-10",
-          "returnDate": "2027-01-25",
-          "airline": "Ryanair",
-          "tripDays": 46
-        },
         {
           "ts": "2026-10-20T03:47:31.657Z",
           "price": 51,
@@ -61436,11 +61420,27 @@
           "returnDate": "2026-12-05",
           "airline": "EW",
           "tripDays": 14
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 47,
+          "date": "2026-12-10",
+          "returnDate": "2026-12-20",
+          "airline": "Ryanair",
+          "tripDays": 10
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 60,
+          "date": "2026-11-11",
+          "returnDate": "2026-12-08",
+          "airline": "Ryanair",
+          "tripDays": 27
         }
       ],
-      "avgPrice": 97,
-      "medianPrice": 115,
-      "stdDev": 31.8
+      "avgPrice": 96,
+      "medianPrice": 114,
+      "stdDev": 31.9
     },
     "PRG→SAW": {
       "origin": "PRG",
@@ -64705,24 +64705,8 @@
       "allTimeLow": 30,
       "allTimeLowDate": "2026-11-02",
       "allTimeHigh": 133,
-      "scansCount": 1566,
+      "scansCount": 1569,
       "history": [
-        {
-          "ts": "2026-10-18T13:12:12.529Z",
-          "price": 48,
-          "date": "2027-01-11",
-          "returnDate": "2027-01-15",
-          "airline": "W6",
-          "tripDays": 4
-        },
-        {
-          "ts": "2026-10-18T13:12:12.529Z",
-          "price": 49,
-          "date": "2026-12-04",
-          "returnDate": "2026-12-17",
-          "airline": "Ryanair",
-          "tripDays": 13
-        },
         {
           "ts": "2026-10-18T13:12:12.529Z",
           "price": 58,
@@ -65506,6 +65490,22 @@
           "returnDate": "2026-11-27",
           "airline": "W6",
           "tripDays": 9
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 47,
+          "date": "2026-11-01",
+          "returnDate": "2026-12-24",
+          "airline": "Ryanair",
+          "tripDays": 53
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 50,
+          "date": "2026-12-04",
+          "returnDate": "2026-12-24",
+          "airline": "Ryanair",
+          "tripDays": 20
         }
       ],
       "avgPrice": 49,
@@ -68775,32 +68775,8 @@
       "allTimeLow": 45,
       "allTimeLowDate": "2026-09-01",
       "allTimeHigh": 177,
-      "scansCount": 2490,
+      "scansCount": 2493,
       "history": [
-        {
-          "ts": "2026-10-19T12:30:24.143Z",
-          "price": 72,
-          "date": "2027-01-15",
-          "returnDate": "2027-01-25",
-          "airline": "VY",
-          "tripDays": 10
-        },
-        {
-          "ts": "2026-10-19T12:30:24.143Z",
-          "price": 74,
-          "date": "2027-01-16",
-          "returnDate": "2027-02-07",
-          "airline": "Ryanair",
-          "tripDays": 22
-        },
-        {
-          "ts": "2026-10-19T12:30:24.143Z",
-          "price": 103,
-          "date": "2026-11-04",
-          "returnDate": "2026-11-12",
-          "airline": "VY",
-          "tripDays": 7
-        },
         {
           "ts": "2026-10-19T12:30:24.143Z",
           "price": 105,
@@ -69576,11 +69552,35 @@
           "returnDate": "2026-11-12",
           "airline": "VY",
           "tripDays": 5
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 65,
+          "date": "2026-11-28",
+          "returnDate": "2027-01-08",
+          "airline": "Ryanair",
+          "tripDays": 41
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 68,
+          "date": "2027-01-16",
+          "returnDate": "2027-01-18",
+          "airline": "Ryanair",
+          "tripDays": 3
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 74,
+          "date": "2026-11-03",
+          "returnDate": "2027-01-08",
+          "airline": "Ryanair",
+          "tripDays": 66
         }
       ],
       "avgPrice": 79,
       "medianPrice": 73,
-      "stdDev": 15.6
+      "stdDev": 15.5
     },
     "KTW→HER": {
       "origin": "KTW",
@@ -71217,24 +71217,8 @@
       "allTimeLow": 30,
       "allTimeLowDate": "2026-10-05",
       "allTimeHigh": 560,
-      "scansCount": 1219,
+      "scansCount": 1222,
       "history": [
-        {
-          "ts": "2026-10-17T11:35:20.679Z",
-          "price": 271,
-          "date": "2026-10-20",
-          "returnDate": "2026-10-24",
-          "airline": "OS",
-          "tripDays": 4
-        },
-        {
-          "ts": "2026-10-17T15:14:35.011Z",
-          "price": 37,
-          "date": "2026-11-14",
-          "returnDate": "2026-12-21",
-          "airline": "Ryanair",
-          "tripDays": 37
-        },
         {
           "ts": "2026-10-17T15:14:35.011Z",
           "price": 41,
@@ -72018,11 +72002,27 @@
           "returnDate": "2026-11-01",
           "airline": "OS, AZ",
           "tripDays": 5
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 35,
+          "date": "2026-11-14",
+          "returnDate": "2027-01-24",
+          "airline": "Ryanair",
+          "tripDays": 71
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 40,
+          "date": "2027-01-15",
+          "returnDate": "2027-01-24",
+          "airline": "Ryanair",
+          "tripDays": 9
         }
       ],
-      "avgPrice": 128,
+      "avgPrice": 126,
       "medianPrice": 41,
-      "stdDev": 158.6
+      "stdDev": 158.2
     },
     "PRG→CTA": {
       "origin": "PRG",
@@ -72031,32 +72031,8 @@
       "allTimeLow": 34,
       "allTimeLowDate": "2026-12-05",
       "allTimeHigh": 186,
-      "scansCount": 2044,
+      "scansCount": 2047,
       "history": [
-        {
-          "ts": "2026-10-21T13:44:47.814Z",
-          "price": 52,
-          "date": "2027-01-12",
-          "returnDate": "2027-01-23",
-          "airline": "W4",
-          "tripDays": 11
-        },
-        {
-          "ts": "2026-10-21T13:44:47.814Z",
-          "price": 53,
-          "date": "2027-01-12",
-          "returnDate": "2027-01-19",
-          "airline": "W4",
-          "tripDays": 7
-        },
-        {
-          "ts": "2026-10-21T13:44:47.814Z",
-          "price": 57,
-          "date": "2027-01-16",
-          "returnDate": "2027-01-23",
-          "airline": "W4",
-          "tripDays": 7
-        },
         {
           "ts": "2026-10-21T13:44:47.814Z",
           "price": 58,
@@ -72832,11 +72808,35 @@
           "returnDate": "2026-11-07",
           "airline": "W4",
           "tripDays": 4
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 37,
+          "date": "2026-12-05",
+          "returnDate": "2026-12-21",
+          "airline": "Ryanair",
+          "tripDays": 16
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 42,
+          "date": "2026-12-31",
+          "returnDate": "2027-01-24",
+          "airline": "Ryanair",
+          "tripDays": 24
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 44,
+          "date": "2026-11-07",
+          "returnDate": "2026-12-21",
+          "airline": "Ryanair",
+          "tripDays": 44
         }
       ],
-      "avgPrice": 64,
+      "avgPrice": 63,
       "medianPrice": 65,
-      "stdDev": 13.7
+      "stdDev": 14.1
     },
     "VIE→ZAD": {
       "origin": "VIE",
@@ -75287,32 +75287,8 @@
       "allTimeLow": 38,
       "allTimeLowDate": "2026-10-13",
       "allTimeHigh": 164,
-      "scansCount": 1676,
+      "scansCount": 1679,
       "history": [
-        {
-          "ts": "2026-10-18T13:12:12.529Z",
-          "price": 119,
-          "date": "2026-12-12",
-          "returnDate": "2026-12-15",
-          "airline": "GQ",
-          "tripDays": 3
-        },
-        {
-          "ts": "2026-10-18T13:12:12.529Z",
-          "price": 128,
-          "date": "2026-11-14",
-          "returnDate": "2026-11-24",
-          "airline": "GQ",
-          "tripDays": 10
-        },
-        {
-          "ts": "2026-10-18T16:38:57.067Z",
-          "price": 59,
-          "date": "2026-11-08",
-          "returnDate": "2026-12-13",
-          "airline": "Ryanair",
-          "tripDays": 35
-        },
         {
           "ts": "2026-10-18T16:38:57.067Z",
           "price": 65,
@@ -76088,11 +76064,35 @@
           "returnDate": "2026-11-24",
           "airline": "OS",
           "tripDays": 4
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 54,
+          "date": "2026-11-08",
+          "returnDate": "2027-01-30",
+          "airline": "Ryanair",
+          "tripDays": 83
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 57,
+          "date": "2026-12-13",
+          "returnDate": "2027-01-30",
+          "airline": "Ryanair",
+          "tripDays": 48
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 78,
+          "date": "2027-01-16",
+          "returnDate": "2027-01-30",
+          "airline": "Ryanair",
+          "tripDays": 14
         }
       ],
-      "avgPrice": 90,
+      "avgPrice": 88,
       "medianPrice": 74,
-      "stdDev": 29.3
+      "stdDev": 29.1
     },
     "PRG→CDG": {
       "origin": "PRG",
@@ -81799,24 +81799,8 @@
       "allTimeLow": 39,
       "allTimeLowDate": "2026-09-29",
       "allTimeHigh": 239,
-      "scansCount": 1568,
+      "scansCount": 1570,
       "history": [
-        {
-          "ts": "2026-10-18T19:27:06.532Z",
-          "price": 152,
-          "date": "2026-11-05",
-          "returnDate": "2026-11-15",
-          "airline": "LS",
-          "tripDays": 10
-        },
-        {
-          "ts": "2026-10-18T22:19:50.915Z",
-          "price": 48,
-          "date": "2026-11-21",
-          "returnDate": "2027-02-06",
-          "airline": "Ryanair",
-          "tripDays": 77
-        },
         {
           "ts": "2026-10-18T22:19:50.915Z",
           "price": 56,
@@ -82600,11 +82584,27 @@
           "returnDate": "2026-11-15",
           "airline": "U2, LS",
           "tripDays": 13
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 46,
+          "date": "2026-11-21",
+          "returnDate": "2027-02-06",
+          "airline": "Ryanair",
+          "tripDays": 77
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 60,
+          "date": "2027-01-01",
+          "returnDate": "2027-02-06",
+          "airline": "Ryanair",
+          "tripDays": 36
         }
       ],
       "avgPrice": 87,
-      "medianPrice": 95,
-      "stdDev": 34.8
+      "medianPrice": 94,
+      "stdDev": 34.4
     },
     "VIE→TIA": {
       "origin": "VIE",
@@ -86943,32 +86943,8 @@
       "allTimeLow": 30,
       "allTimeLowDate": "2026-09-22",
       "allTimeHigh": 314,
-      "scansCount": 1698,
+      "scansCount": 1701,
       "history": [
-        {
-          "ts": "2026-10-18T19:27:06.532Z",
-          "price": 124,
-          "date": "2026-11-04",
-          "returnDate": "2026-11-11",
-          "airline": "OS",
-          "tripDays": 7
-        },
-        {
-          "ts": "2026-10-18T19:27:06.532Z",
-          "price": 129,
-          "date": "2026-11-27",
-          "returnDate": "2026-12-01",
-          "airline": "OS",
-          "tripDays": 4
-        },
-        {
-          "ts": "2026-10-18T22:19:50.915Z",
-          "price": 31,
-          "date": "2026-11-08",
-          "returnDate": "2026-11-22",
-          "airline": "Ryanair",
-          "tripDays": 14
-        },
         {
           "ts": "2026-10-18T22:19:50.915Z",
           "price": 46,
@@ -87744,11 +87720,35 @@
           "returnDate": "2026-11-24",
           "airline": "OS",
           "tripDays": 4
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 30,
+          "date": "2026-11-07",
+          "returnDate": "2026-11-29",
+          "airline": "Ryanair",
+          "tripDays": 22
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 44,
+          "date": "2026-12-06",
+          "returnDate": "2026-12-21",
+          "airline": "Ryanair",
+          "tripDays": 15
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 47,
+          "date": "2027-01-16",
+          "returnDate": "2027-01-23",
+          "airline": "Ryanair",
+          "tripDays": 7
         }
       ],
-      "avgPrice": 84,
+      "avgPrice": 82,
       "medianPrice": 53,
-      "stdDev": 45.4
+      "stdDev": 45.3
     },
     "PRG→BIO": {
       "origin": "PRG",
@@ -93455,32 +93455,8 @@
       "allTimeLow": 67,
       "allTimeLowDate": "2026-11-23",
       "allTimeHigh": 230,
-      "scansCount": 1574,
+      "scansCount": 1577,
       "history": [
-        {
-          "ts": "2026-10-17T23:59:38.872Z",
-          "price": 196,
-          "date": "2026-12-05",
-          "returnDate": "2026-12-08",
-          "airline": "QS",
-          "tripDays": 3
-        },
-        {
-          "ts": "2026-10-17T23:59:38.872Z",
-          "price": 197,
-          "date": "2026-11-09",
-          "returnDate": "2026-11-13",
-          "airline": "QS",
-          "tripDays": 4
-        },
-        {
-          "ts": "2026-10-17T23:59:38.872Z",
-          "price": 228,
-          "date": "2027-01-08",
-          "returnDate": "2027-01-11",
-          "airline": "QS",
-          "tripDays": 3
-        },
         {
           "ts": "2026-10-18T03:23:22.186Z",
           "price": 83,
@@ -94256,11 +94232,35 @@
           "returnDate": "2026-11-13",
           "airline": "QS",
           "tripDays": 6
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 68,
+          "date": "2026-11-06",
+          "returnDate": "2027-02-01",
+          "airline": "Ryanair",
+          "tripDays": 87
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 71,
+          "date": "2027-01-18",
+          "returnDate": "2027-02-01",
+          "airline": "Ryanair",
+          "tripDays": 14
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 83,
+          "date": "2026-11-27",
+          "returnDate": "2027-02-01",
+          "airline": "Ryanair",
+          "tripDays": 66
         }
       ],
-      "avgPrice": 129,
-      "medianPrice": 90,
-      "stdDev": 61.2
+      "avgPrice": 125,
+      "medianPrice": 89,
+      "stdDev": 60.3
     },
     "VIE→MAD": {
       "origin": "VIE",
@@ -99153,16 +99153,8 @@
       "allTimeLow": 56,
       "allTimeLowDate": "2026-09-30",
       "allTimeHigh": 473,
-      "scansCount": 571,
+      "scansCount": 572,
       "history": [
-        {
-          "ts": "2026-10-01T07:12:10.723Z",
-          "price": 88,
-          "date": "2026-10-17",
-          "returnDate": "2026-10-23",
-          "airline": "Ryanair",
-          "tripDays": 6
-        },
         {
           "ts": "2026-10-01T14:31:25.434Z",
           "price": 82,
@@ -99954,11 +99946,19 @@
           "returnDate": "2027-03-28",
           "airline": "Ryanair",
           "tripDays": 151
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 106,
+          "date": "2026-10-28",
+          "returnDate": "2027-03-28",
+          "airline": "Ryanair",
+          "tripDays": 151
         }
       ],
-      "avgPrice": 89,
+      "avgPrice": 90,
       "medianPrice": 90,
-      "stdDev": 14.7
+      "stdDev": 14.8
     },
     "PRG→AMS": {
       "origin": "PRG",
@@ -100781,32 +100781,8 @@
       "allTimeLow": 38,
       "allTimeLowDate": "2026-11-21",
       "allTimeHigh": 215,
-      "scansCount": 1633,
+      "scansCount": 1636,
       "history": [
-        {
-          "ts": "2026-10-18T19:27:06.532Z",
-          "price": 190,
-          "date": "2026-11-22",
-          "returnDate": "2026-11-26",
-          "airline": "EI",
-          "tripDays": 4
-        },
-        {
-          "ts": "2026-10-18T22:19:50.915Z",
-          "price": 50,
-          "date": "2026-11-03",
-          "returnDate": "2026-11-09",
-          "airline": "Ryanair",
-          "tripDays": 6
-        },
-        {
-          "ts": "2026-10-18T22:19:50.915Z",
-          "price": 62,
-          "date": "2026-11-26",
-          "returnDate": "2026-12-07",
-          "airline": "Ryanair",
-          "tripDays": 11
-        },
         {
           "ts": "2026-10-18T22:19:50.915Z",
           "price": 85,
@@ -101582,11 +101558,35 @@
           "returnDate": "2026-12-31",
           "airline": "EI",
           "tripDays": 13
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 57,
+          "date": "2026-11-24",
+          "returnDate": "2027-01-10",
+          "airline": "Ryanair",
+          "tripDays": 47
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 58,
+          "date": "2026-11-07",
+          "returnDate": "2026-11-09",
+          "airline": "Ryanair",
+          "tripDays": 2
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 69,
+          "date": "2026-12-24",
+          "returnDate": "2027-01-10",
+          "airline": "Ryanair",
+          "tripDays": 17
         }
       ],
-      "avgPrice": 110,
+      "avgPrice": 108,
       "medianPrice": 113,
-      "stdDev": 48.8
+      "stdDev": 48.3
     },
     "PRG→LCA": {
       "origin": "PRG",
@@ -126837,24 +126837,8 @@
       "allTimeLow": 42,
       "allTimeLowDate": "2026-11-01",
       "allTimeHigh": 435,
-      "scansCount": 1212,
+      "scansCount": 1215,
       "history": [
-        {
-          "ts": "2026-10-17T15:14:35.011Z",
-          "price": 64,
-          "date": "2027-01-14",
-          "returnDate": "2027-01-28",
-          "airline": "Ryanair",
-          "tripDays": 14
-        },
-        {
-          "ts": "2026-10-17T15:14:35.011Z",
-          "price": 235,
-          "date": "2026-10-21",
-          "returnDate": "2026-10-28",
-          "airline": "OS",
-          "tripDays": 7
-        },
         {
           "ts": "2026-10-17T18:23:51.712Z",
           "price": 46,
@@ -127638,11 +127622,27 @@
           "returnDate": "2026-10-31",
           "airline": "OS",
           "tripDays": 3
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 42,
+          "date": "2026-11-08",
+          "returnDate": "2026-12-24",
+          "airline": "Ryanair",
+          "tripDays": 46
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 50,
+          "date": "2026-11-21",
+          "returnDate": "2026-12-24",
+          "airline": "Ryanair",
+          "tripDays": 33
         }
       ],
-      "avgPrice": 115,
+      "avgPrice": 113,
       "medianPrice": 52,
-      "stdDev": 114.6
+      "stdDev": 114.2
     },
     "OSR→VAR": {
       "origin": "OSR",
@@ -127973,32 +127973,8 @@
       "allTimeLow": 43,
       "allTimeLowDate": "2026-11-19",
       "allTimeHigh": 367,
-      "scansCount": 1569,
+      "scansCount": 1572,
       "history": [
-        {
-          "ts": "2026-10-18T16:38:57.067Z",
-          "price": 142,
-          "date": "2027-01-14",
-          "returnDate": "2027-01-17",
-          "airline": "OS",
-          "tripDays": 3
-        },
-        {
-          "ts": "2026-10-18T16:38:57.067Z",
-          "price": 163,
-          "date": "2026-11-15",
-          "returnDate": "2026-11-19",
-          "airline": "OS",
-          "tripDays": 4
-        },
-        {
-          "ts": "2026-10-18T19:27:06.532Z",
-          "price": 46,
-          "date": "2026-11-18",
-          "returnDate": "2026-12-22",
-          "airline": "Ryanair",
-          "tripDays": 34
-        },
         {
           "ts": "2026-10-18T19:27:06.532Z",
           "price": 57,
@@ -128774,11 +128750,35 @@
           "returnDate": "2026-11-28",
           "airline": "OS",
           "tripDays": 11
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 43,
+          "date": "2026-11-18",
+          "returnDate": "2026-12-22",
+          "airline": "Ryanair",
+          "tripDays": 34
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 52,
+          "date": "2027-01-11",
+          "returnDate": "2027-01-15",
+          "airline": "Ryanair",
+          "tripDays": 4
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 53,
+          "date": "2026-11-21",
+          "returnDate": "2026-12-22",
+          "airline": "Ryanair",
+          "tripDays": 31
         }
       ],
-      "avgPrice": 99,
-      "medianPrice": 94,
-      "stdDev": 47.6
+      "avgPrice": 97,
+      "medianPrice": 61,
+      "stdDev": 47.4
     },
     "BTS→HER": {
       "origin": "BTS",
@@ -140352,17 +140352,9 @@
       "destName": "Corfu",
       "allTimeLow": 56,
       "allTimeLowDate": "2026-10-13",
-      "allTimeHigh": 343,
-      "scansCount": 627,
+      "allTimeHigh": 350,
+      "scansCount": 628,
       "history": [
-        {
-          "ts": "2026-10-03T07:48:43.512Z",
-          "price": 77,
-          "date": "2026-10-06",
-          "returnDate": "2026-10-14",
-          "airline": "Ryanair",
-          "tripDays": 8
-        },
         {
           "ts": "2026-10-03T07:48:43.512Z",
           "price": 253,
@@ -141154,11 +141146,19 @@
           "returnDate": "2026-10-26",
           "airline": "Ryanair",
           "tripDays": 4
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 350,
+          "date": "2026-10-24",
+          "returnDate": "2026-10-26",
+          "airline": "Ryanair",
+          "tripDays": 2
         }
       ],
-      "avgPrice": 158,
+      "avgPrice": 161,
       "medianPrice": 149,
-      "stdDev": 64.3
+      "stdDev": 66.5
     },
     "PRG→FAO": {
       "origin": "PRG",
@@ -150917,16 +150917,8 @@
       "allTimeLow": 32,
       "allTimeLowDate": "2026-10-04",
       "allTimeHigh": 291,
-      "scansCount": 538,
+      "scansCount": 539,
       "history": [
-        {
-          "ts": "2026-10-01T07:12:10.723Z",
-          "price": 40,
-          "date": "2026-10-09",
-          "returnDate": "2026-10-14",
-          "airline": "Ryanair",
-          "tripDays": 5
-        },
         {
           "ts": "2026-10-01T14:31:25.434Z",
           "price": 48,
@@ -151718,11 +151710,19 @@
           "returnDate": "2027-03-28",
           "airline": "Ryanair",
           "tripDays": 150
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 88,
+          "date": "2026-10-29",
+          "returnDate": "2027-03-28",
+          "airline": "Ryanair",
+          "tripDays": 150
         }
       ],
       "avgPrice": 51,
       "medianPrice": 44,
-      "stdDev": 16.5
+      "stdDev": 16.9
     },
     "BTS→ZTH": {
       "origin": "BTS",
@@ -184619,32 +184619,8 @@
       "allTimeLow": 34,
       "allTimeLowDate": "2026-10-14",
       "allTimeHigh": 366,
-      "scansCount": 2185,
+      "scansCount": 2188,
       "history": [
-        {
-          "ts": "2026-10-18T16:38:57.067Z",
-          "price": 74,
-          "date": "2026-11-15",
-          "returnDate": "2027-01-25",
-          "airline": "Ryanair",
-          "tripDays": 71
-        },
-        {
-          "ts": "2026-10-18T16:38:57.067Z",
-          "price": 112,
-          "date": "2026-11-20",
-          "returnDate": "2026-11-27",
-          "airline": "OS",
-          "tripDays": 7
-        },
-        {
-          "ts": "2026-10-18T16:38:57.067Z",
-          "price": 133,
-          "date": "2026-11-06",
-          "returnDate": "2026-11-09",
-          "airline": "OS",
-          "tripDays": 3
-        },
         {
           "ts": "2026-10-18T16:38:57.067Z",
           "price": 173,
@@ -185420,11 +185396,35 @@
           "returnDate": "2026-11-24",
           "airline": "OS",
           "tripDays": 4
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 47,
+          "date": "2026-12-20",
+          "returnDate": "2027-01-11",
+          "airline": "Ryanair",
+          "tripDays": 22
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 65,
+          "date": "2027-01-18",
+          "returnDate": "2027-01-25",
+          "airline": "Ryanair",
+          "tripDays": 7
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 68,
+          "date": "2026-11-20",
+          "returnDate": "2027-01-11",
+          "airline": "Ryanair",
+          "tripDays": 52
         }
       ],
-      "avgPrice": 93,
-      "medianPrice": 96,
-      "stdDev": 35.3
+      "avgPrice": 92,
+      "medianPrice": 78,
+      "stdDev": 35.5
     },
     "PRG→FRA": {
       "origin": "PRG",
@@ -187061,24 +187061,8 @@
       "allTimeLow": 35,
       "allTimeLowDate": "2026-11-01",
       "allTimeHigh": 128,
-      "scansCount": 1282,
+      "scansCount": 1285,
       "history": [
-        {
-          "ts": "2026-10-18T08:47:37.569Z",
-          "price": 37,
-          "date": "2026-11-01",
-          "returnDate": "2026-12-16",
-          "airline": "Ryanair",
-          "tripDays": 45
-        },
-        {
-          "ts": "2026-10-18T08:47:37.569Z",
-          "price": 43,
-          "date": "2026-12-06",
-          "returnDate": "2026-12-16",
-          "airline": "Ryanair",
-          "tripDays": 10
-        },
         {
           "ts": "2026-10-18T08:47:37.569Z",
           "price": 72,
@@ -187862,11 +187846,27 @@
           "returnDate": "2026-11-17",
           "airline": "W6",
           "tripDays": 7
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 36,
+          "date": "2026-11-01",
+          "returnDate": "2026-12-16",
+          "airline": "Ryanair",
+          "tripDays": 45
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 62,
+          "date": "2027-01-06",
+          "returnDate": "2027-01-13",
+          "airline": "Ryanair",
+          "tripDays": 7
         }
       ],
       "avgPrice": 60,
       "medianPrice": 71,
-      "stdDev": 18.3
+      "stdDev": 18.2
     },
     "VIE→OSL": {
       "origin": "VIE",
@@ -217670,27 +217670,11 @@
       "origin": "PED",
       "dest": "ALC",
       "destName": "Alicante",
-      "allTimeLow": 42,
+      "allTimeLow": 41,
       "allTimeLowDate": "2026-11-29",
       "allTimeHigh": 131,
-      "scansCount": 792,
+      "scansCount": 795,
       "history": [
-        {
-          "ts": "2026-10-15T18:16:25.776Z",
-          "price": 53,
-          "date": "2026-10-30",
-          "returnDate": "2027-01-22",
-          "airline": "Ryanair",
-          "tripDays": 84
-        },
-        {
-          "ts": "2026-10-15T18:16:25.776Z",
-          "price": 54,
-          "date": "2027-01-08",
-          "returnDate": "2027-01-22",
-          "airline": "Ryanair",
-          "tripDays": 14
-        },
         {
           "ts": "2026-10-15T22:10:53.789Z",
           "price": 49,
@@ -218474,10 +218458,26 @@
           "returnDate": "2027-01-22",
           "airline": "Ryanair",
           "tripDays": 84
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 41,
+          "date": "2026-11-29",
+          "returnDate": "2027-01-22",
+          "airline": "Ryanair",
+          "tripDays": 54
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 49,
+          "date": "2026-10-30",
+          "returnDate": "2027-01-22",
+          "airline": "Ryanair",
+          "tripDays": 84
         }
       ],
       "avgPrice": 49,
-      "medianPrice": 51,
+      "medianPrice": 50,
       "stdDev": 3.8
     },
     "PED→AGP": {
@@ -218487,32 +218487,8 @@
       "allTimeLow": 34,
       "allTimeLowDate": "2026-09-14",
       "allTimeHigh": 102,
-      "scansCount": 784,
+      "scansCount": 787,
       "history": [
-        {
-          "ts": "2026-10-15T18:16:25.776Z",
-          "price": 64,
-          "date": "2026-11-08",
-          "returnDate": "2026-12-20",
-          "airline": "Ryanair",
-          "tripDays": 42
-        },
-        {
-          "ts": "2026-10-15T22:10:53.789Z",
-          "price": 41,
-          "date": "2026-11-20",
-          "returnDate": "2026-12-20",
-          "airline": "Ryanair",
-          "tripDays": 30
-        },
-        {
-          "ts": "2026-10-15T22:10:53.789Z",
-          "price": 57,
-          "date": "2027-01-01",
-          "returnDate": "2027-01-17",
-          "airline": "Ryanair",
-          "tripDays": 16
-        },
         {
           "ts": "2026-10-15T22:10:53.789Z",
           "price": 65,
@@ -219288,11 +219264,35 @@
           "returnDate": "2027-01-17",
           "airline": "Ryanair",
           "tripDays": 42
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 42,
+          "date": "2026-11-20",
+          "returnDate": "2027-01-17",
+          "airline": "Ryanair",
+          "tripDays": 58
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 49,
+          "date": "2026-12-06",
+          "returnDate": "2027-01-17",
+          "airline": "Ryanair",
+          "tripDays": 42
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 50,
+          "date": "2027-01-01",
+          "returnDate": "2027-01-17",
+          "airline": "Ryanair",
+          "tripDays": 16
         }
       ],
       "avgPrice": 50,
       "medianPrice": 49,
-      "stdDev": 6.5
+      "stdDev": 6.3
     },
     "BRQ→BGY": {
       "origin": "BRQ",
@@ -219301,16 +219301,8 @@
       "allTimeLow": 28,
       "allTimeLowDate": "2026-10-01",
       "allTimeHigh": 165,
-      "scansCount": 382,
+      "scansCount": 383,
       "history": [
-        {
-          "ts": "2026-10-01T14:31:25.434Z",
-          "price": 30,
-          "date": "2026-10-08",
-          "returnDate": "2026-10-15",
-          "airline": "Ryanair",
-          "tripDays": 7
-        },
         {
           "ts": "2026-10-01T20:25:29.509Z",
           "price": 30,
@@ -220102,11 +220094,19 @@
           "returnDate": "2027-03-30",
           "airline": "Ryanair",
           "tripDays": 157
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 153,
+          "date": "2026-10-22",
+          "returnDate": "2026-10-24",
+          "airline": "Ryanair",
+          "tripDays": 2
         }
       ],
-      "avgPrice": 50,
+      "avgPrice": 51,
       "medianPrice": 32,
-      "stdDev": 29.9
+      "stdDev": 31.5
     },
     "BRQ→AGP": {
       "origin": "BRQ",
@@ -220115,32 +220115,8 @@
       "allTimeLow": 35,
       "allTimeLowDate": "2026-11-27",
       "allTimeHigh": 117,
-      "scansCount": 782,
+      "scansCount": 785,
       "history": [
-        {
-          "ts": "2026-10-16T00:22:36.593Z",
-          "price": 48,
-          "date": "2027-01-01",
-          "returnDate": "2027-02-08",
-          "airline": "Ryanair",
-          "tripDays": 38
-        },
-        {
-          "ts": "2026-10-16T00:22:36.593Z",
-          "price": 56,
-          "date": "2026-11-06",
-          "returnDate": "2027-02-08",
-          "airline": "Ryanair",
-          "tripDays": 94
-        },
-        {
-          "ts": "2026-10-16T05:41:34.938Z",
-          "price": 42,
-          "date": "2026-11-27",
-          "returnDate": "2027-02-08",
-          "airline": "Ryanair",
-          "tripDays": 73
-        },
         {
           "ts": "2026-10-16T05:41:34.938Z",
           "price": 48,
@@ -220916,11 +220892,35 @@
           "returnDate": "2027-02-08",
           "airline": "Ryanair",
           "tripDays": 38
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 39,
+          "date": "2026-11-30",
+          "returnDate": "2026-12-21",
+          "airline": "Ryanair",
+          "tripDays": 21
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 43,
+          "date": "2026-11-20",
+          "returnDate": "2026-12-21",
+          "airline": "Ryanair",
+          "tripDays": 31
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 49,
+          "date": "2027-01-01",
+          "returnDate": "2027-02-08",
+          "airline": "Ryanair",
+          "tripDays": 38
         }
       ],
       "avgPrice": 46,
       "medianPrice": 45,
-      "stdDev": 3.8
+      "stdDev": 3.7
     },
     "BRQ→STN": {
       "origin": "BRQ",
@@ -220929,32 +220929,8 @@
       "allTimeLow": 29,
       "allTimeLowDate": "2026-10-14",
       "allTimeHigh": 55,
-      "scansCount": 769,
+      "scansCount": 772,
       "history": [
-        {
-          "ts": "2026-10-15T22:10:53.789Z",
-          "price": 34,
-          "date": "2026-11-16",
-          "returnDate": "2026-11-20",
-          "airline": "Ryanair",
-          "tripDays": 4
-        },
-        {
-          "ts": "2026-10-15T22:10:53.789Z",
-          "price": 40,
-          "date": "2026-12-17",
-          "returnDate": "2026-12-31",
-          "airline": "Ryanair",
-          "tripDays": 14
-        },
-        {
-          "ts": "2026-10-16T00:22:36.593Z",
-          "price": 32,
-          "date": "2026-11-07",
-          "returnDate": "2026-11-13",
-          "airline": "Ryanair",
-          "tripDays": 6
-        },
         {
           "ts": "2026-10-16T00:22:36.593Z",
           "price": 34,
@@ -221730,11 +221706,35 @@
           "returnDate": "2026-12-31",
           "airline": "Ryanair",
           "tripDays": 10
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 32,
+          "date": "2026-11-09",
+          "returnDate": "2026-11-13",
+          "airline": "Ryanair",
+          "tripDays": 4
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 35,
+          "date": "2026-11-21",
+          "returnDate": "2026-12-06",
+          "airline": "Ryanair",
+          "tripDays": 15
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 50,
+          "date": "2026-12-21",
+          "returnDate": "2026-12-31",
+          "airline": "Ryanair",
+          "tripDays": 10
         }
       ],
       "avgPrice": 37,
       "medianPrice": 38,
-      "stdDev": 5.2
+      "stdDev": 5.4
     },
     "PRG→BRS": {
       "origin": "PRG",
@@ -221743,24 +221743,8 @@
       "allTimeLow": 29,
       "allTimeLowDate": "2026-09-22",
       "allTimeHigh": 97,
-      "scansCount": 772,
+      "scansCount": 774,
       "history": [
-        {
-          "ts": "2026-10-16T00:22:36.593Z",
-          "price": 47,
-          "date": "2026-11-21",
-          "returnDate": "2027-01-04",
-          "airline": "Ryanair",
-          "tripDays": 44
-        },
-        {
-          "ts": "2026-10-16T00:22:36.593Z",
-          "price": 72,
-          "date": "2026-12-21",
-          "returnDate": "2027-01-04",
-          "airline": "Ryanair",
-          "tripDays": 14
-        },
         {
           "ts": "2026-10-16T05:41:34.938Z",
           "price": 42,
@@ -222544,11 +222528,27 @@
           "returnDate": "2027-01-18",
           "airline": "Ryanair",
           "tripDays": 2
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 45,
+          "date": "2026-11-21",
+          "returnDate": "2027-01-04",
+          "airline": "Ryanair",
+          "tripDays": 44
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 50,
+          "date": "2027-01-16",
+          "returnDate": "2027-01-18",
+          "airline": "Ryanair",
+          "tripDays": 2
         }
       ],
       "avgPrice": 50,
       "medianPrice": 50,
-      "stdDev": 6.9
+      "stdDev": 6.5
     },
     "VIE→BGY": {
       "origin": "VIE",
@@ -222557,24 +222557,8 @@
       "allTimeLow": 30,
       "allTimeLowDate": "2026-09-16",
       "allTimeHigh": 50,
-      "scansCount": 779,
+      "scansCount": 782,
       "history": [
-        {
-          "ts": "2026-10-14T18:33:22.516Z",
-          "price": 33,
-          "date": "2026-11-06",
-          "returnDate": "2027-01-18",
-          "airline": "Ryanair",
-          "tripDays": 73
-        },
-        {
-          "ts": "2026-10-14T18:33:22.516Z",
-          "price": 40,
-          "date": "2026-12-17",
-          "returnDate": "2027-01-18",
-          "airline": "Ryanair",
-          "tripDays": 32
-        },
         {
           "ts": "2026-10-14T22:14:42.377Z",
           "price": 33,
@@ -223358,11 +223342,27 @@
           "returnDate": "2027-01-18",
           "airline": "Ryanair",
           "tripDays": 37
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 33,
+          "date": "2026-11-02",
+          "returnDate": "2027-01-18",
+          "airline": "Ryanair",
+          "tripDays": 77
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 37,
+          "date": "2026-12-12",
+          "returnDate": "2027-01-18",
+          "airline": "Ryanair",
+          "tripDays": 37
         }
       ],
       "avgPrice": 35,
       "medianPrice": 34,
-      "stdDev": 2.9
+      "stdDev": 2.8
     },
     "VIE→BNX": {
       "origin": "VIE",
@@ -223371,24 +223371,8 @@
       "allTimeLow": 30,
       "allTimeLowDate": "2026-10-17",
       "allTimeHigh": 38,
-      "scansCount": 775,
+      "scansCount": 778,
       "history": [
-        {
-          "ts": "2026-10-06T23:06:16.113Z",
-          "price": 30,
-          "date": "2026-11-02",
-          "returnDate": "2026-12-05",
-          "airline": "Ryanair",
-          "tripDays": 33
-        },
-        {
-          "ts": "2026-10-07T02:19:14.183Z",
-          "price": 30,
-          "date": "2026-10-17",
-          "returnDate": "2026-10-24",
-          "airline": "Ryanair",
-          "tripDays": 7
-        },
         {
           "ts": "2026-10-07T10:04:18.042Z",
           "price": 30,
@@ -224172,11 +224156,27 @@
           "returnDate": "2027-01-02",
           "airline": "Ryanair",
           "tripDays": 1
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 30,
+          "date": "2026-11-14",
+          "returnDate": "2026-11-21",
+          "airline": "Ryanair",
+          "tripDays": 7
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 38,
+          "date": "2027-01-01",
+          "returnDate": "2027-01-02",
+          "airline": "Ryanair",
+          "tripDays": 1
         }
       ],
       "avgPrice": 31,
       "medianPrice": 30,
-      "stdDev": 1.5
+      "stdDev": 1.7
     },
     "BTS→CRL": {
       "origin": "BTS",
@@ -224185,32 +224185,8 @@
       "allTimeLow": 30,
       "allTimeLowDate": "2026-10-14",
       "allTimeHigh": 90,
-      "scansCount": 772,
+      "scansCount": 775,
       "history": [
-        {
-          "ts": "2026-10-16T05:41:34.938Z",
-          "price": 34,
-          "date": "2026-12-22",
-          "returnDate": "2026-12-31",
-          "airline": "Ryanair",
-          "tripDays": 9
-        },
-        {
-          "ts": "2026-10-16T05:41:34.938Z",
-          "price": 36,
-          "date": "2026-12-13",
-          "returnDate": "2026-12-31",
-          "airline": "Ryanair",
-          "tripDays": 18
-        },
-        {
-          "ts": "2026-10-16T05:41:34.938Z",
-          "price": 73,
-          "date": "2026-10-19",
-          "returnDate": "2026-12-31",
-          "airline": "Ryanair",
-          "tripDays": 73
-        },
         {
           "ts": "2026-10-16T10:58:46.429Z",
           "price": 38,
@@ -224986,11 +224962,35 @@
           "returnDate": "2026-12-31",
           "airline": "Ryanair",
           "tripDays": 41
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 37,
+          "date": "2026-12-13",
+          "returnDate": "2026-12-31",
+          "airline": "Ryanair",
+          "tripDays": 18
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 39,
+          "date": "2026-12-22",
+          "returnDate": "2026-12-31",
+          "airline": "Ryanair",
+          "tripDays": 9
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 62,
+          "date": "2026-11-20",
+          "returnDate": "2026-12-31",
+          "airline": "Ryanair",
+          "tripDays": 41
         }
       ],
-      "avgPrice": 49,
-      "medianPrice": 36,
-      "stdDev": 18.8
+      "avgPrice": 48,
+      "medianPrice": 37,
+      "stdDev": 18.6
     },
     "PRG→BGY": {
       "origin": "PRG",
@@ -224999,32 +224999,8 @@
       "allTimeLow": 29,
       "allTimeLowDate": "2026-09-30",
       "allTimeHigh": 48,
-      "scansCount": 783,
+      "scansCount": 786,
       "history": [
-        {
-          "ts": "2026-10-16T05:41:34.938Z",
-          "price": 34,
-          "date": "2026-11-26",
-          "returnDate": "2026-12-09",
-          "airline": "Ryanair",
-          "tripDays": 13
-        },
-        {
-          "ts": "2026-10-16T05:41:34.938Z",
-          "price": 44,
-          "date": "2027-01-12",
-          "returnDate": "2027-02-23",
-          "airline": "Ryanair",
-          "tripDays": 42
-        },
-        {
-          "ts": "2026-10-16T10:58:46.429Z",
-          "price": 29,
-          "date": "2026-11-04",
-          "returnDate": "2026-12-09",
-          "airline": "Ryanair",
-          "tripDays": 35
-        },
         {
           "ts": "2026-10-16T10:58:46.429Z",
           "price": 34,
@@ -225800,11 +225776,35 @@
           "returnDate": "2027-02-23",
           "airline": "Ryanair",
           "tripDays": 38
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 30,
+          "date": "2026-11-04",
+          "returnDate": "2026-12-09",
+          "airline": "Ryanair",
+          "tripDays": 35
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 36,
+          "date": "2026-11-26",
+          "returnDate": "2026-12-09",
+          "airline": "Ryanair",
+          "tripDays": 13
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 37,
+          "date": "2027-01-13",
+          "returnDate": "2027-01-18",
+          "airline": "Ryanair",
+          "tripDays": 5
         }
       ],
       "avgPrice": 35,
       "medianPrice": 34,
-      "stdDev": 5.6
+      "stdDev": 5.5
     },
     "PRG→CIA": {
       "origin": "PRG",
@@ -225813,24 +225813,8 @@
       "allTimeLow": 29,
       "allTimeLowDate": "2026-09-30",
       "allTimeHigh": 60,
-      "scansCount": 768,
+      "scansCount": 771,
       "history": [
-        {
-          "ts": "2026-10-13T09:13:34.142Z",
-          "price": 58,
-          "date": "2027-01-01",
-          "returnDate": "2027-02-03",
-          "airline": "Ryanair",
-          "tripDays": 33
-        },
-        {
-          "ts": "2026-10-13T17:36:11.100Z",
-          "price": 40,
-          "date": "2026-11-04",
-          "returnDate": "2027-02-03",
-          "airline": "Ryanair",
-          "tripDays": 91
-        },
         {
           "ts": "2026-10-13T17:36:11.100Z",
           "price": 57,
@@ -226614,10 +226598,26 @@
           "returnDate": "2027-01-10",
           "airline": "Ryanair",
           "tripDays": 9
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 34,
+          "date": "2026-11-04",
+          "returnDate": "2027-01-10",
+          "airline": "Ryanair",
+          "tripDays": 67
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 39,
+          "date": "2027-01-01",
+          "returnDate": "2027-01-10",
+          "airline": "Ryanair",
+          "tripDays": 9
         }
       ],
       "avgPrice": 44,
-      "medianPrice": 40,
+      "medianPrice": 39,
       "stdDev": 7.9
     },
     "OSR→STN": {
@@ -226627,32 +226627,8 @@
       "allTimeLow": 29,
       "allTimeLowDate": "2026-11-23",
       "allTimeHigh": 52,
-      "scansCount": 777,
+      "scansCount": 780,
       "history": [
-        {
-          "ts": "2026-10-15T22:10:53.789Z",
-          "price": 38,
-          "date": "2026-12-14",
-          "returnDate": "2027-02-01",
-          "airline": "Ryanair",
-          "tripDays": 49
-        },
-        {
-          "ts": "2026-10-16T00:22:36.593Z",
-          "price": 30,
-          "date": "2026-11-23",
-          "returnDate": "2026-11-28",
-          "airline": "Ryanair",
-          "tripDays": 5
-        },
-        {
-          "ts": "2026-10-16T00:22:36.593Z",
-          "price": 36,
-          "date": "2026-11-09",
-          "returnDate": "2026-11-28",
-          "airline": "Ryanair",
-          "tripDays": 19
-        },
         {
           "ts": "2026-10-16T00:22:36.593Z",
           "price": 39,
@@ -227428,6 +227404,30 @@
           "returnDate": "2026-11-09",
           "airline": "Ryanair",
           "tripDays": 2
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 29,
+          "date": "2026-11-23",
+          "returnDate": "2026-11-28",
+          "airline": "Ryanair",
+          "tripDays": 5
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 30,
+          "date": "2026-12-24",
+          "returnDate": "2026-12-31",
+          "airline": "Ryanair",
+          "tripDays": 7
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 33,
+          "date": "2026-11-07",
+          "returnDate": "2026-11-09",
+          "airline": "Ryanair",
+          "tripDays": 2
         }
       ],
       "avgPrice": 35,
@@ -227441,32 +227441,8 @@
       "allTimeLow": 30,
       "allTimeLowDate": "2026-10-12",
       "allTimeHigh": 45,
-      "scansCount": 775,
+      "scansCount": 778,
       "history": [
-        {
-          "ts": "2026-10-15T22:10:53.789Z",
-          "price": 39,
-          "date": "2026-12-02",
-          "returnDate": "2027-01-14",
-          "airline": "Ryanair",
-          "tripDays": 43
-        },
-        {
-          "ts": "2026-10-16T00:22:36.593Z",
-          "price": 36,
-          "date": "2026-11-04",
-          "returnDate": "2027-01-14",
-          "airline": "Ryanair",
-          "tripDays": 71
-        },
-        {
-          "ts": "2026-10-16T00:22:36.593Z",
-          "price": 38,
-          "date": "2026-12-15",
-          "returnDate": "2027-01-14",
-          "airline": "Ryanair",
-          "tripDays": 30
-        },
         {
           "ts": "2026-10-16T05:41:34.938Z",
           "price": 36,
@@ -228242,11 +228218,35 @@
           "returnDate": "2027-01-20",
           "airline": "Ryanair",
           "tripDays": 6
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 30,
+          "date": "2026-10-31",
+          "returnDate": "2026-11-11",
+          "airline": "Ryanair",
+          "tripDays": 11
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 37,
+          "date": "2026-11-23",
+          "returnDate": "2027-01-07",
+          "airline": "Ryanair",
+          "tripDays": 45
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 38,
+          "date": "2027-01-14",
+          "returnDate": "2027-01-20",
+          "airline": "Ryanair",
+          "tripDays": 6
         }
       ],
       "avgPrice": 38,
       "medianPrice": 38,
-      "stdDev": 2.3
+      "stdDev": 2.4
     },
     "PRG→CRL": {
       "origin": "PRG",
@@ -228255,24 +228255,8 @@
       "allTimeLow": 29,
       "allTimeLowDate": "2026-09-29",
       "allTimeHigh": 73,
-      "scansCount": 769,
+      "scansCount": 771,
       "history": [
-        {
-          "ts": "2026-10-15T22:10:53.789Z",
-          "price": 53,
-          "date": "2026-10-20",
-          "returnDate": "2026-11-09",
-          "airline": "Ryanair",
-          "tripDays": 20
-        },
-        {
-          "ts": "2026-10-16T00:22:36.593Z",
-          "price": 49,
-          "date": "2026-12-20",
-          "returnDate": "2026-12-31",
-          "airline": "Ryanair",
-          "tripDays": 11
-        },
         {
           "ts": "2026-10-16T00:22:36.593Z",
           "price": 50,
@@ -229056,11 +229040,27 @@
           "returnDate": "2027-01-04",
           "airline": "Ryanair",
           "tripDays": 44
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 46,
+          "date": "2026-12-21",
+          "returnDate": "2027-01-09",
+          "airline": "Ryanair",
+          "tripDays": 19
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 64,
+          "date": "2026-11-21",
+          "returnDate": "2027-01-09",
+          "airline": "Ryanair",
+          "tripDays": 49
         }
       ],
       "avgPrice": 54,
       "medianPrice": 53,
-      "stdDev": 5.5
+      "stdDev": 5.7
     },
     "BTS→BRI": {
       "origin": "BTS",
@@ -229069,24 +229069,8 @@
       "allTimeLow": 30,
       "allTimeLowDate": "2026-10-13",
       "allTimeHigh": 68,
-      "scansCount": 778,
+      "scansCount": 781,
       "history": [
-        {
-          "ts": "2026-10-15T18:16:25.776Z",
-          "price": 54,
-          "date": "2027-01-08",
-          "returnDate": "2027-02-07",
-          "airline": "Ryanair",
-          "tripDays": 30
-        },
-        {
-          "ts": "2026-10-15T22:10:53.789Z",
-          "price": 37,
-          "date": "2026-10-19",
-          "returnDate": "2026-10-24",
-          "airline": "Ryanair",
-          "tripDays": 6
-        },
         {
           "ts": "2026-10-15T22:10:53.789Z",
           "price": 49,
@@ -229870,6 +229854,22 @@
           "returnDate": "2026-12-22",
           "airline": "Ryanair",
           "tripDays": 23
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 32,
+          "date": "2026-11-01",
+          "returnDate": "2026-11-09",
+          "airline": "Ryanair",
+          "tripDays": 8
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 41,
+          "date": "2026-11-29",
+          "returnDate": "2026-12-22",
+          "airline": "Ryanair",
+          "tripDays": 23
         }
       ],
       "avgPrice": 44,
@@ -229883,32 +229883,8 @@
       "allTimeLow": 33,
       "allTimeLowDate": "2026-10-06",
       "allTimeHigh": 53,
-      "scansCount": 765,
+      "scansCount": 768,
       "history": [
-        {
-          "ts": "2026-10-16T05:41:34.938Z",
-          "price": 43,
-          "date": "2026-11-01",
-          "returnDate": "2026-11-08",
-          "airline": "Ryanair",
-          "tripDays": 7
-        },
-        {
-          "ts": "2026-10-16T05:41:34.938Z",
-          "price": 44,
-          "date": "2026-11-29",
-          "returnDate": "2026-12-06",
-          "airline": "Ryanair",
-          "tripDays": 7
-        },
-        {
-          "ts": "2026-10-16T05:41:34.938Z",
-          "price": 50,
-          "date": "2027-01-09",
-          "returnDate": "2027-03-21",
-          "airline": "Ryanair",
-          "tripDays": 71
-        },
         {
           "ts": "2026-10-16T10:58:46.429Z",
           "price": 41,
@@ -230684,6 +230660,30 @@
           "returnDate": "2027-02-07",
           "airline": "Ryanair",
           "tripDays": 28
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 38,
+          "date": "2026-11-30",
+          "returnDate": "2027-02-07",
+          "airline": "Ryanair",
+          "tripDays": 69
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 41,
+          "date": "2026-11-08",
+          "returnDate": "2026-11-29",
+          "airline": "Ryanair",
+          "tripDays": 21
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 43,
+          "date": "2027-01-09",
+          "returnDate": "2027-02-07",
+          "airline": "Ryanair",
+          "tripDays": 29
         }
       ],
       "avgPrice": 44,
@@ -230697,16 +230697,8 @@
       "allTimeLow": 34,
       "allTimeLowDate": "2026-10-06",
       "allTimeHigh": 209,
-      "scansCount": 436,
+      "scansCount": 437,
       "history": [
-        {
-          "ts": "2026-10-02T23:03:48.213Z",
-          "price": 49,
-          "date": "2026-10-06",
-          "returnDate": "2026-10-13",
-          "airline": "Ryanair",
-          "tripDays": 7
-        },
         {
           "ts": "2026-10-02T23:03:48.213Z",
           "price": 117,
@@ -231498,11 +231490,19 @@
           "returnDate": "2026-11-02",
           "airline": "Ryanair",
           "tripDays": 5
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 165,
+          "date": "2026-11-01",
+          "returnDate": "2026-11-02",
+          "airline": "Ryanair",
+          "tripDays": 1
         }
       ],
-      "avgPrice": 94,
-      "medianPrice": 75,
-      "stdDev": 41.8
+      "avgPrice": 95,
+      "medianPrice": 76,
+      "stdDev": 42.1
     },
     "OSR→AGP": {
       "origin": "OSR",
@@ -231511,32 +231511,8 @@
       "allTimeLow": 33,
       "allTimeLowDate": "2026-11-09",
       "allTimeHigh": 56,
-      "scansCount": 776,
+      "scansCount": 779,
       "history": [
-        {
-          "ts": "2026-10-16T05:41:34.938Z",
-          "price": 54,
-          "date": "2027-01-04",
-          "returnDate": "2027-01-16",
-          "airline": "Ryanair",
-          "tripDays": 12
-        },
-        {
-          "ts": "2026-10-16T10:58:46.429Z",
-          "price": 39,
-          "date": "2026-11-09",
-          "returnDate": "2026-12-19",
-          "airline": "Ryanair",
-          "tripDays": 40
-        },
-        {
-          "ts": "2026-10-16T10:58:46.429Z",
-          "price": 41,
-          "date": "2026-11-30",
-          "returnDate": "2026-12-19",
-          "airline": "Ryanair",
-          "tripDays": 19
-        },
         {
           "ts": "2026-10-16T10:58:46.429Z",
           "price": 54,
@@ -232312,6 +232288,30 @@
           "returnDate": "2027-01-16",
           "airline": "Ryanair",
           "tripDays": 12
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 34,
+          "date": "2026-11-09",
+          "returnDate": "2026-12-19",
+          "airline": "Ryanair",
+          "tripDays": 40
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 41,
+          "date": "2026-11-30",
+          "returnDate": "2026-12-19",
+          "airline": "Ryanair",
+          "tripDays": 19
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 45,
+          "date": "2027-01-04",
+          "returnDate": "2027-01-16",
+          "airline": "Ryanair",
+          "tripDays": 12
         }
       ],
       "avgPrice": 43,
@@ -232325,32 +232325,8 @@
       "allTimeLow": 35,
       "allTimeLowDate": "2026-11-22",
       "allTimeHigh": 76,
-      "scansCount": 766,
+      "scansCount": 769,
       "history": [
-        {
-          "ts": "2026-10-16T05:41:34.938Z",
-          "price": 48,
-          "date": "2026-11-09",
-          "returnDate": "2026-11-22",
-          "airline": "Ryanair",
-          "tripDays": 13
-        },
-        {
-          "ts": "2026-10-16T05:41:34.938Z",
-          "price": 65,
-          "date": "2026-12-17",
-          "returnDate": "2027-01-31",
-          "airline": "Ryanair",
-          "tripDays": 45
-        },
-        {
-          "ts": "2026-10-16T10:58:46.429Z",
-          "price": 40,
-          "date": "2026-11-22",
-          "returnDate": "2027-02-21",
-          "airline": "Ryanair",
-          "tripDays": 91
-        },
         {
           "ts": "2026-10-16T10:58:46.429Z",
           "price": 44,
@@ -233126,11 +233102,35 @@
           "returnDate": "2027-01-10",
           "airline": "Ryanair",
           "tripDays": 20
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 42,
+          "date": "2026-11-22",
+          "returnDate": "2026-12-06",
+          "airline": "Ryanair",
+          "tripDays": 14
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 45,
+          "date": "2026-11-21",
+          "returnDate": "2026-12-06",
+          "airline": "Ryanair",
+          "tripDays": 15
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 47,
+          "date": "2026-12-21",
+          "returnDate": "2027-01-10",
+          "airline": "Ryanair",
+          "tripDays": 20
         }
       ],
-      "avgPrice": 51,
-      "medianPrice": 53,
-      "stdDev": 7.6
+      "avgPrice": 50,
+      "medianPrice": 52,
+      "stdDev": 7.5
     },
     "PRG→BVA": {
       "origin": "PRG",
@@ -233139,16 +233139,8 @@
       "allTimeLow": 44,
       "allTimeLowDate": "2026-09-29",
       "allTimeHigh": 204,
-      "scansCount": 430,
+      "scansCount": 431,
       "history": [
-        {
-          "ts": "2026-10-02T07:00:15.613Z",
-          "price": 104,
-          "date": "2026-10-06",
-          "returnDate": "2026-10-08",
-          "airline": "Ryanair",
-          "tripDays": 2
-        },
         {
           "ts": "2026-10-02T07:00:15.613Z",
           "price": 204,
@@ -233940,11 +233932,19 @@
           "returnDate": "2026-10-27",
           "airline": "Ryanair",
           "tripDays": 3
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 133,
+          "date": "2026-10-24",
+          "returnDate": "2026-10-27",
+          "airline": "Ryanair",
+          "tripDays": 3
         }
       ],
       "avgPrice": 129,
       "medianPrice": 122,
-      "stdDev": 23.8
+      "stdDev": 23.7
     },
     "BTS→EIN": {
       "origin": "BTS",
@@ -234767,16 +234767,8 @@
       "allTimeLow": 38,
       "allTimeLowDate": "2026-10-11",
       "allTimeHigh": 76,
-      "scansCount": 409,
+      "scansCount": 410,
       "history": [
-        {
-          "ts": "2026-10-01T07:12:10.723Z",
-          "price": 49,
-          "date": "2026-10-11",
-          "returnDate": "2026-10-22",
-          "airline": "Ryanair",
-          "tripDays": 12
-        },
         {
           "ts": "2026-10-01T14:31:25.434Z",
           "price": 52,
@@ -235568,6 +235560,14 @@
           "returnDate": "2027-03-31",
           "airline": "Ryanair",
           "tripDays": 155
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 48,
+          "date": "2026-10-29",
+          "returnDate": "2027-03-31",
+          "airline": "Ryanair",
+          "tripDays": 154
         }
       ],
       "avgPrice": 54,
@@ -235581,24 +235581,8 @@
       "allTimeLow": 39,
       "allTimeLowDate": "2026-11-21",
       "allTimeHigh": 111,
-      "scansCount": 776,
+      "scansCount": 778,
       "history": [
-        {
-          "ts": "2026-10-16T05:41:34.938Z",
-          "price": 49,
-          "date": "2026-11-21",
-          "returnDate": "2026-12-22",
-          "airline": "Ryanair",
-          "tripDays": 31
-        },
-        {
-          "ts": "2026-10-16T05:41:34.938Z",
-          "price": 55,
-          "date": "2026-11-03",
-          "returnDate": "2026-12-22",
-          "airline": "Ryanair",
-          "tripDays": 49
-        },
         {
           "ts": "2026-10-16T05:41:34.938Z",
           "price": 74,
@@ -236382,11 +236366,27 @@
           "returnDate": "2027-01-30",
           "airline": "Ryanair",
           "tripDays": 13
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 39,
+          "date": "2026-11-21",
+          "returnDate": "2027-01-11",
+          "airline": "Ryanair",
+          "tripDays": 51
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 50,
+          "date": "2027-01-17",
+          "returnDate": "2027-01-30",
+          "airline": "Ryanair",
+          "tripDays": 13
         }
       ],
       "avgPrice": 55,
-      "medianPrice": 55,
-      "stdDev": 9.7
+      "medianPrice": 54,
+      "stdDev": 9.8
     },
     "VIE→BVA": {
       "origin": "VIE",
@@ -236395,32 +236395,8 @@
       "allTimeLow": 44,
       "allTimeLowDate": "2026-11-02",
       "allTimeHigh": 71,
-      "scansCount": 770,
+      "scansCount": 773,
       "history": [
-        {
-          "ts": "2026-10-15T22:10:53.789Z",
-          "price": 56,
-          "date": "2026-12-12",
-          "returnDate": "2027-01-29",
-          "airline": "Ryanair",
-          "tripDays": 48
-        },
-        {
-          "ts": "2026-10-15T22:10:53.789Z",
-          "price": 60,
-          "date": "2026-11-02",
-          "returnDate": "2027-01-29",
-          "airline": "Ryanair",
-          "tripDays": 88
-        },
-        {
-          "ts": "2026-10-15T22:10:53.789Z",
-          "price": 71,
-          "date": "2027-01-10",
-          "returnDate": "2027-01-29",
-          "airline": "Ryanair",
-          "tripDays": 19
-        },
         {
           "ts": "2026-10-16T00:22:36.593Z",
           "price": 56,
@@ -237196,10 +237172,34 @@
           "returnDate": "2027-01-29",
           "airline": "Ryanair",
           "tripDays": 82
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 51,
+          "date": "2026-11-29",
+          "returnDate": "2027-01-29",
+          "airline": "Ryanair",
+          "tripDays": 61
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 52,
+          "date": "2026-11-08",
+          "returnDate": "2027-01-29",
+          "airline": "Ryanair",
+          "tripDays": 82
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 58,
+          "date": "2027-01-17",
+          "returnDate": "2027-01-29",
+          "airline": "Ryanair",
+          "tripDays": 12
         }
       ],
       "avgPrice": 59,
-      "medianPrice": 62,
+      "medianPrice": 60,
       "stdDev": 7.8
     },
     "BTS→DLM": {
@@ -238023,16 +238023,8 @@
       "allTimeLow": 40,
       "allTimeLowDate": "2026-10-08",
       "allTimeHigh": 206,
-      "scansCount": 417,
+      "scansCount": 418,
       "history": [
-        {
-          "ts": "2026-10-01T07:12:10.723Z",
-          "price": 43,
-          "date": "2026-10-08",
-          "returnDate": "2026-10-28",
-          "airline": "Ryanair",
-          "tripDays": 20
-        },
         {
           "ts": "2026-10-01T14:31:25.434Z",
           "price": 40,
@@ -238824,11 +238816,19 @@
           "returnDate": "2026-10-29",
           "airline": "Ryanair",
           "tripDays": 2
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 129,
+          "date": "2026-10-27",
+          "returnDate": "2026-10-29",
+          "airline": "Ryanair",
+          "tripDays": 2
         }
       ],
-      "avgPrice": 81,
-      "medianPrice": 89,
-      "stdDev": 31.1
+      "avgPrice": 82,
+      "medianPrice": 93,
+      "stdDev": 31.2
     },
     "VIE/BTS→WAW": {
       "origin": "VIE/BTS",
@@ -241279,32 +241279,8 @@
       "allTimeLow": 38,
       "allTimeLowDate": "2026-11-30",
       "allTimeHigh": 125,
-      "scansCount": 777,
+      "scansCount": 780,
       "history": [
-        {
-          "ts": "2026-10-15T22:10:53.789Z",
-          "price": 52,
-          "date": "2026-10-31",
-          "returnDate": "2026-12-03",
-          "airline": "Ryanair",
-          "tripDays": 33
-        },
-        {
-          "ts": "2026-10-15T22:10:53.789Z",
-          "price": 53,
-          "date": "2026-12-14",
-          "returnDate": "2026-12-24",
-          "airline": "Ryanair",
-          "tripDays": 10
-        },
-        {
-          "ts": "2026-10-16T00:22:36.593Z",
-          "price": 50,
-          "date": "2026-12-12",
-          "returnDate": "2026-12-24",
-          "airline": "Ryanair",
-          "tripDays": 12
-        },
         {
           "ts": "2026-10-16T00:22:36.593Z",
           "price": 52,
@@ -242080,6 +242056,30 @@
           "returnDate": "2027-01-21",
           "airline": "Ryanair",
           "tripDays": 7
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 48,
+          "date": "2026-11-30",
+          "returnDate": "2026-12-24",
+          "airline": "Ryanair",
+          "tripDays": 24
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 50,
+          "date": "2026-11-21",
+          "returnDate": "2026-12-24",
+          "airline": "Ryanair",
+          "tripDays": 33
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 63,
+          "date": "2027-01-09",
+          "returnDate": "2027-01-14",
+          "airline": "Ryanair",
+          "tripDays": 5
         }
       ],
       "avgPrice": 57,
@@ -246977,32 +246977,8 @@
       "allTimeLow": 53,
       "allTimeLowDate": "2026-12-07",
       "allTimeHigh": 180,
-      "scansCount": 778,
+      "scansCount": 781,
       "history": [
-        {
-          "ts": "2026-10-16T05:41:34.938Z",
-          "price": 116,
-          "date": "2026-12-17",
-          "returnDate": "2026-12-24",
-          "airline": "Ryanair",
-          "tripDays": 7
-        },
-        {
-          "ts": "2026-10-16T10:58:46.429Z",
-          "price": 60,
-          "date": "2026-11-30",
-          "returnDate": "2026-12-24",
-          "airline": "Ryanair",
-          "tripDays": 24
-        },
-        {
-          "ts": "2026-10-16T10:58:46.429Z",
-          "price": 66,
-          "date": "2026-11-02",
-          "returnDate": "2026-12-24",
-          "airline": "Ryanair",
-          "tripDays": 52
-        },
         {
           "ts": "2026-10-16T10:58:46.429Z",
           "price": 112,
@@ -247778,11 +247754,35 @@
           "returnDate": "2027-01-18",
           "airline": "Ryanair",
           "tripDays": 11
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 64,
+          "date": "2026-11-30",
+          "returnDate": "2026-12-24",
+          "airline": "Ryanair",
+          "tripDays": 24
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 81,
+          "date": "2026-11-09",
+          "returnDate": "2026-12-24",
+          "airline": "Ryanair",
+          "tripDays": 45
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 104,
+          "date": "2027-01-07",
+          "returnDate": "2027-01-18",
+          "airline": "Ryanair",
+          "tripDays": 11
         }
       ],
       "avgPrice": 84,
       "medianPrice": 79,
-      "stdDev": 20.9
+      "stdDev": 20.6
     },
     "VIE/BTS→NAP": {
       "origin": "VIE/BTS",
@@ -251047,16 +251047,8 @@
       "allTimeLow": 130,
       "allTimeLowDate": "2026-09-05",
       "allTimeHigh": 547,
-      "scansCount": 371,
+      "scansCount": 372,
       "history": [
-        {
-          "ts": "2026-10-01T07:12:10.723Z",
-          "price": 130,
-          "date": "2026-10-10",
-          "returnDate": "2026-10-17",
-          "airline": "Ryanair",
-          "tripDays": 7
-        },
         {
           "ts": "2026-10-01T14:31:25.434Z",
           "price": 130,
@@ -251848,11 +251840,19 @@
           "returnDate": "2027-03-31",
           "airline": "Ryanair",
           "tripDays": 158
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 547,
+          "date": "2026-10-24",
+          "returnDate": "2027-03-31",
+          "airline": "Ryanair",
+          "tripDays": 158
         }
       ],
-      "avgPrice": 325,
-      "medianPrice": 243,
-      "stdDev": 175.9
+      "avgPrice": 329,
+      "medianPrice": 348,
+      "stdDev": 176.2
     },
     "KTW→CRL": {
       "origin": "KTW",
@@ -253489,24 +253489,8 @@
       "allTimeLow": 130,
       "allTimeLowDate": "2026-09-29",
       "allTimeHigh": 155,
-      "scansCount": 779,
+      "scansCount": 782,
       "history": [
-        {
-          "ts": "2026-10-13T09:13:34.142Z",
-          "price": 131,
-          "date": "2026-11-15",
-          "returnDate": "2026-11-20",
-          "airline": "Ryanair",
-          "tripDays": 5
-        },
-        {
-          "ts": "2026-10-13T09:13:34.142Z",
-          "price": 155,
-          "date": "2026-12-14",
-          "returnDate": "2027-02-05",
-          "airline": "Ryanair",
-          "tripDays": 53
-        },
         {
           "ts": "2026-10-13T17:36:11.100Z",
           "price": 130,
@@ -254290,11 +254274,27 @@
           "returnDate": "2027-01-17",
           "airline": "Ryanair",
           "tripDays": 27
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 130,
+          "date": "2026-10-31",
+          "returnDate": "2026-11-07",
+          "airline": "Ryanair",
+          "tripDays": 7
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 146,
+          "date": "2026-12-21",
+          "returnDate": "2027-01-17",
+          "airline": "Ryanair",
+          "tripDays": 27
         }
       ],
       "avgPrice": 137,
       "medianPrice": 131,
-      "stdDev": 7.4
+      "stdDev": 7.2
     },
     "KTW→MAN": {
       "origin": "KTW",
@@ -254303,24 +254303,8 @@
       "allTimeLow": 140,
       "allTimeLowDate": "2026-09-29",
       "allTimeHigh": 303,
-      "scansCount": 779,
+      "scansCount": 782,
       "history": [
-        {
-          "ts": "2026-10-15T22:10:53.789Z",
-          "price": 262,
-          "date": "2026-12-24",
-          "returnDate": "2027-01-01",
-          "airline": "Ryanair",
-          "tripDays": 8
-        },
-        {
-          "ts": "2026-10-16T00:22:36.593Z",
-          "price": 192,
-          "date": "2026-10-27",
-          "returnDate": "2026-11-03",
-          "airline": "Ryanair",
-          "tripDays": 7
-        },
         {
           "ts": "2026-10-16T00:22:36.593Z",
           "price": 211,
@@ -255104,11 +255088,27 @@
           "returnDate": "2027-01-17",
           "airline": "Ryanair",
           "tripDays": 2
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 196,
+          "date": "2026-11-20",
+          "returnDate": "2027-01-01",
+          "airline": "Ryanair",
+          "tripDays": 42
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 235,
+          "date": "2027-01-15",
+          "returnDate": "2027-01-17",
+          "airline": "Ryanair",
+          "tripDays": 2
         }
       ],
-      "avgPrice": 212,
+      "avgPrice": 211,
       "medianPrice": 211,
-      "stdDev": 36.8
+      "stdDev": 36.5
     },
     "VIE→PRG": {
       "origin": "VIE",
@@ -255931,16 +255931,8 @@
       "allTimeLow": 139,
       "allTimeLowDate": "2026-10-12",
       "allTimeHigh": 520,
-      "scansCount": 407,
+      "scansCount": 408,
       "history": [
-        {
-          "ts": "2026-10-01T07:12:10.723Z",
-          "price": 223,
-          "date": "2026-10-19",
-          "returnDate": "2026-10-20",
-          "airline": "Ryanair",
-          "tripDays": 1
-        },
         {
           "ts": "2026-10-01T14:31:25.434Z",
           "price": 222,
@@ -256732,11 +256724,19 @@
           "returnDate": "2026-10-28",
           "airline": "Ryanair",
           "tripDays": 2
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 248,
+          "date": "2026-10-27",
+          "returnDate": "2026-10-28",
+          "airline": "Ryanair",
+          "tripDays": 2
         }
       ],
-      "avgPrice": 285,
+      "avgPrice": 286,
       "medianPrice": 273,
-      "stdDev": 80.2
+      "stdDev": 80
     },
     "PRG→IST": {
       "origin": "PRG",
@@ -258373,32 +258373,8 @@
       "allTimeLow": 203,
       "allTimeLowDate": "2026-10-04",
       "allTimeHigh": 448,
-      "scansCount": 775,
+      "scansCount": 778,
       "history": [
-        {
-          "ts": "2026-10-16T05:41:34.938Z",
-          "price": 380,
-          "date": "2026-12-18",
-          "returnDate": "2027-01-01",
-          "airline": "Ryanair",
-          "tripDays": 14
-        },
-        {
-          "ts": "2026-10-16T10:58:46.429Z",
-          "price": 294,
-          "date": "2026-12-04",
-          "returnDate": "2027-01-01",
-          "airline": "Ryanair",
-          "tripDays": 28
-        },
-        {
-          "ts": "2026-10-16T10:58:46.429Z",
-          "price": 357,
-          "date": "2026-11-13",
-          "returnDate": "2027-01-01",
-          "airline": "Ryanair",
-          "tripDays": 49
-        },
         {
           "ts": "2026-10-16T10:58:46.429Z",
           "price": 371,
@@ -259174,11 +259150,35 @@
           "returnDate": "2026-11-09",
           "airline": "Ryanair",
           "tripDays": 3
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 260,
+          "date": "2026-12-11",
+          "returnDate": "2027-01-18",
+          "airline": "Ryanair",
+          "tripDays": 38
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 338,
+          "date": "2027-01-15",
+          "returnDate": "2027-01-25",
+          "airline": "Ryanair",
+          "tripDays": 10
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 356,
+          "date": "2026-11-20",
+          "returnDate": "2027-01-18",
+          "airline": "Ryanair",
+          "tripDays": 59
         }
       ],
-      "avgPrice": 339,
-      "medianPrice": 347,
-      "stdDev": 30.6
+      "avgPrice": 338,
+      "medianPrice": 346,
+      "stdDev": 31
     },
     "PRG→CAI": {
       "origin": "PRG",
@@ -260001,16 +260001,8 @@
       "allTimeLow": 216,
       "allTimeLowDate": "2026-10-19",
       "allTimeHigh": 443,
-      "scansCount": 375,
+      "scansCount": 376,
       "history": [
-        {
-          "ts": "2026-10-01T07:12:10.723Z",
-          "price": 385,
-          "date": "2026-10-07",
-          "returnDate": "2026-10-09",
-          "airline": "Ryanair",
-          "tripDays": 2
-        },
         {
           "ts": "2026-10-01T14:31:25.434Z",
           "price": 344,
@@ -260802,11 +260794,19 @@
           "returnDate": "2027-03-28",
           "airline": "Ryanair",
           "tripDays": 156
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 429,
+          "date": "2026-10-23",
+          "returnDate": "2027-03-28",
+          "airline": "Ryanair",
+          "tripDays": 156
         }
       ],
       "avgPrice": 377,
       "medianPrice": 386,
-      "stdDev": 34.2
+      "stdDev": 34.5
     },
     "VIE→AUH": {
       "origin": "VIE",
@@ -265937,7 +265937,7 @@
       "allTimeLow": 83,
       "allTimeLowDate": "2026-11-01",
       "allTimeHigh": 133,
-      "scansCount": 96,
+      "scansCount": 97,
       "history": [
         {
           "ts": "2026-09-04T10:49:40.791Z",
@@ -266706,11 +266706,19 @@
           "returnDate": "2027-03-28",
           "airline": "Ryanair / Ryanair",
           "tripDays": 146
+        },
+        {
+          "ts": "2026-10-22T13:36:36.061Z",
+          "price": 112,
+          "date": "2026-11-01",
+          "returnDate": "2026-11-02",
+          "airline": "Ryanair / Ryanair",
+          "tripDays": 1
         }
       ],
       "avgPrice": 109,
       "medianPrice": 109,
-      "stdDev": 8.7
+      "stdDev": 8.6
     },
     "VIE/BTS→JMK": {
       "origin": "VIE/BTS",
@@ -295573,6 +295581,6 @@
       "stdDev": 25.8
     }
   },
-  "lastScan": "2026-10-22T07:24:42.518Z",
-  "totalScans": 283
+  "lastScan": "2026-10-22T13:36:36.064Z",
+  "totalScans": 284
 }
